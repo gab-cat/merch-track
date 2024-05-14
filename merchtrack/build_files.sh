@@ -1,3 +1,7 @@
-cd theme/static_src
+python3 -m venv venv
 
-npm run build:tailwind
+source venv.bin/activate
+
+python3 manage.py tailwind build
+
+deactivate
