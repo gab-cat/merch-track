@@ -1,0 +1,25 @@
+{
+  "name": "merch-track",
+  "version": "1.0.0",
+  "description": "Merch track is an designed to manage order processing and fulfillemnt easily.",
+  "main": "index.js",
+  "scripts": {
+    "start": "python manage.py runserver",
+    "migrate": "python manage.py migrate"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gab-cat/merch-track.git"
+  },
+  "keywords": [
+    "merch",
+    "track",
+    "order"
+  ],
+  "author": "Kyla and Friends",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gab-cat/merch-track/issues"
+  },
+  "homepage": "https://github.com/gab-cat/merch-track#readme"
+}

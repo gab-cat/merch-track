@@ -80,8 +80,12 @@ WSGI_APPLICATION = "merchtrack.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",          # Use the PostgreSQL engine
+        "NAME": "merch-track_db",                           # Name of your PostgreSQL database
+        "USER": "merch-track",                              # Your PostgreSQL username
+        "PASSWORD": "6m56rP:Drn4f9Ts",                      # Your PostgreSQL password
+        "HOST": "postgresql-merch-track.alwaysdata.net",    # Hostname where PostgreSQL is running
+        "PORT": "5432",                                     # Port PostgreSQL is listening on (default is 5432)
     }
 }
 
@@ -122,9 +126,9 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATICFILES_DIRS = [
-    BASE_DIR / 'static',
+    BASE_DIR / 'staticfiles',
 ]
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = BASE_DIR / 'merchtrack/staticfiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

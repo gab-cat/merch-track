@@ -12,7 +12,7 @@ This repo will contain the source code for the Merch Track Django App
 2. **Create a Virtual Environment**:
     ```bash
     python -m venv .venv
-    source .venv/bin/activate  
+    source .venv/bin/activate  # For MacOS/Unix
     
     # On Windows use:
     .venv\Scripts\Activate.ps1
@@ -50,6 +50,41 @@ This repo will contain the source code for the Merch Track Django App
 10. **Merge the Pull Request**:
     - Once approved, merge the pull request as per the project's guidelines.
 
+
+## How to access PostgreSQL database
+
+### Database Info
+
+
+| Parameter  | Value                                  |
+|------------|----------------------------------------|
+| NAME       | merch-track_db                         |
+| USER       | merch-track                            |
+| PASSWORD   | 6m56rP:Drn4f9Ts                       |
+| HOST       | postgresql-merch-track.alwaysdata.net |
+| PORT       | 5432                                   |
+
+
+
+1. **Go to the Website**:
+   - Open your web browser and navigate to [https://phppgadmin.alwaysdata.com/](https://phppgadmin.alwaysdata.com/).
+
+2. **Login to phppgadmin**:
+   - Enter your username and password provided by the hosting provider or database administrator.
+
+3. **Select Your Database**:
+   - Once logged in, you will see a list of databases associated with your account. Click on the database you want to access.
+
+4. **Navigate Tables and Data**:
+   - After selecting the database, you can navigate through its tables, views, and other objects.
+   - Click on the table name to view its data or structure.
+
+5. **Perform Operations**:
+   - You can perform various operations such as viewing, inserting, updating, and deleting data.
+   - Use the provided tools and options to execute SQL queries or manage database objects.
+
+6. **Logout** (Optional):
+   - Once you are done, it's a good practice to log out of phppgadmin to secure your account.
 
 ## Packages required for Virtual Environment
 | Package               | Version             |
