@@ -1,3 +1,3 @@
+cd theme/static_src
 
-
-python3.9 manage.py tailwind build
+npm run build:tailwind
