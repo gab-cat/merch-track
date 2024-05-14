@@ -16,8 +16,8 @@
     ],
     "routes": [
       {
-        "src": "/staticfiles/(.*)",
-        "dest": "/staticfiles/$1"
+        "src": "merchtrack/staticfiles/(.*)",
+        "dest": "merchtrack/staticfiles/$1"
       },
       {
         "src": "/(.*)",
