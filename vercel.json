@@ -1,13 +1,13 @@
 {
     "builds": [{
-        "src": "merchtrack/merchtrack/wsgi.py",
+        "src": "pip install -r requirements.txt",
         "use": "@vercel/python",
         "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
     }],
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "merchtrack/merchtrack/wsgi.py"
+            "dest": "python merchtrack/manage.py runserver"
         }
     ]
 }
