@@ -105,6 +105,7 @@ This repo will contain the source code for the Merch Track Django App
 | MarkupSafe            | 2.1.5               |
 | mdurl                 | 0.1.2               |
 | pip                   | 23.0.1              |
+| psycopg2-binary       | 2.9.9               |
 | Pygments              | 2.18.0              |
 | python-dateutil       | 2.9.0.post0         |
 | python-slugify        | 8.0.4               |
