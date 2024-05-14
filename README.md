@@ -24,8 +24,26 @@ This repo will contain the source code for the Merch Track Django App
     ```
 
 4. **Make Your Changes**:
-    - Ensure you follow the project's coding standards and guidelines.
-    - Write clear and concise commit messages.
+    - Start Django Server 
+    ```bash
+    python manage.py runserver
+    ```
+
+    - Open another terminal and start Tailwind Dev to see real-time changes
+    ```bash
+    cd theme/static_src
+    npm install
+    npm start
+    ```
+
+5. **Update Static Files**:
+    ```bash
+    # Close the tailwind terminal
+    # npm run build
+
+    # Close the terminal used to run the server
+    python manage.py collectstatic
+    ```
 
 5. **Update `requirements.txt`** (if you add new dependencies):
     ```bash
