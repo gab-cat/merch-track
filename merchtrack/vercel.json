@@ -5,19 +5,12 @@
         "src": "merchtrack/wsgi.py",
         "use": "@vercel/python",
         "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
-      },
-      {
-        "src": "build_files.sh",
-        "use": "@vercel/static-build",
-        "config": {
-          "distDir": "merchtrack/staticfiles_build"
-        }
       }
     ],
     "routes": [
       {
-        "src": "merchtrack/staticfiles/(.*)",
-        "dest": "merchtrack/staticfiles/$1"
+        "src": "/staticfiles/(.*)",
+        "dest": "/staticfiles/$1"
       },
       {
         "src": "/(.*)",
