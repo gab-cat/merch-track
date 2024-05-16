@@ -1,10 +1,15 @@
-{% extends 'base.html' %} {% block title%} MerchTrack Index Page {% endblock %}
+{% extends 'base.html' %} {% block title %} Welcome to MerchTrack! {% endblock %}
 {% block content %}
 {% load static %}
 <script>
     const handleTextChange = (e) => {
         e.value = e.value.replace(/\D/g, '');
+        
+        if (e.value.length > 9) {
+            e.value = e.value.substring(0, 9);
+        }
     }
+    
 </script>
 
 <div class="flex py-5 flex-row flex-wrap w-full h-full bg-[#f3f3f3]">
@@ -22,7 +27,7 @@
                     <span class='mx-5 text-2xl text-center text-semibold'>ENTER YOUR STUDENT ID:</span>
                 </div>
                 <div class='flex flex-row items-start space-x-1 justify-start w-[75%]  mb-auto' >
-                    <input class='w-[50%] indent-2 py-3 my-3 mx-5 border-[#818286] rounded-xl' type="text" id="student_id" name="student_id" placeholder="eg: 202201007" oninput='handleTextChange(this)' >
+                    <input class='w-[50%] indent-2 py-3 my-3 mx-5 border-[#818286] rounded-xl' type="number" id="student_id" name="student_id" placeholder="eg: 202201007" oninput='handleTextChange(this)' >
                     <input class=' text-white bg-[#3BAFE1] text-2xl rounded-xl font-Inter font-semibold text-center py-2 my-3  px-10 cursor-pointer hover:opacity-[0.5] transition-all' type="submit" value="SUBMIT" >
                 </div>
             </form>
