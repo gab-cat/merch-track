@@ -1,0 +1,36 @@
+{% load static tailwind_tags %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    {% tailwind_css %}
+</head>
+<body>
+  <div class="bg-[#212121] flex flex-row content-between justify-between p-1 px-5">
+        <div class="flex flex-row items-center align-middle ">
+          <img src="{% static 'assets/MerchTrackLogo.png' %}" alt="Merch Track Logo" class='h-[5vh] cursor-pointer'>
+          <b class='text-xl text-white cursor-pointer hover:opacity-[0.5] transition-all'>Merch Track</b>
+        </div>
+        <nav class='content-center text-xl px-3 h-[7vh] items-center space-x-3 flex flex-row '>
+                <a class='font-bold nav-item' href="{% url 'home' %}">Home</a>
+                <a class='text-gray-500 font-regular nav-item' href="{% url 'aboutUs' %}">About Us</a>
+                <a class='font-regular nav-item' href="{% url 'contactUs' %}">Contact Us</a> 
+        </nav>
+  </div>
+  <div class="w-screen h-[90vh]">
+       
+      {% block content %}
+      {% endblock %}
+  </div>
+  <div class='w-full h-5 bg-[#212121] '>
+
+  </div>
+</body>
+</html>
