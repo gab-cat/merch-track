@@ -1,0 +1,14 @@
+{% extends 'base.html' %} {% block title %} Page not found {% endblock %}
+{% block content %}
+{% load static %}
+
+<div class=' flex flex-col w-screen h-full bg-[#f3f3f3] '>
+    <div class='flex overflow-visible flex-col justify-center items-center content-center bg-white rounded-xl shadow-xl w-[75%] min-h-[50%] m-auto p-5'>
+        <img src="{% static 'assets/error_mt.png' %}" alt="Page Not Found" class='w-[30%] my-5' />
+        <div class='pb-5 text-5xl font-semibold text-center'>Oops, page not found</div>
+        <div class='w-[50%] text-center mx-auto my-5 text-lg text-gray-600 font-regular'>We're sorry for the inconvinience. It looks like you are trying to access a page that has been deleted or never even existed. </div>
+        <a href="{% url 'home' %}" class='px-5 py-3 my-5 font-semibold tracking-wide hover:opacity-[0.5] transition-all bg-[#3BAFE1] text-white rounded-lg'>BACK TO HOMEPAGE</a>
+    </div>
+</div>
+
+{% endblock %}
