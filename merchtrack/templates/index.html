@@ -13,21 +13,21 @@
 </script>
 
 <div class="flex py-5 flex-row flex-wrap w-full h-full bg-[#f3f3f3]">
-    <div class="z-0 flex flex-col h-full px-5 mx-5 my-auto">
-        <div class='my-auto'>
-        <div class='flex items-start content-center justify-center w-full my-auto'>
-            <div class='flex flex-col text-left'>
-                <span class='text-[5vh] mb-[-5vh]'>Welcome to </span>
-                <b class='text-[14vh] text-black'>MerchTrack!</b>
+    <div class="z-0 flex flex-col flex-wrap h-full px-5 mx-5 my-auto">
+        <div class='md:my-auto '>
+        <div class='flex flex-col flex-wrap items-start content-start justify-center w-screen my-auto'>
+            <div class='flex flex-col text-left '>
+                <span class='text-[3vw] mb-[-2vw]'>Welcome to </span>
+                <span class='text-[9vw] font-bold text-black'>MerchTrack!</span>
             </div>
         </div>
-        <div class='flex-1 w-full'>
+        <div class='flex-wrap flex-1 w-full '>
             <form class='flex flex-col items-start' action="{% url 'trackOrder' %}" method="get">
-                <div class=''>
-                    <span class='mx-5 text-2xl text-center text-semibold'>ENTER YOUR STUDENT ID:</span>
+                <div class='max-w-[75%]'>
+                    <span class='mx-5 text-[2vw] text-center text-semibold'>ENTER YOUR STUDENT ID:</span>
                 </div>
                 <div class='flex flex-row items-start space-x-1 justify-start w-[75%]  mb-auto' >
-                    <input class='w-[50%] indent-2 py-3 my-3 mx-5 border-[#818286] rounded-xl' type="number" id="student_id" name="student_id" placeholder="eg: 202201007" oninput='handleTextChange(this)' >
+                    <input class='max-w-[50%] indent-2 py-3 my-3 mx-5 border-[#818286] rounded-xl' type="number" id="student_id" name="student_id" placeholder="eg: 202201007" oninput='handleTextChange(this)' >
                     <input class=' text-white bg-[#3BAFE1] text-2xl rounded-xl font-Inter font-semibold text-center py-2 my-3  px-10 cursor-pointer hover:opacity-[0.5] transition-all' type="submit" value="SUBMIT" >
                 </div>
             </form>
