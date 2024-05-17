@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% block title %}{% endblock %} | MerchTrack </title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="icon" href="{% static 'assets/favicon.svg' %}" > 
@@ -26,9 +26,7 @@
         </nav>
   </div>
   <div class="w-screen h-[90vh] overflow-hidden">
-       
-      {% block content %}
-      {% endblock %}
+      {% block content %} {% endblock %}
   </div>
   <div class='w-full h-5 bg-[#212121] '>
 
