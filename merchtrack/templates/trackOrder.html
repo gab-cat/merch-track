@@ -1,0 +1,57 @@
+{% extends 'base.html' %} {% block title%} MerchTrack Order Tracking Page {% endblock %}
+{% block content %}
+<div class="flex flex-row w-full h-full bg-[#f3f3f3] justify-center p-12 m-12">
+    <div class="flex flex-col items-center w-[5dvh] p-12 m-12" style="border: 5px solid black; width: 80%;">
+        
+        <div class="flex flex-row w-full">
+            <div>
+                <h2>Order ID: 147891248970</h2> <!--class="track_first_left"-->
+            </div>
+            <div class="flex">
+                <button>Invoice</button>
+                <button>Track Order</button>
+            </div>
+        </div>
+
+        
+        <div>
+            {% for itr in orders %}
+            <div>   
+                <h4 class="p-6"><b>Order Date:</b> {{ itr.order_date }}</h4> <!--date = pH-->
+                <h4 class="p-6">Estimated Distribution Date: {{ itr.distribution_date }}</h4> <!--date = pH-->
+            </div>
+            <div>
+                <h4>Order Status:</h4>
+                <h4>{{ itr.order_status }}</h4> <!--pH-->
+            </div>
+            {% endfor %}
+        </div>
+        
+
+        <div> <!--Order list-->
+            <div>
+                {% load static %}
+                {% for deets in order_details %}         
+                <div>
+                    <img src="{% static 'assets/tshirtimage.png' %}" alt="Item Image">
+                    <h1>{{ deets.item_name }} {{ deets.item_color }} {{ deets.item_size }}</h1>
+                </div>
+                {% endfor %}
+                
+            </div>
+        </div>
+
+        <div>
+            <h1>Payment</h1>
+            <div>
+                {% for itr in orders%}
+                    <h4><b>Method: </b>{{ itr.payment_method }}</h4>
+                    <h4><b>Status: </b>{{ itr.payment_status }}</h4>
+                    <h4><b>Attached: </b>Receipt</h4>
+                {% endfor %}
+            </div>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}
