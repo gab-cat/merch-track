@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from .models import user_info, order_info, order_details
@@ -11,32 +11,31 @@ def trackOrder(request):
         print("(console.log) Updated")
         student_id = request.GET.get('student_id')
 
+        # order_details_id = request.GET.get('order_details_ID')
+
+        # order_info.objects.filter(order_details_ID=order_details_id).values()
+
+        order_deets = order_info.objects.all().values()
+        print(order_deets)
+        
         orders = order_info.objects.filter(user_info_ID=student_id).values()
 
         order_detail = order_details.objects.filter(order_details_ID=orders[0]['id']).values() #
         
         template = loader.get_template('trackOrder.html')
-        content = {
+        context = {
             'orders': orders,
             'order_details': order_detail,
         }
         
-        return HttpResponse(template.render(content, request))
+        return HttpResponse(template.render(context, request))
     except user_info.DoesNotExist:
         student = None
+        
         return render(request, "index.html", {'error_message': 'student id does not exist'})
-
-def aboutUs(request):
-    return render(request, "about_us.html")
-
-def contactUs(request):
-    return render(request, "contact_us.html")
 
 def not_found(request):
     return render(request, '404.html', status=404)
-    
-def trackOrder(request):
-    return render(request, 'trackOrder.html')
 
 def aboutUs(request):
     return render(request, 'aboutUs.html')
