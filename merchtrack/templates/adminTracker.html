@@ -1,0 +1,23 @@
+{% extends 'base.html' %} {% block title%} MerchTrack Index Page {% endblock %}
+{% block content%}
+
+<div class="flex  w-full h-full bg-[#f3f3f3]">
+    <table class='w-full'>
+        <tr>
+        <th>No</th>
+        <th>Full Name</th>
+        <th>Student Number</th>
+        <th>Email</th>
+        <th>Course</th>
+        <th>Payment Method</th>
+        <th>Status of Payment</th>
+        <th>Status of Order</th>
+        </tr>
+        <tr>
+        {% for x in obj %}
+        <td>{{x.name}}</td>
+        <td>{{x.description}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
