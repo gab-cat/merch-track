@@ -48,3 +48,6 @@ def adminTracker(request):
     results = cursor.fetchall()
     print(results)
     return render(request, 'adminTracker.html', {'orders' : results})
+
+def orderEntry(request):
+    return render(request, "order-entry.html")
