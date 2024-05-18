@@ -11,16 +11,12 @@ def trackOrder(request):
         print("(console.log) Updated")
         student_id = request.GET.get('student_id')
 
-        # order_details_id = request.GET.get('order_details_ID')
-
-        # order_info.objects.filter(order_details_ID=order_details_id).values()
-
         order_deets = order_info.objects.all().values()
         print(order_deets)
         
-        orders = order_info.objects.filter(user_info_ID=student_id).values()
+        orders = order_info.objects.filter(user_info_id=student_id).values()
 
-        order_detail = order_details.objects.filter(order_details_ID=orders[0]['id']).values() #
+        order_detail = order_details.objects.filter(order_details_id=orders[0]['id']).values() #
         
         template = loader.get_template('trackOrder.html')
         context = {
