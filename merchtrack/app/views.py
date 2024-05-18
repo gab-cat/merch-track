@@ -27,7 +27,7 @@ def trackOrder(request):
             'order_details': order_detail,
         }
 
-        return HttpResponse(template.render(content, request))
+        return HttpResponse(template.render(context, request))
     except Exception as e:
         print(f"An error occurred: {e}")
         return redirect(request, 'index.html', {'error_message': 'An unexpected error occurred'})
