@@ -8,6 +8,7 @@ urlpatterns = [
     path("trackOrder", views.trackOrder, name='trackOrder'),
     path("aboutUs", views.aboutUs, name='aboutUs'),
     path("contactUs", views.contactUs, name='contactUs'),
+    path("order-entry", views.orderEntry, name='order-entry'),
     re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
     re_path(r'^.*$', views.not_found, name='404'),
 ]

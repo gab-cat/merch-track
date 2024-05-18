@@ -42,3 +42,6 @@ def not_found(request):
 
 def adminTracker(request):
     return render(request, 'adminTracker.html')
+
+def orderEntry(request):
+    return render(request, "order-entry.html")
