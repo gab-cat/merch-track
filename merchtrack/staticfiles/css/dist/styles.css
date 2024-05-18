@@ -826,6 +826,11 @@ select {
   margin-right: auto;
 }
 
+.my-2 {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
 .my-3 {
   margin-top: 0.75rem;
   margin-bottom: 0.75rem;
@@ -845,32 +850,48 @@ select {
   margin-bottom: 0.75rem;
 }
 
-.mb-\[-2vw\] {
-  margin-bottom: -2vw;
-}
-
-.mb-auto {
-  margin-bottom: auto;
-}
-
-
-.mt-5 {
-  margin-top: 1.25rem;
-}
-
-.mt-10 {
-  margin-top: 2.5rem;
-
 .mb-4 {
   margin-bottom: 1rem;
+}
+
+.mb-\[-2vw\] {
+  margin-bottom: -2vw;
 }
 
 .mb-\[-5vh\] {
   margin-bottom: -5vh;
 }
 
+.mb-auto {
+  margin-bottom: auto;
+}
+
+.ml-3 {
+  margin-left: 0.75rem;
+}
+
+.mr-3 {
+  margin-right: 0.75rem;
+}
+
 .mt-3 {
   margin-top: 0.75rem;
+}
+
+.mt-5 {
+  margin-top: 1.25rem;
+}
+
+.mt-6 {
+  margin-top: 1.5rem;
+}
+
+.mt-9 {
+  margin-top: 2.25rem;
+}
+
+.box-border {
+  box-sizing: border-box;
 }
 
 .block {
@@ -885,20 +906,32 @@ select {
   display: table;
 }
 
-.h-10 {
-  height: 2.5rem;
-}
-
 .h-5 {
   height: 1.25rem;
+}
+
+.h-8 {
+  height: 2rem;
+}
+
+.h-\[25\%\] {
+  height: 25%;
 }
 
 .h-\[5vh\] {
   height: 5vh;
 }
 
+.h-\[70\%\] {
+  height: 70%;
+}
+
 .h-\[7vh\] {
   height: 7vh;
+}
+
+.h-\[80\%\] {
+  height: 80%;
 }
 
 .h-\[80dvh\] {
@@ -907,6 +940,10 @@ select {
 
 .h-\[90vh\] {
   height: 90vh;
+}
+
+.h-\[99\%\] {
+  height: 99%;
 }
 
 .h-fit {
@@ -926,16 +963,12 @@ select {
   height: 100vh;
 }
 
-.h-8 {
-  height: 2rem;
-}
-
 .min-h-\[50\%\] {
   min-height: 50%;
 }
 
-.w-5\/6 {
-  width: 83.333333%;
+.w-1\/2 {
+  width: 50%;
 }
 
 .w-\[30\%\] {
@@ -976,14 +1009,6 @@ select {
   width: 100vw;
 }
 
-.w-\[10\%\] {
-  width: 10%;
- }
-  
-.w-1\/2 {
-  width: 50%;
-}
-
 .max-w-\[50\%\] {
   max-width: 50%;
 }
@@ -994,10 +1019,6 @@ select {
 
 .flex-1 {
   flex: 1 1 0%;
-}
-
-.table-fixed {
-  table-layout: fixed;
 }
 
 .cursor-pointer {
@@ -1044,6 +1065,10 @@ select {
   justify-content: flex-start;
 }
 
+.justify-end {
+  justify-content: flex-end;
+}
+
 .justify-center {
   justify-content: center;
 }
@@ -1066,6 +1091,10 @@ select {
   --tw-space-x-reverse: 0;
   margin-right: calc(0.75rem * var(--tw-space-x-reverse));
   margin-left: calc(0.75rem * calc(1 - var(--tw-space-x-reverse)));
+}
+
+.self-end {
+  align-self: flex-end;
 }
 
 .overflow-auto {
@@ -1092,19 +1121,13 @@ select {
   border-radius: 0.75rem;
 }
 
-
 .border {
   border-width: 1px;
-}
-
-.border-8 {
-  border-width: 8px;
 }
 
 .border-2 {
   border-width: 2px;
 }
-
 
 .border-\[\#818286\] {
   --tw-border-opacity: 1;
@@ -1116,9 +1139,24 @@ select {
   border-color: rgb(0 0 0 / var(--tw-border-opacity));
 }
 
+.border-gray-300 {
+  --tw-border-opacity: 1;
+  border-color: rgb(209 213 219 / var(--tw-border-opacity));
+}
+
+.border-green-500 {
+  --tw-border-opacity: 1;
+  border-color: rgb(34 197 94 / var(--tw-border-opacity));
+}
+
 .border-red-500 {
   --tw-border-opacity: 1;
   border-color: rgb(239 68 68 / var(--tw-border-opacity));
+}
+
+.border-yellow-500 {
+  --tw-border-opacity: 1;
+  border-color: rgb(234 179 8 / var(--tw-border-opacity));
 }
 
 .bg-\[\#212121\] {
@@ -1129,6 +1167,16 @@ select {
 .bg-\[\#3BAFE1\] {
   --tw-bg-opacity: 1;
   background-color: rgb(59 175 225 / var(--tw-bg-opacity));
+}
+
+.bg-\[\#E1E1E1\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(225 225 225 / var(--tw-bg-opacity));
+}
+
+.bg-\[\#FFFFFF\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
 .bg-\[\#f3f3f3\] {
@@ -1151,6 +1199,16 @@ select {
   background-color: rgb(249 250 251 / var(--tw-bg-opacity));
 }
 
+.bg-indigo-600 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(79 70 229 / var(--tw-bg-opacity));
+}
+
+.bg-purple-800 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(107 33 168 / var(--tw-bg-opacity));
+}
+
 .bg-red-100 {
   --tw-bg-opacity: 1;
   background-color: rgb(254 226 226 / var(--tw-bg-opacity));
@@ -1161,17 +1219,6 @@ select {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
-.bg-\[\#E1E1E1\] {
-  --tw-bg-opacity: 1;
-  background-color: rgb(225 225 225 / var(--tw-bg-opacity));
-}
-
-.bg-\[\#FFFFFF\] {
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-}
-
-
 .p-0 {
   padding: 0px;
 }
@@ -1180,12 +1227,17 @@ select {
   padding: 0.25rem;
 }
 
+.p-2 {
+  padding: 0.5rem;
+}
+
 .p-5 {
   padding: 1.25rem;
 }
 
-.p-6 {
-  padding: 1.5rem;
+.px-1 {
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
 }
 
 .px-10 {
@@ -1203,6 +1255,11 @@ select {
   padding-right: 1.25rem;
 }
 
+.py-10 {
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+}
+
 .py-2 {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
@@ -1216,11 +1273,6 @@ select {
 .py-5 {
   padding-top: 1.25rem;
   padding-bottom: 1.25rem;
-}
-
-.py-10 {
-  padding-top: 2.5rem;
-  padding-bottom: 2.5rem;
 }
 
 .pb-5 {
@@ -1260,6 +1312,11 @@ select {
   line-height: 2rem;
 }
 
+.text-3xl {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+
 .text-5xl {
   font-size: 3rem;
   line-height: 1;
@@ -1291,26 +1348,16 @@ select {
   line-height: 1.75rem;
 }
 
-.text-3xl {
-  font-size: 1.875rem;
-  line-height: 2.25rem;
-}
-
-.text-4xl {
-  font-size: 2.25rem;
-  line-height: 2.5rem;
-}
-
 .font-bold {
   font-weight: 700;
 }
 
-.font-semibold {
-  font-weight: 600;
-}
-
 .font-normal {
   font-weight: 400;
+}
+
+.font-semibold {
+  font-weight: 600;
 }
 
 .leading-normal {
@@ -1356,15 +1403,15 @@ select {
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
-.shadow-xl {
-  --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-  --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-}
-
 .shadow-sm {
   --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.shadow-xl {
+  --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 

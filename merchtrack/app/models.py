@@ -16,7 +16,6 @@ class order_info(models.Model):
     payment_method = models.CharField(max_length=200)
     payment_status = models.CharField(max_length=200)
 
-    order_details_id = models.CharField(max_length=200, default='0')
     user_info_id  = models.CharField(max_length=9, default='000000000')
     
 class order_details(models.Model):
