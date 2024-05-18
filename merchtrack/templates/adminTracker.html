@@ -3,7 +3,7 @@
 
 <div class="flex  w-full h-full bg-[#f3f3f3]">
     <table class='w-full'>
-        <tr>
+        <tr class='h-fit'>
         <th>No</th>
         <th>Full Name</th>
         <th>Student Number</th>
@@ -13,10 +13,15 @@
         <th>Status of Payment</th>
         <th>Status of Order</th>
         </tr>
+        
+        {% for x in orders %}
         <tr>
-        {% for x in obj %}
-        <td>{{x.name}}</td>
-        <td>{{x.description}}</td>
+        <td>{{x.0}}</td>
+        <td>{{x.1}}</td>
+        <td>{{x.2}}</td>
+        <td>{{x.3}}</td>
+        <td>{{x.4}}</td>
+        <td>{{x.5}}</td>
         </tr>
         {% endfor %}
     </table>
