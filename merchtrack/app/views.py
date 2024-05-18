@@ -1,3 +1,4 @@
+from django.db import connection
 from django.shortcuts import render, redirect
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
@@ -42,4 +43,8 @@ def not_found(request):
     return render(request, '404.html', status=404)
 
 def adminTracker(request):
-    return render(request, 'adminTracker.html')
+    cursor = connection.cursor()
+    cursor.execute('select app_order_info.order_details_id, app_user_info.student_id, app_user_info.student_name, app_order_info.payment_method, app_order_info.payment_status, app_order_info.order_status from app_order_info join app_user_info on app_order_info.user_info_ID = app_user_info.student_id')
+    results = cursor.fetchall()
+    print(results)
+    return render(request, 'adminTracker.html', {'orders' : results})
