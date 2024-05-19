@@ -37,9 +37,9 @@ def aboutUs(request):
 
 def contactUs(request):
     if request.method == 'POST':
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        message = request.POST.get('message')
+        name = request.POST.get('name','')
+        email = request.POST.get('email','')
+        message = request.POST.get('message','')
         new_contact = contact_us.objects.create(name=name,email=email,message=message)
         new_contact.save()
         return redirect("contactUs")
