@@ -21,10 +21,19 @@ def trackOrder(request):
 
         order_detail = order_details.objects.filter(order_details_id=orders[0]['id']).values()
 
+        order_id = orders[0]['id']
+        order_list = order_detail.all()
+        total_cost = 0
+        for order in order_list:
+            total_cost += (float(order['item_cost']) * int(order['item_quantity']))
+            print(total_cost)
+
         template = loader.get_template('trackOrder.html')
         context = {
             'orders': orders,
             'order_details': order_detail,
+            'total_costs': total_cost,
+            'order_ids': order_id
         }
 
         return HttpResponse(template.render(context, request))
