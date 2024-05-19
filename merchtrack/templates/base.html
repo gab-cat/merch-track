@@ -20,9 +20,7 @@
           <b class='text-xl text-white cursor-pointer hover:opacity-[0.5] transition-all'>Merch Track</b>
         </div>
         <nav class='content-center text-xl px-3 h-[7vh] items-center space-x-3 flex flex-row '>
-                <a class='font-bold nav-item' href="{% url 'home' %}">Home</a>
-                <a class='text-gray-500 font-regular nav-item' href="{% url 'aboutUs' %}">About Us</a>
-                <a class='font-regular nav-item' href="{% url 'contactUs' %}">Contact Us</a> 
+          {% block nav %} {% endblock %}
         </nav>
   </div>
   <div class="w-screen h-[90vh] overflow-hidden">
