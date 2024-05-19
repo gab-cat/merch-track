@@ -20,10 +20,10 @@
           <b class='text-xl text-white cursor-pointer hover:opacity-[0.5] transition-all'>Merch Track</b>
         </div>
         <nav class='content-center text-xl px-3 h-[7vh] items-center space-x-3 flex flex-row '>
-                <a class='font-bold nav-item' href="{% url 'home' %}">Home</a>
-                <a class='text-gray-500 font-regular nav-item' href="{% url 'aboutUs' %}">About Us</a>
-                <a class='font-regular nav-item' href="{% url 'contactUs' %}">Contact Us</a> 
-        </nav>
+          <a class='{% if request.resolver_match.url_name == "home" %}font-bold text-white{% else %}text-gray-500{% endif %}' href="{% url 'home' %}">Home</a>
+          <a class='{% if request.resolver_match.url_name == "aboutUs" %}font-bold text-white{% else %}text-gray-500 font-regular{% endif %} nav-item' href="{% url 'aboutUs' %}">About Us</a>
+          <a class='{% if request.resolver_match.url_name == "contactUs" %}font-bold text-white{% else %}text-gray-500 font-regular{% endif %} nav-item' href="{% url 'contactUs' %}">Contact Us</a> 
+  </nav>
   </div>
   <div class="w-screen h-[90vh] overflow-hidden">
       {% block content %} {% endblock %}
