@@ -1,7 +1,7 @@
 from django.db import connection
+from django.shortcuts import get_object_or_404, render, redirect
 from django.shortcuts import render, redirect
-from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import loader
 from .models import user_info, order_info, order_details
 
@@ -50,4 +50,57 @@ def adminTracker(request):
     return render(request, 'adminTracker.html', {'orders' : results})
 
 def orderEntry(request):
+    if request.method == 'POST':
+        # Extracting order details data
+        student_id = request.POST.get('student_id')
+        item_name = request.POST.get('item_name')
+        item_size = request.POST.get('item_size')
+        item_color = request.POST.get('item_color')
+        item_cost = request.POST.get('item_cost')
+        item_quantity = request.POST.get('item_quantity')
+
+        order_date = request.POST.get('order_date')
+        distribution_date = request.POST.get('distribution_date')
+        payment_method = request.POST.get('payment_method')
+
+        order_details_instance = order_details(
+            item_name=item_name,
+            item_size=item_size,
+            item_color=item_color,
+            item_cost=item_cost,
+            item_quantity=item_quantity
+        )
+        order_details_instance.save()
+
+        order_info_instance = order_info(
+            order_date=order_date,
+            distribution_date=distribution_date,
+            order_status="Pending",
+            payment_method=payment_method,
+            payment_status="Not yet Paid",
+            order_details_id=order_details_instance.id,
+            user_info_id=student_id
+        )
+        order_info_instance.save()
+
+        return render(request, "success.html")
+
     return render(request, "order-entry.html")
+
+def studentInfo(request):
+    student_id = request.GET.get('student_id')
+    
+    if not student_id:
+        return HttpResponse("Student ID not provided", status=400)
+
+    try:
+        student = get_object_or_404(user_info, student_id=student_id)
+        student_data = {
+            'student_id': student.student_id,
+            'student_name': student.student_name,
+            'email': student.email,
+            'course': student.course,
+        }
+        return JsonResponse(student_data)
+    except user_info.DoesNotExist:
+        return HttpResponse("Student not found", status=404)

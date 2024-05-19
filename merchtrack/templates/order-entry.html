@@ -1,15 +1,168 @@
 {% extends 'base.html' %} {% block title %} Order Entry {% endblock %}
 {% block content %}
 {% load static %}
+{% load slippers %}
 
-<div class=" flex flex-col w-screen h-full bg-[#f3f3f3]">
-    <div class='flex overflow-visible flex-col justify-center items-center content-center bg-white rounded-xl shadow-xl w-[75%] min-h-[50%] m-auto p-5'>
-        <div>Create an Order</div>
-        <div>
-            
+<form method="POST"  class=" flex flex-col p-5 w-screen h-full bg-[#f3f3f3] overflow-auto">
+    {% csrf_token %}
+    <div class='flex  flex-col bg-white rounded-xl shadow-xl overflow-auto min-w-[1.5rem] min-h-[50%] m-auto p-5'>
+        <div class='w-full p-3 text-3xl font-bold text-left border-b'>Create an Order</div>
+        <div class='flex flex-col w-full p-3 my-2 border rounded-lg'>
+            <div class='flex flex-row items-center'>
+                <div class='bg-[#3BAFE1] text-white p-1 px-3 text-xl italic font-bold tracking-wide rounded-full w-fit '>
+                    1
+                </div>
+                <div class='p-1 px-2 text-base italic font-bold tracking-wide rounded-full bg- w-fit '>
+                    Enter the Student ID for validation
+                </div>
+            </div>
+            <div class='flex flex-row items-center px-5 my-3 space-x-2'>
+                <div class='text-lg font-semibold'>Student ID :</div>
+                <input class='max-w-[50%] indent-2 py-2 my-2 border-[#818286] rounded-lg' 
+                type="number" 
+                id="student_id" 
+                name="student_id" 
+                placeholder="eg: 202201007" 
+                oninput='handleTextChange(this)' 
+                value='' />
+                <input class=' text-white bg-[#3BAFE1] text-lg rounded-xl font-Inter font-semibold text-center py-1 my-3  px-5 cursor-pointer active:opacity-100 hover:opacity-[0.5] transition-all' 
+                value="Check"
+                type="button"
+                onclick="handleCheckClick()" />
+                <div visible='false' id='error_box' class='hidden px-5 py-2 mx-5 text-red-700 bg-red-100 rounded-lg'></div>
+            </div>
+            <div class='flex flex-col px-5 w-fit '>
+                <div class='flex items-center w-full space-x-2'> 
+                    <div class='w-1/4 text-lg font-semibold text-gray-800 '>Fullname</div>
+                    <input class='w-full indent-2 py-2 bg-slate-300 my-2 border-[#818286] rounded-lg' 
+                    type="text"  
+                    id="student-fullname"
+                    disabled />
+                </div>
+                <div class='flex flex-row justify-start space-x-2'>
+                    <div class='flex flex-row items-center justify-start space-x-2'> 
+                        <div class='w-5/6 text-lg font-semibold text-gray-800'>Email Address</div>
+                        <input class='  indent-2 py-2 bg-slate-300  border-[#818286] rounded-lg' 
+                        type="text"  
+                        id="student-email"
+                        disabled />
+                    </div>
+                    <div class='flex flex-row items-center space-x-2'> 
+                        <div class='text-lg font-semibold text-gray-800'>Course</div>
+                        <input class=' indent-2 py-2 bg-slate-300 my-2 border-[#818286] rounded-lg' 
+                        type="text" 
+                        id="student-course"
+                        disabled />
+                    </div>
+                </div>
+            </div>
         </div>
-
+        <div class='flex flex-col w-full p-3 my-2 border rounded-lg'>
+            <div class='flex flex-row items-center'>
+                <div class='bg-[#3BAFE1] text-white p-1 px-3 text-xl italic font-bold tracking-wide rounded-full w-fit '>
+                    2
+                </div>
+                <div class='p-1 px-2 text-base italic font-bold tracking-wide rounded-full bg- w-fit '>
+                    Create the order
+                </div>
+            </div>
+            <table>
+                {% #text-input name="Item Name" id_name="item_name"  %} {% /text-input %}
+                {% #text-input name="Item Size" id_name="item_size"  %} {% /text-input %}
+                {% #text-input name="Item Color" id_name="item_color"  %} {% /text-input %}
+                {% #text-input name="Item Cost" id_name="item_cost"  %} {% /text-input %}
+                {% #text-input name="Item Quantity" id_name="item_quantity"  %} {% /text-input %}
+            </table>
+        </div>
+        <div class='flex flex-col w-full p-3 my-2 border rounded-lg'>
+            <div class='flex flex-row items-center'>
+                <div class='bg-[#3BAFE1] text-white p-1 px-3 text-xl italic font-bold tracking-wide rounded-full w-fit '>
+                    3
+                </div>
+                <div class='p-1 px-2 text-base italic font-bold tracking-wide rounded-full bg- w-fit '>
+                    Fill Up Order Information
+                </div>
+            </div>
+            <table>
+                {% #text-input name="Order Date" id_name="order_date"  %} {% /text-input %}
+                {% #text-input name="Distribution Date" id_name="distribution_date"  %} {% /text-input %}
+                {% #text-input name="Payment Method" id_name="payment_method"  %} {% /text-input %}
+            </table>
+        </div>
+        <div class='flex justify-end space-x-3'>
+            <input class=' bg-slate-200 text-lg rounded-xl font-Inter font-semibold text-center py-1 my-3  px-8 cursor-pointer active:opacity-100 hover:opacity-[0.5] transition-all' 
+            value="Reset"
+            type="button" />
+            <input class=' text-white bg-[#3BAFE1] border-white text-lg rounded-xl font-Inter font-semibold text-center py-1 my-3  px-5 cursor-pointer active:opacity-100 hover:opacity-[0.5] transition-all' 
+            value="Confirm Create Order"
+            type="submit"/>
+        </div>
     </div>
-</div>
+</form>
+
+<script>
+    const handleTextChange = (e) => {
+        e.value = e.value.replace(/\D/g, '');
+        
+        if (e.value.length > 9) {
+            e.value = e.value.substring(0, 9);
+        }
+    }
+
+    const handleCheckClick = async () => {
+        const error_box = document.getElementById("error_box");
+        error_box.classList.remove("hidden");
+        const studentId = document.getElementById("student_id").value;
+        let fullName = document.getElementById("student-fullname");
+        let email = document.getElementById("student-email");
+        let course = document.getElementById("student-course");
+
+        if (!studentId || studentId.length != 9) {
+            error_box.textContent = "Please enter a valid student ID.";
+            error_box.classList.remove("bg-green-100");
+            error_box.classList.remove("text-green-700");
+            fullName.value = ""
+            email.value = "";
+            course.value = "";
+            error_box.classList.add("bg-red-100");
+            error_box.classList.add("text-red-700");
+            return;
+        }
+
+        error_box.textContent = "Loading";
+        error_box.classList.remove("bg-red-100");
+        error_box.classList.remove("text-red-700");
+        error_box.classList.add("bg-blue-100");
+        error_box.classList.add("text-blue-700");
+
+        try {
+            const response = await fetch(`http://localhost:8000/student-info?student_id=${studentId}`);
+            const data = await response.json();
+    
+            if (response.status === 200) {
+                error_box.textContent = "Valid Student ID";
+                error_box.classList.add("bg-green-100");
+                error_box.classList.add("text-green-700");
+    
+                fullName.value = data.student_name;
+                email.value = data.email;
+                course.value = data.course;
+            } 
+        } catch {
+            error_box.textContent = "No student found. Please try again. ";
+            error_box.classList.remove("bg-green-100");
+            error_box.classList.remove("text-green-700");
+            error_box.classList.add("bg-red-100");
+            error_box.classList.add("text-red-700");
+
+            fullName.value = ""
+            email.value = "";
+            course.value = "";
+        } finally {
+            error_box.classList.remove("bg-blue-100");
+            error_box.classList.remove("text-blue-700");
+        }
+    };
+</script>
 
 {% endblock %}
