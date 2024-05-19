@@ -3,8 +3,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import loader
-from .models import user_info, order_info, order_details
-
+from .models import user_info, order_info, order_details, contact_us
 def home(request):
     return render(request, 'index.html')
 
@@ -22,10 +21,19 @@ def trackOrder(request):
 
         order_detail = order_details.objects.filter(order_details_id=orders[0]['id']).values()
 
+        order_id = orders[0]['id']
+        order_list = order_detail.all()
+        total_cost = 0
+        for order in order_list:
+            total_cost += (float(order['item_cost']) * int(order['item_quantity']))
+            print(total_cost)
+
         template = loader.get_template('trackOrder.html')
         context = {
             'orders': orders,
             'order_details': order_detail,
+            'total_costs': total_cost,
+            'order_ids': order_id
         }
 
         return HttpResponse(template.render(context, request))
@@ -37,7 +45,15 @@ def aboutUs(request):
     return render(request, "aboutUs.html")
 
 def contactUs(request):
-    return render(request, "contactUs.html")
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+        new_contact = contact_us.objects.create(name=name,email=email,message=message)
+        new_contact.save()
+        return redirect("contactUs")
+    else:  
+        return render(request, "contactUs.html")
 
 def not_found(request):
     return render(request, '404.html', status=404)

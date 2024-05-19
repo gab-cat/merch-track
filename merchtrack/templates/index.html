@@ -1,4 +1,12 @@
 {% extends 'base.html' %} {% block title %} Home {% endblock %}
+
+{% block nav %}
+    <a class='font-bold nav-item' href="{% url 'home' %}">Home</a>
+    <a class='text-gray-500 font-regular nav-item' href="{% url 'aboutUs' %}">About Us</a>
+    <a class='font-regular nav-item' href="{% url 'contactUs' %}">Contact Us</a> 
+{% endblock %}
+
+
 {% block content %}
 {% load static %}
 <script>

@@ -1,17 +1,27 @@
-{% extends 'base.html' %} {% block title%} MerchTrack Index Page {% endblock %}
+{% extends 'base.html' %} {% block title%} Contact Us {% endblock %}
+
+{% block nav %}
+    <a class='font-regular nav-item' href="{% url 'home' %}">Home</a>
+    <a class='text-gray-500 font-regular nav-item' href="{% url 'aboutUs' %}">About Us</a>
+    <a class='font-bold nav-item' href="{% url 'contactUs' %}">Contact Us</a> 
+{% endblock %}
+
 {% block content%}
 {% load static %}
 <div class="flex flex-row flex-wrap  w-full h-full bg-[#ffffff]">
     <div class='flex'>
         <img class='h-[80dvh] w-fit my-auto mx-20' src="{% static 'assets/ContactInfo.svg' %}" alt="Contact Info" />
         <div class='w-full mx-20 flex flex-col items-center'>
-            <div class='flex flex-col items-end w-full text-right'>
+            <div class='flex flex-col  w-full '>
                 <span class="text-[7dvh] mx-auto font-semiboldbold text-black ">Contact Us</span>
             </div>
-            <input class='w-[90%] indent-2 my-3  border-[#818286]' type="text" id="your_name" name="your_name" placeholder="Your name">
-            <input class='w-[90%] indent-2 mb-3  border-[#818286]' type="text" id="email" name="email" placeholder="Email">
-            <textarea rows='4' class='w-[90%] indent-2 mb-3 border-[#818286]' type="text" id="message" name="message" placeholder="Message"></textarea>
-            <input class=' text-white bg-[#3BAFE1] text-2xl rounded-xl font-Inter font-semibold text-center py-2 my-3 px-10 cursor-pointer hover:opacity-[0.5] transition-all' type="submit" value="SEND" > 
+            <form class='flex flex-col w-full items-center' action="" method="POST">
+                {%csrf_token%}
+                <input class='w-[90%] indent-2 my-3  border-[#818286]' type="text" id="your_name" name="your_name" placeholder="Your name">
+                <input class='w-[90%] indent-2 mb-3  border-[#818286]' type="text" id="email" name="email" placeholder="Email">
+                <textarea rows='4' class='w-[90%] indent-2 mb-3 border-[#818286]' type="text" id="message" name="message" placeholder="Message"></textarea>
+                <input class=' text-white bg-[#3BAFE1] text-2xl rounded-xl font-Inter font-semibold text-center py-2 my-3 px-10 cursor-pointer hover:opacity-[0.5] transition-all' type="submit" value="SEND" >
+            </form>
             <div class='w-[85%] h-px bg-black my-3' style="opacity: 1; transform-origin: 50% 50% 0px;"></div>
             <div class='flex flex-col'>
                 <div class='flex items-start flex-row '>
