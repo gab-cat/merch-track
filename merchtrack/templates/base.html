@@ -17,7 +17,7 @@
   <div class="bg-[#212121] flex flex-row content-between justify-between p-1 px-5">
         <div class="flex flex-row items-center align-middle ">
           <img src="{% static 'assets/MerchTrackLogo.png' %}" alt="Merch Track Logo" class='h-[5vh] cursor-pointer'>
-          <b class='text-xl text-white cursor-pointer hover:opacity-[0.5] transition-all'>Merch Track</b>
+          <a href="{% url 'home' %}" class='text-2xl font-bold text-white cursor-pointer hover:opacity-[0.5] transition-all'>Merch Track</a>
         </div>
         <nav class='content-center text-xl px-3 h-[7vh] items-center space-x-3 flex flex-row '>
           {% block nav %} {% endblock %}

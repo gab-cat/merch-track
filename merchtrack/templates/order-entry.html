@@ -1,4 +1,9 @@
 {% extends 'base.html' %} {% block title %} Order Entry {% endblock %}
+
+{% block nav %}
+    <a class='px-3 py-1 text-lg font-semibold text-white transition-all border rounded-full hover:opacity-50 active:opacity-80' href="{% url 'dashboard' %}">Back to Dashboard</a>
+{% endblock %}
+
 {% block content %}
 {% load static %}
 {% load slippers %}
@@ -6,7 +11,7 @@
 <form method="POST"  class=" flex flex-col p-5 w-screen h-full bg-[#f3f3f3] overflow-auto">
     {% csrf_token %}
     <div class='flex  flex-col bg-white rounded-xl shadow-xl overflow-auto min-w-[1.5rem] min-h-[50%] m-auto p-5'>
-        <div class='w-full p-3 text-3xl font-bold text-left border-b'>Create an Order</div>
+        <div class='w-full p-3 text-[#3BAFE1] text-3xl font-bold text-left border-b'>Create an Order</div>
         <div class='flex flex-col w-full p-3 my-2 border rounded-lg'>
             <div class='flex flex-row items-center'>
                 <div class='bg-[#3BAFE1] text-white p-1 px-3 text-xl italic font-bold tracking-wide rounded-full w-fit '>

@@ -1,0 +1,71 @@
+{% extends 'base.html' %} {% block title %} Login {% endblock %}
+{% block content %}
+{% load static %}
+
+<style>
+p {
+    display: flex;
+    flex-direction: column;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    align-items: start;
+    width: 100%;
+}
+
+.helptext {
+    font-size: 0.8rem;
+    color: blue;
+    margin-left: 0.5rem;
+}
+
+p label {
+    margin-right: 0.5rem;
+    font-weight: 700;
+}
+
+ul {
+    font-size: 0.85rem;
+    list-style: none;
+}
+
+ul li {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background-color: rgb(254 226 226 );
+    color: rgb(185 28 28);
+}
+
+p input {
+    width: 100%;
+    border-radius: 25px;
+}
+
+#id_password, #id_password2 {
+    border-radius: 0.5rem;
+}
+
+</style>
+
+<div class=' flex flex-col w-screen h-full  bg-[#f3f3f3] '>
+    <div class='flex overflow-visible flex-col justify-center items-center content-center bg-white rounded-xl shadow-xl min-h-[50%] min-w-[8rem] m-auto p-5'>
+        <div class='self-start w-full mx-5'>
+            <div class=' self-start text-[#3BAFE1] text-3xl mt-2 font-bold text-left'>Log in to MerchTrack! </div>
+            <div class='self-start w-full pb-3 mb-2 text-lg italic font-medium border-b'>Easy way to order</div>
+        </div>
+
+        <form class='flex border-b flex-col self-start justify-start mx-10 my-5 min-w-[50%]' method="POST" autocomplete='off' >
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <input class=' max-w-[15rem] text-white bg-[#3BAFE1] border-white text-lg rounded-xl font-Inter font-semibold text-center py-1 my-5  px-5 cursor-pointer active:opacity-100 hover:opacity-[0.5] transition-all' 
+            value="Login"
+            type="submit"/>
+        </form>
+        <div class='self-start mx-5'>
+            <div class='italic font-medium'>Do not yet have an account?</div>
+            <a class='text-[#3BAFE1] text-lg font-bold underline' href='{% url 'registration' %}' >Register here</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

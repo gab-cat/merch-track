@@ -1,0 +1,30 @@
+{% extends 'base.html' %} {% block title %} Dashboard {% endblock %}
+
+{% block content %}
+{% load static %}
+{% load slippers %}
+
+<div class=' flex flex-col w-screen h-full  bg-[#f3f3f3] '>
+    <div class='flex overflow-visible flex-col  bg-white rounded-xl shadow-xl min-w-auto min-h-[50%] m-auto p-5'>
+        <div class='self-start w-full mx-5'>
+            <div class=' self-start text-[#3BAFE1] text-3xl mt-2 font-bold text-left'>Welcome to MerchTrack Dashboard! </div>
+            <div class='self-start w-full pb-3 mb-2 text-lg italic font-medium border-b'>Easy way to order</div>
+        </div>
+        <div class='flex flex-row mx-5 my-2 space-x-4'>
+            <span  class='text-sm font-regular'>  Logged in as</span> 
+            <span class='text-sm font-semibold'>{{ student_name }}</span>
+        </div>
+        <div class='flex flex-row content-center p-5 justify-evenly'>
+            {% card url='order-entry' src='assets/create.png' title='Create new order' %}
+            {% card url='adminTracker' src='assets/track.png' title='Admin Tracker' %}
+            {% card url='messages' src='assets/messages.png' title='Check Messages' %}
+
+        </div>
+        <div class='flex flex-row-reverse self-start w-full mt-auto mr-10 '>
+            <a class='text-[#e13b3b] hover:bg-red-200 transition-all text-lg font-bold py-2 px-5 border border-[#e13b3b] rounded-xl' href='{% url 'logout' %}' >Logout</a>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
