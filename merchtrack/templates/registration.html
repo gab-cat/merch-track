@@ -1,4 +1,9 @@
 {% extends 'base.html' %} {% block title %} Register  {% endblock %}
+
+{% block nav %}
+    <a class='px-3 py-1 text-lg font-semibold text-white transition-all border rounded-full hover:opacity-50 active:opacity-80' href="{% url 'dashboard' %}">Back to Dashboard</a>
+{% endblock %}
+
 {% block content %}
 {% load static %}
 
@@ -63,10 +68,10 @@ p input {
             <input class='self-end max-w-[15rem] text-white bg-[#3BAFE1] border-white text-lg rounded-xl font-Inter font-semibold text-center py-1 my-5  px-10 cursor-pointer active:opacity-100 hover:opacity-[0.5] transition-all' 
             value="Create Account"
             type="submit"/>
-            <div class='self-center w-full py-3 mx-5 border-t'>
+            {% comment %} <div class='self-center w-full py-3 mx-5 border-t'>
                 <div class='italic font-medium'>Already have an account?</div>
                 <a class='text-[#3BAFE1] text-lg underline font-bold' href='{% url 'login' %}' >Login here</a>
-            </div>
+            </div> {% endcomment %}
         </form>
 
 

@@ -128,12 +128,13 @@ def studentInfo(request):
     except user_info.DoesNotExist:
         return HttpResponse("Student not found", status=404)
 
+@login_required(login_url='login')
 def register(request):
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('login')
+            return redirect('dashboard')
     else:
         form = CreateUserForm()
     
