@@ -2,66 +2,63 @@
 {% block content %}
 {% load static %}
 <div class="flex flex-row w-full h-full bg-[#f3f3f3] justify-center">
-    <div class="w-[90%] flex flex-col items-center border border-black-500">
+    <div class="w-[90%] flex flex-col items-center">
         
-        <div class="w-[90%] flex flex-row justify-between box-border border border-red-500 mt-9">
+        <div class="w-[90%] flex flex-row items-center justify-between box-border mt-9">
             <div>
-                <h2>Order ID: 147891248970</h2> <!--class="track_first_left"-->
+                <h2 class="text-xl"><b>Order ID: {{ order_ids }}</b></h2>
             </div>
-<<<<<<< Updated upstream
             <div class="flex flex-row flex-wrap justify-end border border-red-500">
                 <button class="ml-3 px-1 rounded-lg border-2 border-gray-300 box-border">Invoice</button>
                 <button class="ml-3 px-1 rounded-lg bg-indigo-600 box-border text-white">Track order</button>
-=======
-            <div class="flex flex-row flex-wrap justify-end">
-                <button class="mr-3 px-2 py-1 rounded-lg border-2 border-gray-300 hover:bg-gray-300 box-border">Invoice</button>
-                <button class="ml-3 px-2 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-300 box-border text-white">Track order</button>
->>>>>>> Stashed changes
             </div>
         </div>
 
-        <div class="w-[90%] flex flex-row flex-wrap justify-between border border-green-500 mt-6">
+        <div class="w-[90%] flex flex-row flex-wrap gap-y-1 items-center justify-between mt-6">
             {% for itr in orders %}
             <div class="flex flex-row">   
                 <h4 class="mr-3"><b>Order Date:</b> {{ itr.order_date }}</h4> <!--date = pH-->
-                <h4 class="ml-3">Estimated Distribution Date: {{ itr.distribution_date }}</h4> <!--date = pH-->
+                <h4 class="h-full">|</h4>
+                <h4 class="ml-3 text-green-500"><b>Estimated Distribution Date: </b>{{ itr.distribution_date }}</h4> <!--date = pH-->
             </div>
-            <div class="flex flex-row flex-wrap justify-end border border-red-500">
-                <h4 class="ml-3">Order Status:</h4>
-                <h4 class="ml-3 px-1 rounded-lg bg-purple-800 box-border text-white" >{{ itr.order_status }}</h4>
+            <div class="flex flex-row flex-wrap items-center">
+                <h4 class="mr-3">Order Status:</h4>
+                <h4 class="ml-3 px-2 py-1 rounded-lg bg-purple-800 box-border text-white" >{{ itr.order_status }}</h4>
             </div>
 
             {% endfor %}
         </div>
 
-        <div class='w-[90%] h-px bg-black my-3' style="opacity: 1; transform-origin: 50% 50% 0px;"></div> <!-- This is <hr> but working-->
+        <div class='w-[90%] h-px bg-black my-6' style="opacity: 1; transform-origin: 50% 50% 0px;"></div> <!-- This is <hr> but working-->
 
 
-        <div class="w-[75%] h-[70%] overflow-auto box-border border border-yellow-500" >
+        <div class="w-[75%] h-[65%] overflow-auto box-border">
                 {% load static %}
                 {% for deets in order_details %}         
-                <div class="h-[25%] flex flex-row items-center my-2 p-2 box-border " style = "border: 2px solid blueviolet;">
+                <div class="h-[25%] flex flex-row items-center my-2 p-2 rounded-lg border border-black box-border">
                     <img src="{% static 'assets/tshirtimage.png' %}" alt="Item Image" class="h-[99%] min-w-1/10 border border-black-500">
-                    <div class="flex flex-col w-full h-[80%] p-2 justify-center border border-red-500">
+                    <div class="flex flex-col w-full h-[80%] p-2 justify-center">
                         <div class="flex flex-row justify-between box-border">
-                            <h1><b>{{ deets.item_name }}</b></h1>
-                            <h1><b>Php {{ deets.item_cost}}.00</b></h1>
+                            <h1 class="text-xl"><b>{{ deets.item_name }}</b></h1>
+                            <h1 class="text-xl"><b>Php {{ deets.item_cost}}.00</b></h1>
                         </div>
                         <div class="flex flex-row justify-between box-border">
-                            <h1> {{ deets.item_color }} {{ deets.item_size }} </h1>
+                            <h1> {{ deets.item_color }} | {{ deets.item_size }} </h1>
                             <h1> Qty: {{ deets.item_quantity}} </h1>
                         </div>
                     </div>
                 </div>
                 {% endfor %}
-                <h1 class="flex self-end justify-end border border-red-500">Total: PHP temp val</h1>
         </div>
+        <h1 class="w-[75%] my-2 px-6 flex justify-end text-xl"><b>Total:<span class="inline-block mx-4"></span>PHP {{total_costs}}</b></h1>
 
-        <div class='w-[90%] h-px bg-black my-3' style="opacity: 1; transform-origin: 50% 50% 0px;"></div> <!-- This is <hr> but working-->
+        <!-- <h1 class="w-[75%] flex self-end items-center justify-end text-xl border border-black"><b>Total:<span class="inline-block mx-4"></span>PHP {{total_costs}}</b></h1> -->
 
-        <div class="w-[90%] flex flex-col border">
-            <h1>Payment</h1>
-            <div class="flex flex-row justify-between">
+        <div class='w-[90%] h-px bg-black my-6' style="opacity: 1; transform-origin: 50% 50% 0px;"></div> <!-- This is <hr> but working-->
+
+        <div class="w-[85%] flex flex-col border">
+            <h1 class="text-xl"><b>Payment</b></h1>
+            <div class="flex flex-row justify-between my-2">
                 {% for itr in orders%}
                     <h4><b>Method: </b>{{ itr.payment_method }}</h4>
                     <h4><b>Status: </b>{{ itr.payment_status }}</h4>
@@ -73,7 +70,4 @@
     </div>
 </div>
 {% endblock %}
-
-                 <!-- class="flex flex-row justify-end flex-wrap border-2 border border-black-500 box-border" -->
-
-                                 <!--  class="bg-purple-800 rounded-lg border box-border" -->
+border border-black

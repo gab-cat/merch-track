@@ -1,23 +1,31 @@
 {% extends 'base.html' %} {% block title%} MerchTrack Index Page {% endblock %}
 {% block content%}
 
-<div class="flex  w-full h-full bg-[#f3f3f3]">
-    <table class='w-full'>
+<div class="flex w-full h-full bg-[#f3f3f3]">
+    <table class='mx-5 mt-5 w-full border-2 border-black h-8' >
         <tr>
-        <th>No</th>
-        <th>Full Name</th>
-        <th>Student Number</th>
-        <th>Email</th>
-        <th>Course</th>
-        <th>Payment Method</th>
-        <th>Status of Payment</th>
-        <th>Status of Order</th>
+        <th>NO</th>
+        <th>FULL NAME</th>
+        <th>STUDENT NUMBER</th>
+        <th>EMAIL</th>
+        <th>COURSE</th>
+        <th>PAYMENT OF METHOD</th>
+        <th>STATUS OF PAYMENT</th>
+        <th>STATUS OF ORDER</th>
         </tr>
-        <tr>
-        {% for x in obj %}
-        <td>{{x.name}}</td>
-        <td>{{x.description}}</td>
+        
+        {% for x in orders %}
+        <tr class=' w-full border-2 border-black'>
+            <td class='text-center'>{{x.0}}</td>
+            <td class='text-left overflow-ellipsis'>{{x.1}}</td>
+            <td class='text-center'>{{x.2}}</td>
+            <td class='text-center'>{{x.3}}</td>
+            <td class='text-center'>{{x.4}}</td>
+            <td class='text-center'>{{x.5}}</td>
+            <td class='text-center'>{{x.6}}</td>
+            <td class='text-center'>{{x.7}}</td>
         </tr>
         {% endfor %}
     </table>
+</div>
 {% endblock %}
