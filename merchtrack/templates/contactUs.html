@@ -1,14 +1,21 @@
-{% extends 'base.html' %} {% block title%} MerchTrack Index Page {% endblock %}
+{% extends 'base.html' %} {% block title%} Contact Us {% endblock %}
+
+{% block nav %}
+    <a class='font-regular nav-item' href="{% url 'home' %}">Home</a>
+    <a class='text-gray-500 font-regular nav-item' href="{% url 'aboutUs' %}">About Us</a>
+    <a class='font-bold nav-item' href="{% url 'contactUs' %}">Contact Us</a> 
+{% endblock %}
+
 {% block content%}
 {% load static %}
 <div class="flex flex-row flex-wrap  w-full h-full bg-[#ffffff]">
     <div class='flex'>
         <img class='h-[80dvh] w-fit my-auto mx-20' src="{% static 'assets/ContactInfo.svg' %}" alt="Contact Info" />
         <div class='w-full mx-20 flex flex-col items-center'>
-            <div class='flex flex-col items-end w-full text-right'>
+            <div class='flex flex-col  w-full '>
                 <span class="text-[7dvh] mx-auto font-semiboldbold text-black ">Contact Us</span>
             </div>
-            <form action="" method="POST">
+            <form class='flex flex-col w-full items-center' action="" method="POST">
                 {%csrf_token%}
                 <input class='w-[90%] indent-2 my-3  border-[#818286]' type="text" id="your_name" name="your_name" placeholder="Your name">
                 <input class='w-[90%] indent-2 mb-3  border-[#818286]' type="text" id="email" name="email" placeholder="Email">
