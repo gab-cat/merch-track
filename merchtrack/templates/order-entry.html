@@ -141,7 +141,7 @@
         error_box.classList.add("text-blue-700");
 
         try {
-            const response = await fetch(`http://localhost:8000/student-info?student_id=${studentId}`);
+            const response = await fetch(`https://merch-track.vercel.app/student-info?student_id=${studentId}`);
             const data = await response.json();
     
             if (response.status === 200) {

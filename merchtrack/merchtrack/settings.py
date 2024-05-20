@@ -59,7 +59,7 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:8000', 
-    'https://merch-track.vercel.app',
+    'https://merch-track.vercel.app/',
 ]
 
 ROOT_URLCONF = "merchtrack.urls"
