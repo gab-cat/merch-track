@@ -66,7 +66,7 @@ def not_found(request):
 @login_required(login_url='login')
 def adminTracker(request):
     cursor = connection.cursor()
-    cursor.execute('select app_order_info.order_details_id, app_user_info.student_id, app_user_info.student_name, app_order_info.payment_method, app_order_info.payment_status, app_order_info.order_status from app_order_info join app_user_info on app_order_info.user_info_ID = app_user_info.student_id')
+    cursor.execute('select app_order_info.order_details_id, app_user_info.student_id, app_user_info.student_name, app_user_info.email, app_user_info.course, app_order_info.payment_method, app_order_info.payment_status, app_order_info.order_status from app_order_info join app_user_info on app_order_info.user_info_ID = app_user_info.student_id')
     results = cursor.fetchall()
     print(results)
     return render(request, 'adminTracker.html', {'orders' : results})
