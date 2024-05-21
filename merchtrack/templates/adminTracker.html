@@ -1,13 +1,13 @@
 {% extends 'base.html' %} {% block title%} Admin Tracker {% endblock %}
-
+{% load slippers %}
 {% block nav %}
-    <a class='px-3 py-1 text-lg font-semibold text-white transition-all border rounded-full hover:opacity-50 active:opacity-80' href="{% url 'dashboard' %}">Back to Dashboard</a>
+    {% back-to-dashboard %}
 {% endblock %}
 
 {% block content%}
-
-<div class="flex w-full h-full bg-[#f3f3f3]">
-    <table class='w-full h-8 mx-5 mt-5 border-2 border-black' >
+{% #page-base page_title='Admin Tracker' %}
+<div class="flex w-auto min-w-[80vw] h-full ">
+    <table class='w-full h-10 mx-5 mt-5 ' >
         <tr>
         <th>NO</th>
         <th>FULL NAME</th>
@@ -20,7 +20,7 @@
         </tr>
         
         {% for x in orders %}
-        <tr class='w-full border-2 border-black '>
+        <tr class='w-full h-10 border-b '>
             <td class='text-center'>{{x.0}}</td>
             <td class='text-left overflow-ellipsis'>{{x.1}}</td>
             <td class='text-center'>{{x.2}}</td>
@@ -33,4 +33,5 @@
         {% endfor %}
     </table>
 </div>
+{% /page-base %}
 {% endblock %}

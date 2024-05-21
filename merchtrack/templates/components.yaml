@@ -1,3 +1,5 @@
 components:
     text-input: 'components/text-input.html'
     card: 'components/card.html'
+    page-base: 'components/page-base.html'
+    back-to-dashboard: 'components/back-to-dashboard.html'

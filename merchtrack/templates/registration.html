@@ -1,7 +1,8 @@
 {% extends 'base.html' %} {% block title %} Register  {% endblock %}
+{% load slippers %}
 
 {% block nav %}
-    <a class='px-3 py-1 text-lg font-semibold text-white transition-all border rounded-full hover:opacity-50 active:opacity-80' href="{% url 'dashboard' %}">Back to Dashboard</a>
+    {% back-to-dashboard %}
 {% endblock %}
 
 {% block content %}
@@ -57,7 +58,7 @@ p input {
 <div class=' flex flex-col w-screen h-full bg-[#f3f3f3] overflow-auto p-2'>
     <div class='flex flex-col items-center content-center justify-center h-auto p-5 m-auto overflow-visible bg-white shadow-xl rounded-xl min-w-auto'>
         <div class='self-start w-full mx-5'>
-            <div class=' self-start text-[#3BAFE1] text-3xl mt-2 font-bold text-left'>Create your account at MerchTrack! </div>
+            <div class=' self-start text-[#3BAFE1] text-3xl mt-2 font-bold text-left'>Create an account at MerchTrack </div>
             <div class='self-start w-full pb-3 mb-2 text-lg italic font-medium border-b'>Easy way to order</div>
         </div>
 
