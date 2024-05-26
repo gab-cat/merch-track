@@ -6,9 +6,10 @@ from django.template import loader
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.cache import cache
 
-from .forms import CreateUserForm, LoginForm
-from .models import user_info, order_info, order_details, contact_us
+from .forms import CreateUserForm, LoginForm, UserRegistrationForm
+from .models import user_info, order_info, order_details, contact_us, Customer
 
 def home(request):
     return render(request, 'index.html')
@@ -129,18 +130,22 @@ def studentInfo(request):
     except user_info.DoesNotExist:
         return HttpResponse("Student not found", status=404)
 
-@login_required(login_url='login')
 def register(request):
     if request.method == 'POST':
-        form = CreateUserForm(request.POST)
+        form = UserRegistrationForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('dashboard')
+            user = form.save(commit=False)
+            user.save()
+            # Create a Customer instance
+            Customer.objects.create(
+                user=user,
+                phone=form.cleaned_data['phone'],
+                course=form.cleaned_data['course']
+            )
+            return redirect('login')  # Redirect to the login page after successful registration
     else:
-        form = CreateUserForm()
-    
-    context = {'form': form}
-    return render(request, 'registration.html', context)
+        form = UserRegistrationForm()
+    return render(request, 'registration.html', {'form': form})
 
 def login(request):
     if request.user.is_authenticated:
@@ -149,24 +154,15 @@ def login(request):
     if request.method == 'POST':
         form = LoginForm(data=request.POST)
         if form.is_valid():
-            student_id = form.cleaned_data['username']
+            username = form.cleaned_data['username']
             password = form.cleaned_data['password']
 
-            print("username: " + student_id, "password: " + password)
+            print("username: " + username, "password: " + password)
             # Retrieve the user_info object with the provided student_id
-            try:
-                user_info_obj = user_info.objects.get(student_id=student_id)
-            except user_info.DoesNotExist:
-                user_info_obj = None
-
-            if user_info_obj:
-                # Authenticate using the user_info's associated User object
-                user = authenticate(request, username=user_info_obj.user.username, password=password)
-                if user is not None:
-                    auth_login(request, user)
-                    return redirect('dashboard')
-                else:
-                    form.add_error(None, "Invalid student ID or password.")
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                auth_login(request, user)
+                return redirect('dashboard')
             else:
                 form.add_error(None, "Invalid student ID or password.")
     else:
@@ -176,6 +172,8 @@ def login(request):
 
 def logout(request):
     if request.method == 'POST':
+        cache_key = f'user_details_{request.user.id}'
+        cache.delete(cache_key)
         auth_logout(request)
         return redirect('login')
 
@@ -183,24 +181,34 @@ def logout(request):
 
 @login_required(login_url='login')
 def dashboard(request):
-    # Access user details
     user = request.user
-
-    user_info_obj = user_info.objects.get(student_id=user)
-    student_name = user_info_obj.student_name
-    course = user_info_obj.course
-    email = user_info_obj.email
-
+    cache_key = f'user_details_{user.id}'
+    user_details = cache.get(cache_key)
     
-    context = {
-        'user': user,
-        'student_id': user,
-        'student_name': student_name,
-        'course': course,
-        'email': email,
-        # Add other user details as needed
-    }
-    return render(request, 'dashboard.html', context)
+    if not user_details:
+        student_name = f"{user.first_name} {user.last_name}"
+        email = user.email
+        try:
+            customer = Customer.objects.get(user=user)
+            course = customer.course
+            phone = customer.phone
+        except Customer.DoesNotExist:
+            course = None
+            phone = None
+        
+        user_details = {
+            'user': user,
+            'student_id': user.id,
+            'student_name': student_name,
+            'course': course,
+            'email': email,
+            'phone': phone
+        }
+        
+        # Cache the user details
+        cache.set(cache_key, user_details)
+    
+    return render(request, 'dashboard.html', user_details)
 
 @login_required(login_url='login')
 def messages(request):

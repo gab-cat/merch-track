@@ -7,62 +7,14 @@
 
 {% block content %}
 {% load static %}
-
-<style>
-p {
-    display: flex;
-    flex-direction: column;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    align-items: start;
-}
-
-.helptext {
-    font-size: 0.8rem;
-    color: blue;
-    margin-left: 0.5rem;
-}
-
-p label {
-    margin-right: 0.5rem;
-    font-weight: 700;
-}
-
-ul {
-    font-size: 0.8rem;
-    list-style: disc;
-    margin-left: 1rem;
-}
-
-p input {
-    width: 100%;
-    border-radius: 25px;
-}
-
-#id_password1, #id_password2 {
-    border-radius: 0.5rem;
-}
-
-.errorlist {
-    font-size: 0.85rem;
-    list-style: none;
-    margin: 1rem;
-    border-radius: 0.5rem;
-    background-color: rgb(254 226 226 );
-    color: rgb(185 28 28);
-    padding: 0.5rem;
-}
-
-</style>
-
 <div class=' flex flex-col w-screen h-full bg-[#f3f3f3] overflow-auto p-2'>
-    <div class='flex flex-col items-center content-center justify-center h-auto p-5 m-auto overflow-visible bg-white shadow-xl rounded-xl min-w-auto'>
-        <div class='self-start w-full mx-5'>
-            <div class=' self-start text-[#3BAFE1] text-3xl mt-2 font-bold text-left'>Create an account at MerchTrack </div>
+    <div class='flex flex-col items-center content-center justify-center h-auto p-5 m-auto overflow-visible bg-white shadow-xl w-min rounded-xl'>
+        <div class='self-start mx-5 w-fit'>
+            <div class=' self-start text-[#3BAFE1] text-3xl mt-2 font-bold text-left'>Create an account</div>
             <div class='self-start w-full pb-3 mb-2 text-lg italic font-medium border-b'>Easy way to order</div>
         </div>
 
-        <form class='flex flex-col self-center justify-start mx-10 my-5' method="POST" autocomplete='off' >
+        <form class='flex flex-col self-center justify-start w-full px-10 my-5' method="POST" autocomplete='off' >
             {% csrf_token %}
             {{ form.as_p }}
 
@@ -79,5 +31,94 @@ p input {
 
     </div>
 </div>
+
+
+<style>
+    p {
+        display: flex;
+        flex-direction: column;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        align-items: start;
+    }
+    
+    .helptext {
+        font-size: 0.8rem;
+        color: blue;
+        margin-left: 0.5rem;
+    }
+    
+    p label {
+        margin-right: 0.5rem;
+        font-weight: 700;
+    }
+    
+    ul {
+        font-size: 0.8rem;
+        list-style: disc;
+        margin-left: 1rem;
+    }
+    
+    p input {
+        width: 100%;
+        border-radius: 25px;
+    }
+    
+    #id_password1, #id_password2 {
+        border-radius: 0.5rem;
+    }
+    
+    .errorlist {
+        font-size: 0.85rem;
+        list-style: none;
+        margin: 1rem;
+        border-radius: 0.5rem;
+        background-color: rgb(254 226 226 );
+        color: rgb(185 28 28);
+        padding: 0.5rem;
+    }
+
+    input[type="text"], input[type="password"], input[type="email"], select {
+        border-radius: 0.5rem;
+
+    }
+    
+</style>
+
+<script>
+    function generateRandomPassword(length) {
+        const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let password = '';
+        for (let i = 0; i < length; i++) {
+            password += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return password;
+    }
+
+    function togglePasswordField() {
+        const isStaffCheckbox = document.getElementById('id_is_staff');
+        const passwordField = document.getElementById('id_password');
+        const confirmPasswordField = document.getElementById('id_confirm_password');
+
+        if (isStaffCheckbox.checked) {
+            passwordField.disabled = false;
+            confirmPasswordField.disabled = false;
+            passwordField.value = '';
+            confirmPasswordField.value = '';
+        } else {
+            const randomPassword = generateRandomPassword(8);
+            passwordField.value = randomPassword;
+            confirmPasswordField.value = randomPassword;
+            passwordField.disabled = true;
+            confirmPasswordField.disabled = true;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const isStaffCheckbox = document.getElementById('id_is_staff');
+        isStaffCheckbox.addEventListener('change', togglePasswordField);
+        togglePasswordField(); // Initial call to set the correct state
+    });
+</script>
 
 {% endblock %}

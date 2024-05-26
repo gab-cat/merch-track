@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.core.validators import RegexValidator
 
@@ -46,3 +47,45 @@ class CreateUserForm(UserCreationForm):
 class LoginForm(AuthenticationForm):
     username = forms.CharField(widget=TextInput(attrs={'class': 'w-full rounded-lg', 'placeholder': 'Student ID'}))
     password = forms.CharField(widget=PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}))
+
+
+
+
+class UserRegistrationForm(forms.ModelForm):
+    COURSE_CHOICES = [
+        ('BS Digital Illustration and Animation', 'BS Digital Illustration and Animation'),
+        ('BS Computer Science', 'BS Computer Science'),
+        ('BS Information Technology', 'BS Information Technology'),
+        ('BS Information Systems', 'BS Information Systems'),
+        ('Others', 'Others'),
+    ]
+
+    first_name = forms.CharField(max_length=30, required=True)
+    last_name = forms.CharField(max_length=30, required=True)
+    email = forms.EmailField(max_length=254, required=True, help_text='Use GBOX whenever possible.')
+    username = forms.CharField(max_length=30, required=True, help_text='Use GBOX Username whenever possible.')
+    phone = forms.CharField(max_length=15, required=True)
+    course = forms.ChoiceField(choices=COURSE_CHOICES, required=True,  help_text='Select "Others" if not applicable.')
+    password = forms.CharField(widget=forms.PasswordInput(), required=True, help_text='Assign a password if the user will be staff. If not a random password will be generated.')
+    confirm_password = forms.CharField(widget=forms.PasswordInput(), required=True, help_text='Re-enter your password for confirmation.')
+    is_staff = forms.BooleanField(required=False, label='Is Staff:', help_text='Check if the user will have staff privileges.')
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email', 'username', 'phone', 'course', 'password', 'confirm_password', 'is_staff')
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get("password")
+        confirm_password = cleaned_data.get("confirm_password")
+
+        if password != confirm_password:
+            raise forms.ValidationError("Password and Confirm Password do not match")
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data['password'])
+        user.is_staff = self.cleaned_data['is_staff']
+        if commit:
+            user.save()
+        return user
