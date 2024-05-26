@@ -1,0 +1,150 @@
+{% extends 'base.html' %} {% block title %} Create Product  {% endblock %}
+{% load slippers %}
+
+{% block nav %}
+    {% back-to-dashboard %}
+{% endblock %}
+
+{% block content %}
+{% load static %}
+<div class=' flex flex-col w-screen h-full bg-[#f3f3f3] overflow-auto p-2'>
+    <div class='flex flex-col items-center content-center justify-center w-auto h-auto p-5 m-auto overflow-visible bg-white shadow-xl rounded-xl'>
+        <div class='self-start mx-5 w-fit'>
+            <div class=' text-[#3BAFE1] text-3xl mt-2 font-bold text-left'>Create a New Product</div>
+            <div class='w-full pb-3 mb-2 text-lg italic font-medium border-b'>Easy way to order</div>
+        </div>
+        <form class='flex flex-row min-w-[50rem]' method="POST" autocomplete='off' enctype="multipart/form-data" >
+            <div class='flex flex-col self-start justify-start w-4/6 px-10 my-5' >
+                {% csrf_token %}
+                <table class='table-auto border-spacing-y-2'>
+                    <tr>
+                        <td class='py-2 align-top'><label class='mr-2 font-bold' for="{{ form.name.id_for_label }}">{{ form.name.label }}</label></td>
+                        <td class='w-full'>{{ form.name }}</td>
+                    </tr>
+                    
+                    <tr>
+                        <td class='py-2 align-top'><label class='mb-auto mr-2 font-bold ' for="{{ form.description.id_for_label }}">{{ form.description.label }}</label></td>
+                        <td>{{ form.description }}</td>
+                    </tr>
+                    
+                    <tr>
+                        <td class='py-2 align-top'><label class='mr-2 font-bold'  for="{{ form.price.id_for_label }}">{{ form.price.label }}</label></td>
+                        <td>{{ form.price }}</td>
+                    </tr>
+                    
+                    <tr>
+                        <td class='py-2 align-top'><label class='mr-2 font-bold'  for="{{ form.category.id_for_label }}">{{ form.category.label }}</label></td>
+                        <td>{{ form.category }}</td>
+                    </tr>
+                </table>
+
+                {% if form.non_field_errors or form.errors %}
+                <ul class='w-5/6 p-3 my-5 text-base text-red-700 list-inside bg-red-100 rounded-lg'>
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+
+            </div>
+            <div class='flex flex-col h-full p-5 rounded-lg w-72 '>
+                <label class='mr-2 font-bold' for="id_productImage">Product Image:</label>
+                <div class='flex self-center w-56 h-56 my-5 border rounded-lg bg-slate-200 max-w-56 max-h-56'>
+                    <img class='object-cover w-full h-full' alt='image preview' id='image-prev'  />
+                </div>
+                <input class='flex px-4 py-2 my-1 rounded-lg' type="file" name="productImage" accept="image/*" id="id_productImage" onchange="previewImage(event)">
+                <input class='self-end mt-auto w-fit text-white bg-[#3BAFE1] border-white text-lg rounded-xl font-Inter font-semibold text-center py-2 px-4 my-5  cursor-pointer active:opacity-100 hover:opacity-[0.5] transition-all' 
+                value="Create New Product"
+                type="submit"/>
+            </div>
+
+
+        </form>
+
+
+    </div>
+</div>
+
+
+<style>
+
+    #image-prev {
+        display: none;
+        max-width: 300px;
+        max-height: 300px;
+    }
+
+    p {
+        display: flex;
+        flex-direction: column;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        align-items: start;
+    }
+    
+    .helptext {
+        font-size: 0.8rem;
+        color: blue;
+        margin-left: 0.5rem;
+    }
+    
+    p label {
+        margin-right: 0.5rem;
+        font-weight: 700;
+    }
+    
+    ul {
+        font-size: 0.8rem;
+        list-style: disc;
+        margin-left: 1rem;
+    }
+    
+    p input {
+        width: 100%;
+        border-radius: 25px;
+    }
+    
+    #id_password1, #id_password2 {
+        border-radius: 0.5rem;
+    }
+    
+    .errorlist {
+        font-size: 0.85rem;
+        list-style: none;
+        margin: 1rem;
+        border-radius: 0.5rem;
+        background-color: rgb(254 226 226 );
+        color: rgb(185 28 28);
+        padding: 0.5rem;
+    }
+
+    input[type="text"], input[type="number"], textarea{
+        border-radius: 0.5rem;
+        width: 100%;
+
+    }
+
+    tr {
+        display: grid;
+        padding-bottom: 0.25rem; /* Adjust this value for vertical spacing */
+    }
+    
+</style>
+<script>
+    function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function(){
+            var output = document.getElementById('image-prev');
+            output.src = reader.result;
+            output.style.display = 'block';
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
+
+{% endblock %}

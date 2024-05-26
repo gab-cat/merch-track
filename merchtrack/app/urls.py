@@ -1,7 +1,8 @@
 from django.conf import settings
 from django.views.static import serve
-from django.urls import path,re_path
+from django.urls import path,re_path, include
 from . import views
+from .view import product
 
 urlpatterns = [
     path("", views.home, name='home'),
@@ -16,6 +17,9 @@ urlpatterns = [
     path('logout', views.logout, name='logout'),
     path('dashboard', views.dashboard, name='dashboard'),
     path('messages', views.messages, name='messages'),
+
+    path('create-product', product.create_product, name='create-product'),
+
     re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
     re_path(r'^.*$', views.not_found, name='404'),
 ]
