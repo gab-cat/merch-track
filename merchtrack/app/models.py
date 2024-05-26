@@ -49,19 +49,17 @@ class contact_us(models.Model):
 # NEW DATA
 
 class Customer(models.Model):
-    customerId = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=200)
-    email = models.EmailField(max_length=200)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, default=999)
     phone = models.CharField(max_length=15)
     course = models.CharField(max_length=200)
 
     class Meta:
         db_table = 'customer'
         constraints = [
-            models.UniqueConstraint(fields=['customerId'], name='unique_customer_id')
+            models.UniqueConstraint(fields=['user'], name='unique_customer_id')
         ]
         indexes = [
-            models.Index(fields=['customerId'], name='customer_id_idx')
+            models.Index(fields=['user'], name='customer_id_idx')
         ]
 
 class Product(models.Model):
@@ -82,9 +80,12 @@ class Product(models.Model):
 
 class Order(models.Model):
     orderId = models.AutoField(primary_key=True)
-    customerId = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customerId = models.ForeignKey(Customer, on_delete=models.CASCADE, default=999)
+    processedBy = models.ForeignKey(User, on_delete=models.CASCADE, related_name='processed_orders', default=999)
     orderDate = models.DateTimeField(default=now)
-    status = models.CharField(max_length=50)
+    status = models.CharField(max_length=50, default="Pending")
+    totalAmount = models.FloatField(max_length=10, default=0)
+    discountAmount = models.FloatField(max_length=10, default=0)
     estimatedDeliveryDate = models.DateTimeField()
 
     class Meta:
@@ -116,10 +117,13 @@ class OrderItem(models.Model):
 class Payment(models.Model):
     paymentId = models.AutoField(primary_key=True)
     orderId = models.ForeignKey(Order, on_delete=models.CASCADE)
+    customerId = models.ForeignKey(Customer, on_delete=models.CASCADE, default=999)
+    processedBy = models.ForeignKey(User, on_delete=models.CASCADE, related_name='processed_payments', default=999)
     paymentDate = models.DateTimeField(default=now)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     paymentMethod = models.CharField(max_length=50)
-    paymentStatus = models.CharField(max_length=50)
+    paymentStatus = models.CharField(max_length=50, default="For Verification")
+    referenceNumber = models.CharField(max_length=100, default="")
 
     class Meta:
         db_table = 'payment'
@@ -148,7 +152,9 @@ class Fulfillment(models.Model):
     fulfillmentId = models.AutoField(primary_key=True)
     orderId = models.OneToOneField(Order, on_delete=models.CASCADE)
     fulfillmentDate = models.DateTimeField(default=now)
-    status = models.CharField(max_length=50)
+    processedBy = models.ForeignKey(User, on_delete=models.CASCADE, related_name='processed_fulfillments', default=999)
+    status = models.CharField(max_length=50, default="Pending")
+
 
     class Meta:
         db_table = 'fulfillment'
@@ -157,4 +163,25 @@ class Fulfillment(models.Model):
         ]
         indexes = [
             models.Index(fields=['fulfillmentId'], name='fulfillment_id_idx')
+        ]
+
+class Log(models.Model):
+    logId = models.AutoField(primary_key=True)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    created_date = models.DateTimeField(default=now)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, default=999)
+    reason = models.CharField(max_length=255)
+    system_text = models.TextField()
+    user_text = models.TextField()
+
+    def __str__(self):
+        return f"Log for {self.customer.user.username} by {self.created_by.username} on {self.created_date}"
+    
+    class Meta:
+        db_table = 'log'
+        constraints = [
+            models.UniqueConstraint(fields=['logId'], name='unique_logId_id')
+        ]
+        indexes = [
+            models.Index(fields=['logId'], name='logId_id_idx')
         ]
