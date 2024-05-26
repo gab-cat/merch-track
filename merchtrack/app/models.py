@@ -64,6 +64,7 @@ class Customer(models.Model):
 
 class Product(models.Model):
     productId = models.AutoField(primary_key=True)
+    productImage = models.ImageField(upload_to='product_images/', blank=True, null=True)
     name = models.CharField(max_length=200)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)

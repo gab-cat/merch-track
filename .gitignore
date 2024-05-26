@@ -3,4 +3,5 @@
 *.pyc
 *.pyo
 *.pyd
+*.djcache
 merchtrack/app/__pycache__/

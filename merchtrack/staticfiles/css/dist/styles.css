@@ -819,11 +819,6 @@ select {
   margin: auto;
 }
 
-.mx-10 {
-  margin-left: 2.5rem;
-  margin-right: 2.5rem;
-}
-
 .mx-20 {
   margin-left: 5rem;
   margin-right: 5rem;
@@ -1120,15 +1115,6 @@ select {
 
 .min-w-\[8rem\] {
   min-width: 8rem;
-}
-
-.min-w-fit {
-  min-width: -moz-fit-content;
-  min-width: fit-content;
-}
-
-.min-w-full {
-  min-width: 100%;
 }
 
 .max-w-\[15rem\] {
@@ -1742,6 +1728,10 @@ select {
   transition-duration: 300ms;
 }
 
+.duration-150 {
+  transition-duration: 150ms;
+}
+
 body {
   background-color: #16173A;
   font-family: 'Montserrat';
@@ -2023,16 +2013,16 @@ body {
   background-color: rgb(248 250 252 / var(--tw-bg-opacity));
 }
 
+.hover\:\!opacity-100:hover {
+  opacity: 1 !important;
+}
+
 .hover\:opacity-50:hover {
   opacity: 0.5;
 }
 
 .hover\:opacity-\[0\.5\]:hover {
   opacity: 0.5;
-}
-
-.hover\:\!opacity-100:hover {
-  opacity: 1 !important;
 }
 
 .active\:scale-90:active {
@@ -2055,10 +2045,6 @@ body {
 
 .active\:opacity-80:active {
   opacity: 0.8;
-}
-
-.group:hover .group-hover\:opacity-10 {
-  opacity: 0.1;
 }
 
 .group:hover .group-hover\:opacity-50 {
