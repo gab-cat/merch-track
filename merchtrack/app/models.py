@@ -43,3 +43,118 @@ class contact_us(models.Model):
     email = models.EmailField(max_length=200)
     message = models.TextField(max_length=200)
     created_at = models.DateTimeField(default=now) 
+
+
+
+# NEW DATA
+
+class Customer(models.Model):
+    customerId = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=200)
+    email = models.EmailField(max_length=200)
+    phone = models.CharField(max_length=15)
+    course = models.CharField(max_length=200)
+
+    class Meta:
+        db_table = 'customer'
+        constraints = [
+            models.UniqueConstraint(fields=['customerId'], name='unique_customer_id')
+        ]
+        indexes = [
+            models.Index(fields=['customerId'], name='customer_id_idx')
+        ]
+
+class Product(models.Model):
+    productId = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=200)
+    description = models.TextField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    category = models.CharField(max_length=100)
+
+    class Meta:
+        db_table = 'product'
+        constraints = [
+            models.UniqueConstraint(fields=['productId'], name='unique_product_id')
+        ]
+        indexes = [
+            models.Index(fields=['productId'], name='product_id_idx')
+        ]
+
+class Order(models.Model):
+    orderId = models.AutoField(primary_key=True)
+    customerId = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    orderDate = models.DateTimeField(default=now)
+    status = models.CharField(max_length=50)
+    estimatedDeliveryDate = models.DateTimeField()
+
+    class Meta:
+        db_table = 'order'
+        constraints = [
+            models.UniqueConstraint(fields=['orderId'], name='unique_order_id')
+        ]
+        indexes = [
+            models.Index(fields=['orderId'], name='order_id_idx')
+        ]
+
+class OrderItem(models.Model):
+    orderItemId = models.AutoField(primary_key=True)
+    orderId = models.ForeignKey(Order, on_delete=models.CASCADE)
+    productId = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    customerNote = models.TextField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'order_item'
+        constraints = [
+            models.UniqueConstraint(fields=['orderItemId'], name='unique_order_item_id')
+        ]
+        indexes = [
+            models.Index(fields=['orderItemId'], name='order_item_id_idx')
+        ]
+
+class Payment(models.Model):
+    paymentId = models.AutoField(primary_key=True)
+    orderId = models.ForeignKey(Order, on_delete=models.CASCADE)
+    paymentDate = models.DateTimeField(default=now)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    paymentMethod = models.CharField(max_length=50)
+    paymentStatus = models.CharField(max_length=50)
+
+    class Meta:
+        db_table = 'payment'
+        constraints = [
+            models.UniqueConstraint(fields=['paymentId'], name='unique_payment_id')
+        ]
+        indexes = [
+            models.Index(fields=['paymentId'], name='payment_id_idx')
+        ]
+
+class Inventory(models.Model):
+    inventoryId = models.AutoField(primary_key=True)
+    productId = models.OneToOneField(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+
+    class Meta:
+        db_table = 'inventory'
+        constraints = [
+            models.UniqueConstraint(fields=['inventoryId'], name='unique_inventory_id')
+        ]
+        indexes = [
+            models.Index(fields=['inventoryId'], name='inventory_id_idx')
+        ]
+
+class Fulfillment(models.Model):
+    fulfillmentId = models.AutoField(primary_key=True)
+    orderId = models.OneToOneField(Order, on_delete=models.CASCADE)
+    fulfillmentDate = models.DateTimeField(default=now)
+    status = models.CharField(max_length=50)
+
+    class Meta:
+        db_table = 'fulfillment'
+        constraints = [
+            models.UniqueConstraint(fields=['fulfillmentId'], name='unique_fulfillment_id')
+        ]
+        indexes = [
+            models.Index(fields=['fulfillmentId'], name='fulfillment_id_idx')
+        ]
