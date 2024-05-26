@@ -21,9 +21,10 @@
             {% card url='registration' src='assets/register.png' title='Register Account' %}
 
         </div>
-        <div class='flex flex-row-reverse self-start w-full mt-auto mr-10 '>
-            <a class='text-[#e13b3b] hover:bg-red-200 transition-all text-lg font-bold py-2 px-5 border border-[#e13b3b] rounded-xl active:scale-90 active:opacity-60' href='{% url 'logout' %}' >Logout</a>
-        </div>
+        <form method='POST' action='/logout' class='flex flex-row-reverse self-start w-full mt-auto mr-10 '>
+            {% csrf_token %}
+            <button type='submit' class='text-[#e13b3b] hover:bg-red-200 transition-all text-lg font-bold py-2 px-5 border border-[#e13b3b] rounded-xl active:scale-90 active:opacity-60' href='{% url 'logout' %}' >Logout</button>
+        </form>
 
     </div>
 </div>

@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 
 from .forms import CreateUserForm, LoginForm
 from .models import user_info, order_info, order_details, contact_us
+
 def home(request):
     return render(request, 'index.html')
 
@@ -174,8 +175,11 @@ def login(request):
     return render(request, 'login.html', {'form': form})
 
 def logout(request):
-    auth_logout(request)
-    return redirect('login')
+    if request.method == 'POST':
+        auth_logout(request)
+        return redirect('login')
+
+    return redirect('dashboard')
 
 @login_required(login_url='login')
 def dashboard(request):
