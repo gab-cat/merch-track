@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
+from django.contrib.auth.models import User
 
 from .forms import CreateUserForm, LoginForm, UserRegistrationForm
 from .models import user_info, order_info, order_details, contact_us, Customer
@@ -181,27 +182,36 @@ def logout(request):
 
 @login_required(login_url='login')
 def dashboard(request):
-    user = request.user
-    student_name = f"{user.first_name} {user.last_name}"
-    email = user.email
-    try:
-        customer = Customer.objects.get(user=user)
-        course = customer.course
-        phone = customer.phone
-    except Customer.DoesNotExist:
-        course = None
-        phone = None
-    
-    user_details = {
-        'user': user,
-        'student_id': user.id,
-        'student_name': student_name,
-        'course': course,
-        'email': email,
-        'phone': phone
-    }
-    
+    if 'user_details' not in request.session:
+        user = request.user
+        student_name = f"{user.first_name} {user.last_name}"
+        email = user.email
+        try:
+            customer = Customer.objects.get(user=user)
+            course = customer.course
+            phone = customer.phone
+        except Customer.DoesNotExist:
+            course = None
+            phone = None
+        
+        user_details = {
+            'user': user.id,
+            'student_id': user.id,
+            'student_name': student_name,
+            'course': course,
+            'email': email,
+            'phone': phone
+        }
+        
+        # Store user details in the session
+        request.session['user_details'] = user_details
+    else:
+        user_details = request.session['user_details']
+        # You might need to re-fetch the user instance if you need it
+        user_details['user'] = User.objects.get(id=user_details['user'])
+
     return render(request, 'dashboard.html', user_details)
+
 
 
 @login_required(login_url='login')
