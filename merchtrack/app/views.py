@@ -173,8 +173,6 @@ def login(request):
 
 def logout(request):
     if request.method == 'POST':
-        cache_key = f'user_details_{request.user.id}'
-        cache.delete(cache_key)
         auth_logout(request)
         return redirect('login')
 
