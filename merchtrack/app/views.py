@@ -182,33 +182,27 @@ def logout(request):
 @login_required(login_url='login')
 def dashboard(request):
     user = request.user
-    cache_key = f'user_details_{user.id}'
-    user_details = cache.get(cache_key)
+    student_name = f"{user.first_name} {user.last_name}"
+    email = user.email
+    try:
+        customer = Customer.objects.get(user=user)
+        course = customer.course
+        phone = customer.phone
+    except Customer.DoesNotExist:
+        course = None
+        phone = None
     
-    if not user_details:
-        student_name = f"{user.first_name} {user.last_name}"
-        email = user.email
-        try:
-            customer = Customer.objects.get(user=user)
-            course = customer.course
-            phone = customer.phone
-        except Customer.DoesNotExist:
-            course = None
-            phone = None
-        
-        user_details = {
-            'user': user,
-            'student_id': user.id,
-            'student_name': student_name,
-            'course': course,
-            'email': email,
-            'phone': phone
-        }
-        
-        # Cache the user details
-        cache.set(cache_key, user_details)
+    user_details = {
+        'user': user,
+        'student_id': user.id,
+        'student_name': student_name,
+        'course': course,
+        'email': email,
+        'phone': phone
+    }
     
     return render(request, 'dashboard.html', user_details)
+
 
 @login_required(login_url='login')
 def messages(request):
