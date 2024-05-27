@@ -13,6 +13,22 @@ body {
     @apply w-fit p-3 text-white  my-1 py-2 items-center content-center text-center rounded-full hover:opacity-[0.5] transition-all
 }
 
+.btn-primary {
+    @apply px-4 py-2 ml-2 text-white transition-all bg-blue-500 rounded-lg hover:opacity-80 active:opacity-50
+}
+
+.btn-main {
+    @apply  text-white bg-[#3BAFE1] border-white text-lg rounded-xl font-semibold text-center py-2 px-4 my-2  cursor-pointer active:opacity-100 hover:opacity-[0.5] transition-all
+}
+
+.btn-secondary {
+    @apply px-5 py-2 font-bold text-white transition-all bg-gray-500 rounded hover:bg-gray-700
+}
+
+.btn-destructive {
+    @apply px-5 py-2 mr-2 font-bold text-white transition-all bg-red-500 rounded hover:bg-red-700
+}
+
 .navi_title {
     display: flex;
     align-items: center;

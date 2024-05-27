@@ -8,22 +8,41 @@
 
 {% block content%}
 {% load static %}
-<div class="flex flex-row flex-wrap  w-full h-full bg-[#ffffff]">
+<div class="flex flex-row flex-wrap font-Inter w-full h-full bg-[#ffffff]">
     <div class='flex'>
         <img class='h-[80dvh] w-fit my-auto mx-20' src="{% static 'assets/ContactInfo.svg' %}" alt="Contact Info" />
-        <div class='flex flex-col items-center w-full mx-20'>
-            <div class='flex flex-col w-full '>
-                <span class="text-[7dvh] mx-auto font-semiboldbold text-black ">Contact Us</span>
+        <div class='flex flex-col items-center w-full mx-20 my-auto'>
+            <div class='flex flex-col justify-start w-full mb-4'>
+                <span class="text-[7dvh] font-semibold text-black ">Contact Us</span>
+                <p class="mb-3">Email us at help@domain.com or message us here:</p>
             </div>
-            <form class='flex flex-col items-center max-w-[25rem] w-full' action="" method="POST">
-                {% if success_message %}
-                <div class=' px-5 py-2 mx-5 text-justify text-blue-700 bg-blue-100 rounded-lg indent-5'>{{success_message}}</div>
-                {% endif %}
+            <form class='flex flex-col items-center max-w-[30rem] w-full' action="" method="POST">
                 {%csrf_token%}
-                <input class='w-[90%] indent-2 rounded-md my-3  border-[#818286]' type="text" id="name" name="name" placeholder="Your name">
+
+                <div class="grid w-full gap-6 sm:grid-cols-2">
+                    <div class="relative z-0">
+                      <input type="text" name="name" class="peer block w-full appearance-none border-0 border-b border-gray-700 bg-transparent py-2.5 px-0 text-base text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0" placeholder=" " />
+                      <label class="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-base text-gray-700 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:dark:text-blue-500">Your name</label>
+                    </div>
+                    <div class="relative z-0">
+                      <input type="text" name="email" class="peer block w-full appearance-none border-0 border-b border-gray-700 bg-transparent py-2.5 px-0 text-base text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0" placeholder=" " />
+                      <label class="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-base text-gray-700 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:dark:text-blue-500">Your email</label>
+                    </div>
+                    <div class="relative z-0 col-span-2">
+                      <textarea name="message" rows="5" class="peer block w-full appearance-none border-0 border-b border-gray-700 bg-transparent py-2.5 px-0 text-lg text-gray-900 focus:border-blue-600 focus:outline-none focus:ring-0" placeholder=" "></textarea>
+                      <label class="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-lg text-gray-700 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:left-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:dark:text-blue-500">Your message</label>
+                    </div>
+                </div>
+                <button type="submit" class="px-10 py-2 my-5 text-white bg-black rounded-md ">Send Message</button>
+                {% if success_message %}
+                <div class='px-5 py-2 mx-5 text-justify text-blue-700 bg-blue-100 rounded-lg indent-5'>{{success_message}}</div>
+                {% endif %}
+
+
+                {% comment %} <input class='w-[90%] indent-2 rounded-md my-3  border-[#818286]' type="text" id="name" name="name" placeholder="Your name">
                 <input class='w-[90%] indent-2 mb-3 rounded-md border-[#818286]' type="text" id="email" name="email" placeholder="Email">
                 <textarea rows='4' class='w-[90%] rounded-md indent-2 mb-3 border-[#818286]' type="text" id="message" name="message" placeholder="Message"></textarea>
-                <input class=' text-white bg-[#3BAFE1] text-2xl rounded-xl font-Inter font-semibold text-center py-2 my-3 px-10 cursor-pointer hover:opacity-[0.5] transition-all' type="submit" value="SEND" >
+                <input class=' text-white bg-[#3BAFE1] text-2xl rounded-xl font-Inter font-semibold text-center py-2 my-3 px-10 cursor-pointer hover:opacity-[0.5] transition-all' type="submit" value="SEND" > {% endcomment %}
             </form>
             <div class='w-[85%] h-px bg-black my-3' style="opacity: 1; transform-origin: 50% 50% 0px;"></div>
             <div class='flex flex-col'>

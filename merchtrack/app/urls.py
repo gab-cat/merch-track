@@ -18,8 +18,12 @@ urlpatterns = [
     path('dashboard', views.dashboard, name='dashboard'),
     path('messages', views.messages, name='messages'),
 
-    path('create-product', product.create_product, name='create-product'),
+    path('create-product', product.create_product, name='create_product'),
+    path('products', product.product_list, name='product_list'),
+    path('edit-product/<int:product_id>/', product.edit_product, name='edit_product'),
+    path('delete-product/<int:product_id>/', product.delete_product, name='delete_product'),
 
     re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
+    re_path(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),
     re_path(r'^.*$', views.not_found, name='404'),
 ]

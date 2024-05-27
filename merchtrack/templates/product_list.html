@@ -1,0 +1,51 @@
+{% extends 'base.html' %} {% block title %} Inventory Manager  {% endblock %}
+{% load slippers %}
+
+{% block nav %}
+    {% back-to-dashboard %}
+{% endblock %}
+
+{% block content %}
+{% load static %}
+{% #page-base page_title='Inventory Manager' %}
+<div class="self-start w-full px-4 py-8">
+    <div class='flex justify-between w-full mb-3'>
+        <h2 class="text-2xl font-bold ">Current Products</h2>
+        <a href='{% url 'create_product' %}' class='items-center content-center justify-center flex align-middle self-end mt-auto w-fit text-white bg-[#3BAFE1] border-white text-lg rounded-lg font-Inter font-semibold text-center py-2 px-4 cursor-pointer active:opacity-100 hover:opacity-[0.5] transition-all' >
+            <span class='mr-2 text-3xl font-bold'> + </span> 
+            <span class='flex h-full my-auto align-middle'> Create new Product </span>
+        </a>
+    </div>
+    
+    <form method="GET" action="{% url 'product_list' %}" class="flex flex-row w-2/4 mb-6 space-x-3">
+        <input type="text" name="q" placeholder="Search products..." value="{{ request.GET.q }}" class="w-full px-4 py-2 border rounded-lg">
+        <select name="category" class="w-full px-4 py-2 border rounded-lg">
+            <option value="">All Categories</option>
+            {% for category in categories %}
+                <option value="{{ category }}" {% if request.GET.category == category %}selected{% endif %}>{{ category }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn-primary">Search</button>
+    </form>
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        {% for product in products %}
+            <a href="{% url 'edit_product' product_id=product.productId %}" class=" bg-white flex flex-col rounded-lg h-full shadow-lg hover:border-[#3BAFE1] cursor-pointer hover:scale-110 active:scale-90 transition-all active:opacity-60  border">
+                {% if product.productImage %}
+                    <img class="object-cover object-center w-full h-48 border-b" src="{{ product.productImage.url }}" alt="{{ product.name }}">
+                {% else %}
+                    <img class="object-cover object-center w-full h-48 " src="{% static 'assets/placeholder.png' %}" alt="No image available">
+                {% endif %}
+                <div class='container flex flex-col p-4 h-max'>
+                    <h3 class="mb-2 text-lg font-semibold">{{ product.name }}</h3>
+                    <p class="mb-4 text-gray-700 line-clamp-3">{{ product.description }}</p>
+                    <p class="mb-2 font-bold text-gray-900">₱{{ product.price }}</p>
+                    <div class="mt-auto">
+                        <p class="text-white text-sm py-1 px-3 rounded-full bg-[#3BAFE1] w-fit ">{{ product.category }}</p>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+</div>
+{% /page-base %}
+{% endblock %}

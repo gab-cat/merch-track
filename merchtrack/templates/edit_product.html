@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% block title %} Create Product  {% endblock %}
+{% extends 'base.html' %} {% block title %} Modify Product  {% endblock %}
 {% load slippers %}
 
 {% block nav %}
@@ -10,7 +10,7 @@
 <div class=' flex flex-col w-screen h-full bg-[#f3f3f3] overflow-auto p-2'>
     <div class='flex flex-col items-center content-center justify-center w-auto h-auto p-5 m-auto overflow-visible bg-white shadow-xl rounded-xl'>
         <div class='self-start mx-5 w-fit'>
-            <div class=' text-[#3BAFE1] text-3xl mb-2 font-bold text-left'>Create a New Product</div>
+            <div class=' text-[#3BAFE1] text-3xl mb-2 font-bold text-left'>Modify Product</div>
             <div class='w-full pb-3 mb-2 text-lg italic font-medium border-b'>Easy way to order</div>
         </div>
         <form class='flex flex-row min-w-[50rem]' method="POST" autocomplete='off' enctype="multipart/form-data" >
@@ -24,7 +24,7 @@
                     
                     <tr>
                         <td class='py-2 align-top'><label class='mb-auto mr-2 font-bold ' for="{{ form.description.id_for_label }}">{{ form.description.label }}</label></td>
-                        <td>{{ form.description }}</td>
+                        <td class='line-clamp-3'>{{ form.description }}</td>
                     </tr>
                     
                     <tr>
@@ -35,14 +35,15 @@
                     <tr>
                         <td class='py-2 align-top'><label class='mr-2 font-bold' for="{{ form.category.id_for_label }}">{{ form.category.label }}</label></td>
                         <td>
-                            {{ form.category }}
+                            <input type="text" name="category" id="{{ form.category.id_for_label }}" list="category-list" value="{{ form.instance.category }}">
                             <datalist id="category-list">
-                                {% for category in form.existing_categories %}
+                                {% for category in categories %}
                                     <option value="{{ category }}">{{ category }}</option>
                                 {% endfor %}
                             </datalist>
                         </td>
                     </tr>
+                    
                 </table>
 
                 {% if form.non_field_errors or form.errors %}
@@ -61,14 +62,19 @@
             </div>
             <div class='flex flex-col h-full p-5 rounded-lg w-72 '>
                 <label class='mr-2 font-bold' for="id_productImage">Product Image:</label>
-                <div class='flex self-center w-56 h-56 my-5 border rounded-lg bg-slate-200 max-w-56 max-h-56'>
-                    <img class='object-cover w-full h-full' alt='image preview' id='image-prev'  />
+                <div class='flex self-center w-56 h-56 my-5 border rounded-lg bg-slate-200'>
+                    {% if product.productImage %}
+                    <img src="{{ product.productImage.url }}" class='z-10 block object-cover w-full h-full' alt='image preview' id='image-prev' />
+                    {% else %}
+                    <img class='z-10 block object-cover w-full h-full' alt='image preview' id='image-prev' />
+                    {% endif %}
                 </div>
-                <input class='flex w-full px-1 py-2 my-1 text-sm rounded-lg' type="file" name="productImage" accept="image/*" id="id_productImage" onchange="previewImage(event)">
-                <input class='self-end mt-auto w-full text-white bg-[#3BAFE1] border-white text-lg rounded-xl font-Inter font-semibold text-center py-2 px-4 my-2  cursor-pointer active:opacity-100 hover:opacity-[0.5] transition-all' 
-                value="Create New Product"
+                <input class='flex px-4 py-2 my-1 rounded-lg' type="file" name="productImage" accept="image/*" id="id_productImage" onchange="previewImage(event)">
+                <input class='self-end mt-auto w-full text-white bg-[#3BAFE1] font-semibold border-white rounded font-Inter  text-center py-2 px-4 my-2  cursor-pointer active:opacity-100 hover:opacity-[0.5] transition-all' 
+                value="Update Product"
                 type="submit"/>
-                <a href='{% url 'product_list' %}' class='self-end mt-auto w-full text-black border  text-lg rounded-xl font-Inter font-semibold text-center py-2 px-4 my-5  cursor-pointer active:opacity-100 hover:opacity-[0.5] hover:bg-blue-200 transition-all' >
+                <a href="{% url 'delete_product' product_id=product.productId %}"  class="px-4 py-2 mb-2 font-semibold text-center text-white bg-red-500 rounded cursor-pointer hover:bg-red-700">Delete</a>
+                <a href='{% url 'product_list' %}' class='self-end w-full mt-auto text-center btn-secondary' >
                     Cancel
                 </a>
             </div>
@@ -84,7 +90,6 @@
 <style>
 
     #image-prev {
-        display: none;
         max-width: 300px;
         max-height: 300px;
     }

@@ -53,11 +53,20 @@ p input {
             <div class='self-start w-full pb-3 mb-2 text-lg italic font-medium border-b'>Easy way to order</div>
         </div>
 
-        <form class='flex w-fit border-b mx-5 flex-col self-center justify-start my-5 min-w-[80%]' method="POST" autocomplete='off' >
+        <form class='flex w-full border-b flex-col self-center justify-start my-5 min-w-[80%]' method="POST" autocomplete='off' >
             {% csrf_token %}
-            {{ form.as_p }}
+            {% comment %} {{ form.as_p }} {% endcomment %}
 
-            <input class=' w-full text-white self-center px-10 bg-[#3BAFE1] border-white text-lg rounded-xl font-Inter font-semibold text-center py-1 my-5 cursor-pointer active:opacity-100 hover:opacity-[0.5] transition-all' 
+            <div class="relative w-full mb-5">
+                <input type="text" name="username" required id='id_username' class="w-full h-16 p-3 pt-8 font-normal placeholder-transparent transition-all border border-gray-200 rounded-md peer focus:outline-none focus:border-gray-500 focus:shadow-sm" placeholder="name@example.com" autocomplete="off" />
+                <label for="id_username" class="absolute top-0 left-0 h-full px-3 py-5 font-semibold transition-all duration-100 ease-in-out origin-left transform scale-75 translate-x-1 -translate-y-3 opacity-100 pointer-events-none peer-placeholder-shown:opacity-100 peer-focus:opacity-100 peer-placeholder-shown:scale-100 peer-focus:scale-75 peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-3 peer-placeholder-shown:translate-x-0 peer-focus:translate-x-1">Username</label>
+            </div>
+            <div class="relative w-full mb-5">
+                <input type="password" name="password" required id='id_password'  class="w-full h-16 p-3 pt-8 font-normal placeholder-transparent transition-all border border-gray-200 rounded-md peer focus:outline-none focus:border-blue-500 focus:shadow-sm" placeholder="password" autocomplete="off" />
+                <label for="id_password" class="absolute top-0 left-0 h-full px-3 py-5 font-semibold transition-all duration-100 ease-in-out origin-left transform scale-75 translate-x-1 -translate-y-3 opacity-100 pointer-events-none peer-placeholder-shown:opacity-100 peer-focus:opacity-100 peer-placeholder-shown:scale-100 peer-focus:scale-75 peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-3 peer-placeholder-shown:translate-x-0 peer-focus:translate-x-1">Password</label>
+              </div>
+
+            <input class='w-2/4 text-white text-center self-center px-10 bg-[#3BAFE1] border-white text-lg rounded-xl font-Inter font-semibold py-1 mb-5 cursor-pointer active:opacity-100 hover:opacity-[0.5] transition-all' 
             value="Login"
             type="submit"/>
         </form>

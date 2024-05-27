@@ -1,0 +1,131 @@
+{% extends 'base.html' %} {% block title %} Confirm Delete  {% endblock %}
+{% load slippers %}
+
+{% block nav %}
+    {% back-to-dashboard %}
+{% endblock %}
+
+{% block content %}
+{% load static %}
+
+<div class=' flex flex-col w-screen h-full bg-[#f3f3f3] overflow-auto p-2'>
+    <div class='flex flex-col items-center content-center justify-center w-auto h-auto p-5 m-auto overflow-visible bg-white shadow-xl max-w-[65%] rounded-xl'>
+        <div class='self-start mx-5 w-fit'>
+            <div class=' text-[#3BAFE1] text-3xl mb-2 font-bold text-left'>Delete Product</div>
+            <div class='w-full pb-3 mb-2 text-lg italic font-medium border-b'>Easy way to order</div>
+        </div>
+        <div class="container px-4 py-2 mx-auto">
+            <p class='font-medium'>Are you sure you want to delete the product "{{ product.name }}"?</p>
+            <table class='my-5 border-spacing-2'>
+                <tr class='border-spacing-5'>
+                    <td class='font-bold'>Name</td>
+                    <td>:</td>
+                    <td>{{ product.name }}</td>
+                </tr>
+                <tr class='border-spacing-5'>
+                    <td class='font-bold align-top'>Description</td>
+                    <td class='align-top'>:</td>
+                    <td class='text-justify'>{{ product.description }}</td>
+                </tr>
+                <tr class='border-spacing-5'>
+                    <td class='font-bold'>Price</td>
+                    <td>:</td>
+                    <td>{{ product.price }}</td>
+                </tr>
+                <tr class='border-spacing-5'>
+                    <td class='font-bold'>Category</td>
+                    <td>:</td>
+                    <td>{{ product.category }}</td>
+                </tr>
+            </table>
+            <form method="POST" class='flex flex-row content-end justify-end w-full h-fit'>
+                {% csrf_token %}
+                <button type="submit" class="btn-destructive">Delete</button>
+                <a href="{% url 'edit_product' product_id=product.productId %}" class="btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<style>
+
+    #image-prev {
+        display: none;
+        max-width: 300px;
+        max-height: 300px;
+    }
+
+    p {
+        display: flex;
+        flex-direction: column;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        align-items: start;
+    }
+    
+    .helptext {
+        font-size: 0.8rem;
+        color: blue;
+        margin-left: 0.5rem;
+    }
+    
+    p label {
+        margin-right: 0.5rem;
+        font-weight: 700;
+    }
+    
+    ul {
+        font-size: 0.8rem;
+        list-style: disc;
+        margin-left: 1rem;
+    }
+    
+    p input {
+        width: 100%;
+        border-radius: 25px;
+    }
+    
+    #id_password1, #id_password2 {
+        border-radius: 0.5rem;
+    }
+    
+    .errorlist {
+        font-size: 0.85rem;
+        list-style: none;
+        margin: 1rem;
+        border-radius: 0.5rem;
+        background-color: rgb(254 226 226 );
+        color: rgb(185 28 28);
+        padding: 0.5rem;
+    }
+
+    input[type="text"], input[type="number"], textarea{
+        border-radius: 0.5rem;
+        width: 100%;
+
+    }
+
+    tr {
+        padding-bottom: 0.25rem; /* Adjust this value for vertical spacing */
+    }
+
+    th, td{
+        padding: 0.5rem;
+        padding-right: 0.75rem;
+        }
+    
+</style>
+<script>
+    function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function(){
+            var output = document.getElementById('image-prev');
+            output.src = reader.result;
+            output.style.display = 'block';
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
+
+{% endblock %}
