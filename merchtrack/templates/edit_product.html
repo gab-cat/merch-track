@@ -17,6 +17,26 @@
             <div class='flex flex-col self-start justify-start w-4/6 px-10 my-5' >
                 {% csrf_token %}
                 <table class='table-auto border-spacing-y-2'>
+                    <div class="inline-flex items-center">
+                        <label class="relative -ml-2.5 flex cursor-pointer items-center rounded-full p-3" for="available_checkbox" data-ripple-dark="true">
+                            <input
+                                type="checkbox"
+                                class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-blue-500 checked:bg-blue-500 checked:before:bg-blue-500 hover:before:opacity-10"
+                                id="available_checkbox"
+                                name="available"
+                                {% if product.available %}checked{% endif %}
+                            />
+                            <span class="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor" stroke="currentColor" stroke-width="1">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                            </span>
+                        </label>
+                        <label class="mt-px font-semibold cursor-pointer select-none" for="available_checkbox">
+                            <p class="flex items-center text-base antialiased font-bold leading-normal">Is Product currently available?</p>
+                        </label>
+                    </div>
+                    
                     <tr>
                         <td class='py-2 align-top'><label class='mr-2 font-bold' for="{{ form.name.id_for_label }}">{{ form.name.label }}</label></td>
                         <td class='w-full'>{{ form.name }}</td>
@@ -64,7 +84,7 @@
                 <label class='mr-2 font-bold' for="id_productImage">Product Image:</label>
                 <div class='flex self-center w-56 h-56 my-5 border rounded-lg bg-slate-200'>
                     {% if product.productImage %}
-                    <img src="{{ product.productImage.url }}" class='z-10 block object-cover w-full h-full' alt='image preview' id='image-prev' />
+                    <img src="{{ product.productImage.url }}" class='z-10 block object-cover w-full h-full p-0 rounded-lg' alt='image preview' id='image-prev' />
                     {% else %}
                     <img class='z-10 block object-cover w-full h-full' alt='image preview' id='image-prev' />
                     {% endif %}

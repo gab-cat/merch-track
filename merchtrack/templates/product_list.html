@@ -8,7 +8,7 @@
 {% block content %}
 {% load static %}
 {% #page-base page_title='Inventory Manager' %}
-<div class="self-start w-full px-4 py-8">
+<div class="self-start w-full px-4 py-8 mb-auto align-top">
     <div class='flex justify-between w-full mb-3'>
         <h2 class="text-2xl font-bold ">Current Products</h2>
         <a href='{% url 'create_product' %}' class='items-center content-center justify-center flex align-middle self-end mt-auto w-fit text-white bg-[#3BAFE1] border-white text-lg rounded-lg font-Inter font-semibold text-center py-2 px-4 cursor-pointer active:opacity-100 hover:opacity-[0.5] transition-all' >
@@ -30,17 +30,22 @@
     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {% for product in products %}
             <a href="{% url 'edit_product' product_id=product.productId %}" class=" bg-white flex flex-col rounded-lg h-full shadow-lg hover:border-[#3BAFE1] cursor-pointer hover:scale-110 active:scale-90 transition-all active:opacity-60  border">
-                {% if product.productImage %}
-                    <img class="object-cover object-center w-full h-48 border-b" src="{{ product.productImage.url }}" alt="{{ product.name }}">
-                {% else %}
-                    <img class="object-cover object-center w-full h-48 " src="{% static 'assets/placeholder.png' %}" alt="No image available">
+                {% if not product.available %}
+                <div class='fixed self-end px-3 py-1 m-2 text-sm font-medium text-white bg-red-500 rounded-md shadow-lg'>
+                    Not available
+                </div>
                 {% endif %}
-                <div class='container flex flex-col p-4 h-max'>
+                {% if product.productImage %}
+                    <img class="object-cover object-center w-full h-48 p-0 border-b rounded-t-lg" src="{{ product.productImage.url }}" alt="{{ product.name }}">
+                {% else %}
+                    <img class="object-cover object-center w-full h-48 p-0 rounded-t-md" src="{% static 'assets/placeholder.png' %}" alt="No image available">
+                {% endif %}
+                <div class='container flex flex-col self-stretch p-4 rounded-b-lg product-card-content h-max'>
                     <h3 class="mb-2 text-lg font-semibold">{{ product.name }}</h3>
                     <p class="mb-4 text-gray-700 line-clamp-3">{{ product.description }}</p>
                     <p class="mb-2 font-bold text-gray-900">₱{{ product.price }}</p>
                     <div class="mt-auto">
-                        <p class="text-white text-sm py-1 px-3 rounded-full bg-[#3BAFE1] w-fit ">{{ product.category }}</p>
+                        <p class="text-white text-sm py-1 px-3 rounded-md bg-[#3BAFE1] w-fit ">{{ product.category }}</p>
                     </div>
                 </div>
             </a>
@@ -48,4 +53,23 @@
     </div>
 </div>
 {% /page-base %}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const productCards = document.querySelectorAll('.product-card-content');
+        let maxHeight = 0;
+
+        // Calculate the maximum height of all product cards
+        productCards.forEach(card => {
+            if (card.offsetHeight > maxHeight) {
+                maxHeight = card.offsetHeight;
+            }
+        });
+
+        // Set all product cards to the maximum height
+        productCards.forEach(card => {
+            card.style.height = maxHeight + 'px';
+        });
+    });
+</script>
 {% endblock %}

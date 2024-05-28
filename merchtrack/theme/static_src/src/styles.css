@@ -8,26 +8,56 @@ body {
     font-family: 'Montserrat';
 }
 
-
 .nav-item {
     @apply w-fit p-3 text-white  my-1 py-2 items-center content-center text-center rounded-full hover:opacity-[0.5] transition-all
 }
 
 .btn-primary {
-    @apply px-4 py-2 ml-2 text-white transition-all bg-blue-500 rounded-lg hover:opacity-80 active:opacity-50
+    @apply px-4 py-2 ml-2 text-white transition-all bg-blue-500 rounded-md hover:opacity-80 active:opacity-50
 }
 
 .btn-main {
-    @apply  text-white bg-[#3BAFE1] border-white text-lg rounded-xl font-semibold text-center py-2 px-4 my-2  cursor-pointer active:opacity-100 hover:opacity-[0.5] transition-all
+    @apply  text-white bg-[#3BAFE1] border-white text-lg rounded-md font-semibold text-center py-2 px-4 my-2  cursor-pointer active:opacity-100 hover:opacity-[0.5] transition-all
 }
 
 .btn-secondary {
-    @apply px-5 py-2 font-bold text-white transition-all bg-gray-500 rounded hover:bg-gray-700
+    @apply px-5 py-2 text-white transition-all bg-gray-500 rounded hover:bg-gray-700
 }
 
 .btn-destructive {
-    @apply px-5 py-2 mr-2 font-bold text-white transition-all bg-red-500 rounded hover:bg-red-700
+    @apply px-5 py-2  text-white transition-all bg-red-500 rounded-md hover:bg-red-700
 }
+
+@layer utilities {
+    [type='text']:focus, 
+    input:where(:not([type])):focus, 
+    [type='email']:focus, 
+    [type='url']:focus, 
+    [type='password']:focus, 
+    [type='number']:focus, 
+    [type='date']:focus, 
+    [type='datetime-local']:focus, 
+    [type='month']:focus, 
+    [type='search']:focus, 
+    [type='tel']:focus, 
+    [type='time']:focus, 
+    [type='week']:focus, 
+    [multiple]:focus, 
+    textarea:focus, 
+    select:focus {
+        outline: 2px solid transparent;
+        outline-offset: 2px;
+        --tw-ring-inset: var(--tw-empty,/*!*/ /*!*/);
+        --tw-ring-offset-width: 0px;
+        --tw-ring-offset-color: #fff;
+        --tw-ring-color: #3B82F6;
+        --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+        --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+        box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+        border-color: #3B82F6;
+        transition: all 0.2s linear;
+    }
+  }
 
 .navi_title {
     display: flex;

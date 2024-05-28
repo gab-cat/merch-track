@@ -217,4 +217,22 @@ def messages(request):
     all_messages = contact_us.objects.all().order_by('-created_at')
     return render(request, 'messages.html', {'messages': all_messages})
 
-    
+def customer_info(request):
+    email = request.GET.get('email')
+    try:
+        user = User.objects.get(email=email)
+        customer = Customer.objects.get(user=user)
+        data = {
+            'valid': True,
+            'username': user.username,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'email': user.email,
+            'phone': customer.phone,
+            'course': customer.course,
+            "id": customer.user_id
+        }
+
+    except User.DoesNotExist:
+        data = {'valid': False}
+    return JsonResponse(data)

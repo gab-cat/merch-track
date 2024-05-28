@@ -1,0 +1,369 @@
+{% extends 'base.html' %} {% block title %} Order Entry {% endblock %}
+{% load slippers %}
+
+{% block nav %}
+    {% back-to-dashboard %}
+{% endblock %}
+
+{% block content %}
+{% load static %}
+{% #page-base page_title='Create Order' %}
+<form method="POST" class='flex flex-row w-full h-full max-h-[90%] mb-auto space-x-3'>
+    {% csrf_token %}
+    <div class='flex flex-col w-1/4 h-full p-4 border rounded-md'>
+        <p class='pb-2 font-semibold border-b'><span class='px-3 py-1 mr-2 text-base font-semibold text-white bg-[#3BAFE1] rounded-md'>Step 1</span> Validate Customer Profile</p>
+        <div class='w-full py-2'>
+            <label for="customer_email" class='font-semibold'>Customer Email</label>
+            <input type="email" id="customer_email" name="customer_email" placeholder='Enter email address' class='w-full transition-all duration-300 rounded-md'>
+            <div  class='flex flex-row items-center my-2'>
+                <p class='my-3 mr-2 text-sm font-semibold'>Status :</p>
+                <span id="status_message" class='px-2 py-1 font-normal text-blue-700 bg-blue-100 rounded-md h-fit'>Enter a valid email address.</span>
+            </div>
+            <p  class='py-2 pt-2 font-bold border-t'>
+                Customer Information
+            </p>
+            <table class="flex w-full max-w-full px-2 my-5 overflow-x-auto" id="customer_info">
+                <tbody class="flex flex-col space-y-3">
+                    <tr class="flex">
+                        <td class="flex-shrink-0 font-semibold">ID</td>
+                        <td class="flex-shrink-0">:</td>
+                        <td class="flex-grow p-0 border-none rounded-md bg-slate-100">
+                            <input readonly class="w-full border-none rounded-md bg-slate-100" name="customerId" id="id_customerId" />
+                        </td>
+                    </tr>
+                    <tr class="flex">
+                        <td class="flex-shrink-0 font-semibold">Name</td>
+                        <td class="flex-shrink-0">:</td>
+                        <td class="flex-grow py-2 rounded-md bg-slate-100" id="fullname"></td>
+                    </tr>
+                    <tr class="flex">
+                        <td class="flex-shrink-0 font-semibold">Email</td>
+                        <td class="flex-shrink-0">:</td>
+                        <td class="flex-grow py-2 rounded-md bg-slate-100" id="email"></td>
+                    </tr>
+                    <tr class="flex">
+                        <td class="flex-shrink-0 font-semibold">Phone</td>
+                        <td class="flex-shrink-0">:</td>
+                        <td class="flex-grow py-2 rounded-md bg-slate-100" id="phone"></td>
+                    </tr>
+                    <tr class="flex">
+                        <td class="flex-shrink-0 font-semibold">Course</td>
+                        <td class="flex-shrink-0">:</td>
+                        <td class="flex-grow py-2 rounded-md bg-slate-100" id="course"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <a href='{% url 'registration' %}' class='flex items-center justify-center text-center cursor-pointer btn-primary'>
+                <span>Register here</span>
+            </a>
+        </div>
+    </div>
+
+    
+    <div class='flex flex-col w-2/4 h-full p-4 border rounded-md'>
+        
+        <p class='pb-2 font-semibold border-b'><span class='px-3 py-1 mr-2 text-base font-semibold text-white bg-[#3BAFE1] rounded-md'>Step 2</span> Add Order Items</p>
+        <div class="grid grid-cols-4 gap-4 mt-4">
+            <div class="flex items-center col-span-3 space-x-3">
+                <label class="font-semibold w-max" for="product_select">Select Product:</label>
+                <select class="w-full rounded-md" id="product_select">
+                    {% for product in products %}
+                        <option 
+                            value="{{ product.productId }}" 
+                            data-product-name="{{ product.name }}" 
+                            data-product-price="{{ product.price }}" 
+                            data-product-image="{% if product.productImage %}{{ product.productImage.url }}{% else %}{% static 'assets/placeholder.png' %}{% endif %}"> 
+                            {{ product.name }} 
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="flex items-center space-x-3">
+                <label class="font-semibold" for="product_quantity">Quantity:</label>
+                <input class="w-full rounded-md" type="number" id="product_quantity" name="product_quantity" min="1">
+            </div>
+            <div class="flex items-center col-span-3 space-x-3">
+                <label class="font-semibold" for="product_note">Add Note:</label>
+                <textarea class="w-full rounded-md" id="product_note" name="product_note" rows="1"></textarea>
+            </div>
+            <div class="flex items-center space-x-3">
+                <label class="font-semibold" for="product_size">Size:</label>
+                <select class="w-full rounded-md" id="product_size">
+                    <option value="">Sizes</option>
+                    <option value="Small">Small</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Large">Large</option>
+                    <option value="XL">XL</option>
+                    <option value="XXL">XXL</option>
+                    <option value="XXXL">XXXL</option>
+                </select>
+            </div>
+        </div>
+        <div class="flex justify-end my-2 space-x-3">
+            <button class="w-1/4 btn-primary" type="button" onclick='addItemToCart(e)' id="add_product">Add Product</button>
+            <button class="w-1/4 font-normal transition-all btn-destructive active:opacity-90" type="button" id="remove_items">Remove Items</button>
+        </div>
+        
+
+
+        <p class='self-start mr-auto text-2xl font-bold text-[#3BAFE1]'>Order Item List</p>
+        <div class='flex flex-col h-full overflow-y-auto border border-[#3BAFE1] rounded-md' id="cart">
+
+        
+
+        </div>
+    </div>
+
+
+    <div class='flex flex-col w-1/4 h-full p-4 border rounded-md'>
+        <p class='pb-2 font-semibold border-b'><span class='px-3 py-1 mr-2 text-base font-semibold text-white bg-[#3BAFE1] rounded-md'>Step 3</span> Confirm Order Details</p>
+        {% comment %} <div>
+            <label for="{{ order_form.customerId.id_for_label }}">Customer</label>
+            {{ order_form.customerId }}
+        </div> 
+        <div>
+            <label for="{{ order_form.status.id_for_label }}">Status</label>
+            {{ order_form.status }}
+        </div> {% endcomment %}
+        <div class='flex flex-col my-2 text-blue-700'>
+            <label class='text-xl font-bold' for="{{ order_form.totalAmount.id_for_label }}">Total Amount</label>
+            {% comment %} {{ order_form.totalAmount }} {% endcomment %}
+            <input disabled class='text-2xl font-bold bg-blue-100 border-blue-700 rounded-md' type="number" name="netTotalAmount" value="0" step="any" required="" id="id_totalAmount">
+        </div>
+        <div class='flex flex-col my-2 text-green-700'>
+            <label class='font-semibold' for="{{ order_form.discountAmount.id_for_label }}">Discount Amount</label>
+            {{ order_form.discountAmount }}
+        </div>
+        <div class='flex flex-col my-2 text-red-700 border-t'>
+            <label class='text-xl font-semibold'>Payable Amount</label>
+            <input readonly class='text-xl font-semibold bg-red-100 border-red-700 rounded-md' type="number" name="totalAmount" value="0" step="any" required="" id="id_payableAmount">
+        </div>
+        <div class='flex flex-col my-2'>
+            <label class='w-full font-semibold' for="{{ order_form.estimatedDeliveryDate.id_for_label }}">Estimated Delivery Date</label>
+            {{ order_form.estimatedDeliveryDate }}
+        </div>
+    
+        <button class='flex justify-center w-full mt-auto text-center btn-primary' disabled id='submit_btn' type="submit">Create Order</button>
+    </div>
+    
+</form>
+{% /page-base %}
+
+<script>
+    function handleOnChange(event) {
+        const email = event.target.value;
+        console.log("email: " + email);
+        const status_message = document.getElementById('status_message')
+        const submit_btn = document.getElementById('submit_btn')
+
+        status_message.classList.remove('text-red-700','bg-red-100')
+        status_message.classList.remove('text-green-700','bg-green-100')
+        status_message.classList.add('text-blue-700', 'bg-blue-100')
+        status_message.textContent = 'Fetching Data.'
+        fetch(`/api/customer_info/?email=${email}`)
+            .then(response => response.json())
+            .then(data => {
+                status_message.classList.remove('text-blue-700', 'bg-blue-100')
+                console.log(data)
+                if (data.valid) {
+                    submit_btn.disabled = false;
+                    status_message.textContent = 'The email address is valid.'
+                    status_message.classList.remove('text-red-700','bg-red-100')
+                    status_message.classList.add('text-green-700','bg-green-100')
+                    document.getElementById('id_customerId').value = data.id
+                    document.getElementById('fullname').textContent = data.first_name + " " + data.last_name
+                    document.getElementById('email').textContent = data.email;
+                    document.getElementById('phone').textContent = data.phone;
+                    document.getElementById('course').textContent = data.course;
+                } else {
+                    submit_btn.disabled = true;
+                    status_message.textContent = 'Customer not found.'
+                    status_message.classList.remove('text-green-700','bg-green-100')
+                    status_message.classList.add('text-red-700', 'bg-red-100')
+                    document.getElementById('id_customerId').value = ``;
+                    document.getElementById('fullname').textContent = ``
+                    document.getElementById('email').textContent = ``
+                    document.getElementById('phone').textContent = ``
+                    document.getElementById('course').textContent = ``
+                }
+            });
+    }
+
+    function addItemToCart(event) {
+        const productSelect = document.getElementById('product_select');
+        const selectedOption = productSelect.options[productSelect.selectedIndex];
+        const productId = selectedOption.value;
+        const productName = selectedOption.getAttribute('data-product-name');
+        const productPrice = parseFloat(selectedOption.getAttribute('data-product-price'));
+        const productImage = selectedOption.getAttribute('data-product-image');
+        const quantity = parseInt(document.getElementById('product_quantity').value, 10);
+        const size = document.getElementById('product_size').value;  // Get the selected size
+        const note = document.getElementById('product_note').value;
+    
+        if (!productId || !productName || isNaN(productPrice) || isNaN(quantity) || quantity < 1) {
+            alert('Please select a valid product and quantity.');
+            return;
+        }
+    
+        const cart = document.getElementById('cart');
+        const subtotal = productPrice * quantity;
+    
+        const item = document.createElement('div');
+        item.classList.add('cart-item');
+        item.innerHTML = `
+            <img class='border rounded-md' src="${productImage}" alt="Product Image">
+            <div class="flex flex-col ml-4">
+                <span class="font-semibold text-gray-700">${productName}</span>
+                <span class="text-gray-500">₱<span class="price">${productPrice.toFixed(2)}</span></span>
+                <span class="text-gray-500">${size}</span>  <!-- Display selected size -->
+            </div>
+            <div class="flex items-center">
+                <span class="mr-2 text-gray-700">Quantity:</span>
+                <input type="number" class="w-16 text-center border border-gray-300 rounded-md" value="${quantity}" min="1" data-product-id="${productId}" onchange="updateSubtotal(this)">
+            </div>
+            <div class="ml-4">
+                <span class="text-gray-700">Subtotal: ₱<span id="subtotal-${productId}">${subtotal.toFixed(2)}</span></span>
+            </div>
+            <button class="px-3 py-1 ml-4 text-white bg-red-500 rounded-md hover:bg-red-600" onclick="removeItemFromCart(event, ${productId})">Remove</button>
+            <input type="hidden" name="items" value='{"productId": "${productId}", "quantity": ${quantity}, "price": ${productPrice}, "size": "${size}", "note": "${note}"}'>
+        `;
+        cart.appendChild(item);
+        document.getElementById('product_quantity').value = "";
+        document.getElementById('product_note').value = "";
+        updateTotalAmount();
+    }
+    
+    function removeItemFromCart(event, productId) {
+        event.preventDefault();
+        const cart = document.getElementById('cart');
+        const item = cart.querySelector(`input[data-product-id="${productId}"]`).closest('.cart-item');
+    
+        item.classList.add('cart-item-exit');
+    
+        item.addEventListener('animationend', function() {
+            item.remove();
+            updateTotalAmount();
+        });
+    }
+    
+    function updateSubtotal(input) {
+        const productId = input.getAttribute('data-product-id');
+        const quantity = parseInt(input.value, 10);
+        const priceElement = input.closest('.cart-item').querySelector('.price');
+        const price = parseFloat(priceElement.innerText);
+        const subtotal = price * quantity;
+        document.getElementById(`subtotal-${productId}`).innerText = subtotal.toFixed(2);
+        updateTotalAmount();
+    }
+    
+    function updateTotalAmount() {
+        const cartItems = document.querySelectorAll('.cart-item');
+        let totalAmount = 0;
+        cartItems.forEach(item => {
+            const subtotalElement = item.querySelector('[id^="subtotal-"]');
+            const subtotal = parseFloat(subtotalElement.innerText);
+            totalAmount += subtotal;
+        });
+        document.getElementById('id_totalAmount').value = totalAmount.toFixed(2);
+        updatePayableAmount();
+    }
+    
+    function updatePayableAmount() {
+        const totalAmount = parseFloat(document.getElementById('id_totalAmount').value);
+        const discountAmount = parseFloat(document.getElementById('id_discountAmount').value) || 0;
+        const payableAmount = totalAmount - discountAmount;
+        document.getElementById('id_payableAmount').value = payableAmount.toFixed(2);
+    }
+    
+    function removeAllItemsFromCart() {
+        const cart = document.getElementById('cart');
+        cart.innerHTML = '';
+        updateTotalAmount();
+    }
+    
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('customer_email').addEventListener('change', handleOnChange);
+    
+        document.getElementById('add_product').addEventListener('click', addItemToCart);
+    
+        document.getElementById('id_discountAmount').addEventListener('input', updatePayableAmount);
+    
+        document.getElementById('remove_items').addEventListener('click', removeAllItemsFromCart);
+    });
+</script>
+
+<style>
+
+    textarea {
+        overflow-y: hidden; /* Hide the vertical scrollbar */
+        padding-top: 0.25rem; /*
+        padding-bottom: 0.25rem; /* Adjust this value for vertical spacing */
+    }
+
+    tr {
+        padding-bottom: 0.25rem; /* Adjust this value for vertical spacing */
+    }
+
+    th, td{
+        padding: 0.5rem;
+        padding-right: 0.75rem;
+        }
+
+    .cart-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem;
+        border: 1px solid #e5e7eb;
+        margin-bottom: 0.375rem;
+        background-color: #f9fafb;
+        animation: myAnim 0.5s ease 0s 1 normal forwards;
+    }
+    .cart-item img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 0.375rem;
+        padding: 0;
+    }
+
+    @keyframes myAnim {
+        0% {
+            opacity: 0;
+            transform: translateY(-50px);
+        }
+    
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes exitAnim {
+        0% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    
+        100% {
+            opacity: 0;
+            transform: scale(0.6);
+        }
+    }
+    
+    .cart-item-exit {
+        animation: exitAnim 0.3s ease 0s 1 normal forwards;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    input[type="password"],
+    input[type="date"],
+    textarea {
+        border-radius: 0.375rem;
+    }
+    
+</style>
+
+{% endblock %}

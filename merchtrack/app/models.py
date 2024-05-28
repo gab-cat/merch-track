@@ -69,6 +69,7 @@ class Product(models.Model):
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     category = models.CharField(max_length=100)
+    available = models.BooleanField(default=True)
 
     class Meta:
         db_table = 'product'
@@ -105,6 +106,7 @@ class OrderItem(models.Model):
     quantity = models.IntegerField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     customerNote = models.TextField(blank=True, null=True)
+    size = models.CharField(max_length=50, blank=True, null=True)
 
     class Meta:
         db_table = 'order_item'
