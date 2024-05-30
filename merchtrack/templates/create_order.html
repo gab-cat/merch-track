@@ -197,10 +197,14 @@
         hideModal();
     });
 
-    // document.getElementById('confirmButton').addEventListener('click', function() {
-    //     hideModal();
-    //     document.querySelector('form').submit();
-    // });
+    document.getElementById('confirmButton').addEventListener('click', function() {
+        event.preventDefault();
+        hideModal('{{ modal_id }}');
+        fadeOutAllElements();
+        setTimeout(() => {
+            document.querySelector('form').submit();
+        }, 500);
+    });
 
     function handleOnChange(event) {
         const email = event.target.value;
