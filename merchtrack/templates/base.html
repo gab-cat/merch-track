@@ -21,6 +21,15 @@
           opacity: 0;
           transition: opacity 0.5s ease-in-out;
       }
+
+      .fade-box {
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+      .fade-box.show {
+          opacity: 1;
+      }
     </style>
 </head>
 <body>
@@ -29,31 +38,71 @@
         <img src="{% static 'assets/MerchTrackLogo.png' %}" alt="Merch Track Logo" class='h-[5vh] cursor-pointer'>
         <a href="{% url 'home' %}" class='text-2xl font-bold text-white cursor-pointer hover:opacity-[0.5] transition-all'>Merch Track</a>
     </div>
-    <nav class='content-center text-xl px-3 h-[7vh] items-center space-x-3 flex flex-row '>
+    <nav class='fade-box content-center text-xl px-3 h-[7vh] items-center space-x-3 flex flex-row '>
         {% block nav %} {% endblock %}
     </nav>
   </div>
-  <div class="w-screen h-[90vh] overflow-hidden">
+  <div class="fade-box w-screen h-[90vh] overflow-hidden">
     {% block content %} {% endblock %}
   </div>
   <div class='w-full h-5 bg-[#212121]'>
   </div>
 
   <script>
+      function fadeIn(element) {
+      element.classList.add('show');
+      element.classList.remove('fade-out');
+      }
+
+      // Function to fade out the element
+      function fadeOut(element) {
+          element.classList.add('fade-out');
+          element.classList.remove('show');
+          element.addEventListener('transitionend', function() {
+              // element.style.display = 'none';
+          }, { once: true });
+      }
+
+      function fadeOutAllElements() {
+        const fadeElements = document.querySelectorAll('.fade-box');
+        fadeElements.forEach(element => {
+            fadeOut(element);
+        });
+      }
+
     document.addEventListener('DOMContentLoaded', function () {
         // Fade-in effect for the header
         const header = document.getElementById('header');
         header.classList.add('show');
 
+        const fadeElements = document.querySelectorAll('.fade-box');
+        fadeElements.forEach(element => {
+            fadeIn(element); // Fade in on page load
+        });
+
+        // Example of fading out an element after 3 seconds
+
         // Fade-out effect on link click
         const links = document.querySelectorAll('a');
         links.forEach(link => {
-            link.addEventListener('click', function (event) {
+            link.addEventListener('click', function(event) {
                 event.preventDefault();
                 const href = this.href;
-                header.classList.add('fade-out');
+                fadeOutAllElements();
                 setTimeout(() => {
                     window.location.href = href;
+                }, 500); // Duration should match the CSS transition duration
+            });
+        });
+
+        // Handle form submissions
+        const forms = document.querySelectorAll('form');
+        forms.forEach(form => {
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                fadeOutAllElements();
+                setTimeout(() => {
+                    form.submit();
                 }, 500); // Duration should match the CSS transition duration
             });
         });

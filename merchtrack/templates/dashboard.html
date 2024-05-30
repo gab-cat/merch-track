@@ -5,7 +5,7 @@
 {% load static %}
 {% load slippers %}
 
-<div id="dashboardPage" class='flex flex-col w-screen h-full bg-[#f3f3f3] opacity-0 transition-opacity duration-500'>
+<div  class='flex flex-col w-screen h-full bg-[#f3f3f3]'>
     <div class='flex overflow-visible flex-col bg-white rounded-xl shadow-xl min-w-auto min-h-[50%] m-auto p-5'>
         <div class='self-start w-full mx-5'>
             <div class='self-start text-[#3BAFE1] text-3xl mt-2 font-bold text-left'>Welcome to MerchTrack Dashboard!</div>
@@ -24,40 +24,9 @@
         </div>
         <form method='POST' action='/logout' class='flex flex-row-reverse self-start w-full mt-auto mr-10'>
             {% csrf_token %}
-            <button type='submit' class='text-[#e13b3b] hover:bg-red-200 transition-all text-lg font-bold py-2 px-5 border border-[#e13b3b] rounded-xl active:scale-90 active:opacity-60' href='{% url 'logout' %}'>Logout</button>
+            <button type='submit' onclick="showModal('confirmationModal')" class='text-[#e13b3b] hover:bg-red-200 transition-all text-lg font-bold py-2 px-5 border border-[#e13b3b] rounded-xl active:scale-90 active:opacity-60' href='{% url 'logout' %}'>Logout</button>
         </form>
     </div>
 </div>
-<style>
-    #dashboardPage.show {
-        opacity: 1;
-    }
-    
-    .fade-out {
-        opacity: 0;
-        transition: opacity 0.5s ease-in-out;
-    }
-</style>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Fade-in effect for the dashboard page
-        const dashboardPage = document.getElementById('dashboardPage');
-        dashboardPage.classList.add('show');
-
-        // Fade-out effect on link click
-        const links = document.querySelectorAll('a');
-        links.forEach(link => {
-            link.addEventListener('click', function (event) {
-                event.preventDefault();
-                const href = this.href;
-                dashboardPage.classList.add('fade-out');
-                setTimeout(() => {
-                    window.location.href = href;
-                }, 500); // Duration should match the CSS transition duration
-            });
-        });
-    });
-</script>
-
-
+{% modal modal_id='confirmationModal' modal_title='Confirm Log out' modal_message='Are you sure you want to logout' modal_warning='Please save any unsaved progresses as they will not be saved once logged out.' %}
 {% endblock %}

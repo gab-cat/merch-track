@@ -4,3 +4,4 @@ components:
     page-base: 'components/page-base.html'
     back-to-dashboard: 'components/back-to-dashboard.html'
     input: 'components/input.html'
+    modal: 'components/modal.html'

@@ -250,15 +250,15 @@
         const quantity = parseInt(document.getElementById('product_quantity').value, 10);
         const size = document.getElementById('product_size').value;  // Get the selected size
         const note = document.getElementById('product_note').value;
-    
+
         if (!productId || !productName || isNaN(productPrice) || isNaN(quantity) || quantity < 1) {
             alert('Please select a valid product and quantity.');
             return;
         }
-    
+
         const cart = document.getElementById('cart');
         const subtotal = productPrice * quantity;
-    
+
         const item = document.createElement('div');
         item.classList.add('cart-item');
         item.setAttribute('data-product-id', productId);  // Set data attribute for the product ID
@@ -266,17 +266,17 @@
             <img src="${productImage}" alt="Product Image">
             <div class="flex flex-col ml-4">
                 <span class="font-semibold text-gray-700">${productName}</span>
-                <span class="text-gray-500">Price: $<span class="price">${productPrice.toFixed(2)}</span></span>
-                <span class="text-gray-500">Size: ${size}</span>  <!-- Display selected size -->
+                <span class="text-gray-500">₱<span class="price">${productPrice.toFixed(2)}</span></span>
+                <span class="text-gray-500">${size}</span>  <!-- Display selected size -->
             </div>
             <div class="flex items-center">
                 <span class="mr-2 text-gray-700">Quantity:</span>
                 <input type="number" class="w-16 text-center border border-gray-300 rounded-md" value="${quantity}" min="1" data-product-id="${productId}" onchange="updateSubtotal(this)">
             </div>
             <div class="ml-4">
-                <span class="text-gray-700">Subtotal: $<span id="subtotal-${productId}">${subtotal.toFixed(2)}</span></span>
+                <span class="text-gray-700">₱<span id="subtotal-${productId}">${subtotal.toFixed(2)}</span></span>
             </div>
-            <button class="px-3 py-1 ml-4 text-white bg-red-500 rounded-md hover:bg-red-600" onclick="removeItemFromCart(${productId})">Remove</button>
+            <button class="px-3 py-1 ml-4 text-white bg-red-500 rounded-md hover:bg-red-600" onclick="removeItemFromCart(this)">Remove</button>  <!-- Pass this button element -->
             <input type="hidden" name="items" value='{"productId": "${productId}", "quantity": ${quantity}, "price": ${productPrice}, "size": "${size}", "note": "${note}"}'>
         `;
         cart.appendChild(item);
@@ -286,13 +286,13 @@
         updateTotalAmount();
     }
     
-    function removeItemFromCart(productId) {
+    function removeItemFromCart(button) {
+        console.log("Pressed")
         event.preventDefault();
-        const cart = document.getElementById('cart');
-        const item = cart.querySelector(`div[data-product-id="${productId}"]`);  // Select the correct item
+        const item = button.closest('.cart-item');  // Find the closest cart-item parent of the button
         if (item) {
             item.classList.add('cart-item-exit');
-    
+
             item.addEventListener('animationend', function() {
                 item.remove();
                 updateTotalAmount();
@@ -343,6 +343,21 @@
         document.getElementById('id_discountAmount').addEventListener('input', updatePayableAmount);
     
         document.getElementById('remove_items').addEventListener('click', removeAllItemsFromCart);
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Set discount amount to 0
+        const discountAmountField = document.getElementById('id_discountAmount');
+        if (discountAmountField) {
+            discountAmountField.value = 0;
+        }
+
+        // Set estimated delivery date to today
+        const estimatedDeliveryDateField = document.getElementById('id_estimatedDeliveryDate');
+        if (estimatedDeliveryDateField) {
+            const today = new Date().toISOString().split('T')[0]; // Get today's date in yyyy-mm-dd format
+            estimatedDeliveryDateField.value = today;
+        }
     });
 </script>
 

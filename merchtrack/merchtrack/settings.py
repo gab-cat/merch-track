@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-&-z&&p-$piufy%24!&va==9ahs%@1(he^zyln81786a%^e2t^7"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -87,22 +87,22 @@ WSGI_APPLICATION = "merchtrack.wsgi.application"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    # "default": {
-    #     "ENGINE": "django.db.backends.postgresql",          # Use the PostgreSQL engine
-    #     "NAME": "merch-track_db",                           # Name of your PostgreSQL database
-    #     "USER": "merch-track",                              # Your PostgreSQL username
-    #     "PASSWORD": "6m56rP:Drn4f9Ts",                      # Your PostgreSQL password
-    #     "HOST": "postgresql-merch-track.alwaysdata.net",    # Hostname where PostgreSQL is running
-    #     "PORT": "5432",                                     # Port PostgreSQL is listening on (default is 5432)
-    # },
     "default": {
-        "ENGINE": "django.db.backends.postgresql",          
-        "NAME": "merch-track",                         
-        "USER": "postgres",                           
-        "PASSWORD": "password",                    
-        "HOST": "localhost",     
-        "PORT": "8080",   
-    }
+        "ENGINE": "django.db.backends.postgresql",          # Use the PostgreSQL engine
+        "NAME": "merch-track_db",                           # Name of your PostgreSQL database
+        "USER": "merch-track",                              # Your PostgreSQL username
+        "PASSWORD": "6m56rP:Drn4f9Ts",                      # Your PostgreSQL password
+        "HOST": "postgresql-merch-track.alwaysdata.net",    # Hostname where PostgreSQL is running
+        "PORT": "5432",                                     # Port PostgreSQL is listening on (default is 5432)
+    },
+    # "default": {
+    #     "ENGINE": "django.db.backends.postgresql",          
+    #     "NAME": "merch-track",                         
+    #     "USER": "postgres",                           
+    #     "PASSWORD": "password",                    
+    #     "HOST": "localhost",     
+    #     "PORT": "5432",   
+    # }
 }
 
 import os

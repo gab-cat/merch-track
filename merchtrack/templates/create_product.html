@@ -7,7 +7,7 @@
 
 {% block content %}
 {% load static %}
-<div class=' flex flex-col w-screen h-full bg-[#f3f3f3] overflow-auto p-2'>
+<div class='fade-box flex flex-col w-screen h-full bg-[#f3f3f3] overflow-auto p-2'>
     <div class='flex flex-col items-center content-center justify-center w-auto h-auto p-5 m-auto overflow-visible bg-white shadow-xl rounded-xl'>
         <div class='self-start mx-5 w-fit'>
             <div class=' text-[#3BAFE1] text-3xl mb-2 font-bold text-left'>Create a New Product</div>
@@ -64,7 +64,7 @@
                 <div class='flex self-center w-56 h-56 my-5 border rounded-lg bg-slate-200 max-w-56 max-h-56'>
                     <img class='object-cover w-full h-full p-0 rounded-lg' alt='image preview' id='image-prev'  />
                 </div>
-                <input class='flex w-full px-1 py-2 my-1 text-sm rounded-lg' type="file" name="productImage" accept="image/*" id="id_productImage" onchange="previewImage(event)">
+                <input  class='flex w-full px-1 py-2 file:px-3 file:py-1 file:rounded-full cursor-pointer file:border-0 hover:file:opacity-60 active:file:opacity-85 file:bg-blue-100 file:text-blue-700  my-1 text-sm rounded-lg' type="file" name="productImage" accept="image/*" id="id_productImage" onchange="previewImage(event)">
                 <input class='self-end mt-auto w-full text-white bg-[#3BAFE1] border-white text-lg rounded-xl font-Inter font-semibold text-center py-2 px-4 my-2  cursor-pointer active:opacity-100 hover:opacity-[0.5] transition-all' 
                 value="Create New Product"
                 type="submit"/>

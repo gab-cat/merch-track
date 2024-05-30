@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import User
 from django.utils.timezone import now
+import os
 
 # Create your database models here.
 
@@ -79,6 +80,12 @@ class Product(models.Model):
         indexes = [
             models.Index(fields=['productId'], name='product_id_idx')
         ]
+
+    def delete(self, *args, **kwargs):
+        if self.productImage:
+            if os.path.isfile(self.productImage.path):
+                os.remove(self.productImage.path)
+        super(Product, self).delete(*args, **kwargs)
 
 class Order(models.Model):
     orderId = models.AutoField(primary_key=True)
