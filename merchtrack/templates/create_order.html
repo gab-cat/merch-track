@@ -175,6 +175,7 @@
 
 <script>
     function showModal() {
+        event.preventDefault();
         const modal = document.getElementById('confirmationModal');
         const totalAmount = document.getElementById('id_totalAmount').value
         if (totalAmount <= 0 ) return;
