@@ -4,9 +4,10 @@
 
 
 body {
-    background-color: #16173A;
     font-family: 'Montserrat';
 }
+
+
 
 .nav-item {
     @apply w-fit p-3 text-white  my-1 py-2 items-center content-center text-center rounded-full hover:opacity-[0.5] transition-all

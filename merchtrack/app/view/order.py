@@ -50,7 +50,7 @@ def create_order(request):
             )
             order_item.save()
 
-        return render(request, 'success.html')  # Redirect to a success page
+        return redirect('success')  # Redirect to a success page
 
     return render(request, 'create_order.html', {
         'products': products,

@@ -8,7 +8,7 @@
 {% block content %}
 {% load static %}
 {% #page-base page_title='Create Order' %}
-<form method="POST" class='flex flex-row w-full h-full max-h-[90%] mb-auto space-x-3'>
+<form method="POST" class='flex flex-row w-full h-full max-h-[90%] mb-auto space-x-3' onsubmit="event.preventDefault(); showModal()">
     {% csrf_token %}
     <div class='flex flex-col w-1/4 h-full p-4 border rounded-md'>
         <p class='pb-2 font-semibold border-b'><span class='px-3 py-1 mr-2 text-base font-semibold text-white bg-[#3BAFE1] rounded-md'>Step 1</span> Validate Customer Profile</p>
@@ -142,14 +142,65 @@
             <label class='w-full font-semibold' for="{{ order_form.estimatedDeliveryDate.id_for_label }}">Estimated Delivery Date</label>
             {{ order_form.estimatedDeliveryDate }}
         </div>
-    
+        <div class='flex flex-col my-2'>
+            <label class='font-semibold' for="processed_by">Processed by</label>
+            <input disabled class='rounded-md' type="text" name="processed_by" value="{{ request.user.get_full_name }}" readonly>
+        </div>
+        <div class='flex flex-col my-2'>
+            <p class='p-2 text-sm text-justify text-blue-700 bg-blue-100 rounded-md '>
+                Disclaimer: By pressing the "Create Order" button, you confirm that the order details are accurate and final. Once submitted, the order will not be modifiable anymore. If you make an error, you will have to create a new order.
+            </p>
+        </div>
         <button class='flex justify-center w-full mt-auto text-center btn-primary' disabled id='submit_btn' type="submit">Create Order</button>
     </div>
     
 </form>
 {% /page-base %}
 
+<div id="confirmationModal" class="fixed inset-0 z-50 flex items-center justify-center hidden transition-opacity duration-300 bg-gray-800 bg-opacity-75 opacity-0">
+    <div class="w-1/3 bg-white rounded-lg shadow-lg">
+        <div class="p-4 border-b">
+            <h2 class="text-lg font-semibold">Confirm Order Submission</h2>
+        </div>
+        <div class="p-4">
+            <p>Are you sure you want to submit the order?</p>
+            <p class="mt-2 text-sm text-gray-600">Once submitted, the order will not be modifiable anymore. If you make an error, you will have to create a new order.</p>
+        </div>
+        <div class="flex justify-end p-4 border-t">
+            <button id="cancelButton" class="px-4 py-2 mr-2 text-gray-700 bg-gray-200 rounded hover:bg-gray-300">Cancel</button>
+            <button id="confirmButton" class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">Confirm</button>
+        </div>
+    </div>
+</div>
+
 <script>
+    function showModal() {
+        const modal = document.getElementById('confirmationModal');
+        const totalAmount = document.getElementById('id_totalAmount').value
+        if (totalAmount <= 0 ) return;
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+            modal.classList.add('show');
+        }, 10); // Slight delay to trigger the transition
+    }
+
+    function hideModal() {
+        const modal = document.getElementById('confirmationModal');
+        modal.classList.remove('show');
+        modal.addEventListener('transitionend', function() {
+            modal.classList.add('hidden');
+        }, { once: true });
+    }
+
+    document.getElementById('cancelButton').addEventListener('click', function() {
+        hideModal();
+    });
+
+    document.getElementById('confirmButton').addEventListener('click', function() {
+        hideModal();
+        document.querySelector('form').submit();
+    });
+
     function handleOnChange(event) {
         const email = event.target.value;
         console.log("email: " + email);
@@ -210,40 +261,43 @@
     
         const item = document.createElement('div');
         item.classList.add('cart-item');
+        item.setAttribute('data-product-id', productId);  // Set data attribute for the product ID
         item.innerHTML = `
-            <img class='border rounded-md' src="${productImage}" alt="Product Image">
+            <img src="${productImage}" alt="Product Image">
             <div class="flex flex-col ml-4">
                 <span class="font-semibold text-gray-700">${productName}</span>
-                <span class="text-gray-500">₱<span class="price">${productPrice.toFixed(2)}</span></span>
-                <span class="text-gray-500">${size}</span>  <!-- Display selected size -->
+                <span class="text-gray-500">Price: $<span class="price">${productPrice.toFixed(2)}</span></span>
+                <span class="text-gray-500">Size: ${size}</span>  <!-- Display selected size -->
             </div>
             <div class="flex items-center">
                 <span class="mr-2 text-gray-700">Quantity:</span>
                 <input type="number" class="w-16 text-center border border-gray-300 rounded-md" value="${quantity}" min="1" data-product-id="${productId}" onchange="updateSubtotal(this)">
             </div>
             <div class="ml-4">
-                <span class="text-gray-700">Subtotal: ₱<span id="subtotal-${productId}">${subtotal.toFixed(2)}</span></span>
+                <span class="text-gray-700">Subtotal: $<span id="subtotal-${productId}">${subtotal.toFixed(2)}</span></span>
             </div>
-            <button class="px-3 py-1 ml-4 text-white bg-red-500 rounded-md hover:bg-red-600" onclick="removeItemFromCart(event, ${productId})">Remove</button>
+            <button class="px-3 py-1 ml-4 text-white bg-red-500 rounded-md hover:bg-red-600" onclick="removeItemFromCart(${productId})">Remove</button>
             <input type="hidden" name="items" value='{"productId": "${productId}", "quantity": ${quantity}, "price": ${productPrice}, "size": "${size}", "note": "${note}"}'>
         `;
         cart.appendChild(item);
+    
         document.getElementById('product_quantity').value = "";
         document.getElementById('product_note').value = "";
         updateTotalAmount();
     }
     
-    function removeItemFromCart(event, productId) {
+    function removeItemFromCart(productId) {
         event.preventDefault();
         const cart = document.getElementById('cart');
-        const item = cart.querySelector(`input[data-product-id="${productId}"]`).closest('.cart-item');
+        const item = cart.querySelector(`div[data-product-id="${productId}"]`);  // Select the correct item
+        if (item) {
+            item.classList.add('cart-item-exit');
     
-        item.classList.add('cart-item-exit');
-    
-        item.addEventListener('animationend', function() {
-            item.remove();
-            updateTotalAmount();
-        });
+            item.addEventListener('animationend', function() {
+                item.remove();
+                updateTotalAmount();
+            });
+        }
     }
     
     function updateSubtotal(input) {
@@ -293,6 +347,15 @@
 </script>
 
 <style>
+
+    #confirmationModal {
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+    }
+    
+    #confirmationModal.show {
+        opacity: 1;
+    }
 
     textarea {
         overflow-y: hidden; /* Hide the vertical scrollbar */

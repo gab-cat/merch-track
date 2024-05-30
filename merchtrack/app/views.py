@@ -15,6 +15,9 @@ from .models import user_info, order_info, order_details, contact_us, Customer
 def home(request):
     return render(request, 'index.html')
 
+def success(request):
+    return render(request, "success.html")
+
 def trackOrder(request):
     try:
         student_id = request.GET.get('student_id')

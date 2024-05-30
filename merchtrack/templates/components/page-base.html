@@ -1,10 +1,39 @@
-<div class=' flex flex-col w-screen h-full  bg-[#f3f3f3] overflow-auto p-2'>
+<div id="pageBase" class='flex flex-col w-screen h-full bg-[#f3f3f3] overflow-auto p-2 opacity-0 transition-opacity duration-500'>
     <div class='container flex flex-col items-center content-center justify-center p-5 m-auto overflow-visible bg-white shadow-xl rounded-xl min-w-auto'>
         <div class='self-start w-full mx-5'>
-            <div class=' self-start text-[#3BAFE1] text-3xl mt-2 font-bold text-left'>{{ page_title }} </div>
+            <div class='self-start text-[#3BAFE1] text-3xl mt-2 font-bold text-left'>{{ page_title }} </div>
             <div class='self-start w-full pb-3 mb-2 text-lg italic font-medium border-b'>Easy way to order</div>
         </div>
         {{ children }}
-
     </div>
 </div>
+<style>
+    #pageBase.show {
+        opacity: 1;
+    }
+    
+    .fade-out {
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+    }
+</style>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Fade-in effect for the page base
+        const pageBase = document.getElementById('pageBase');
+        pageBase.classList.add('show');
+
+        // Fade-out effect on link click
+        const links = document.querySelectorAll('a');
+        links.forEach(link => {
+            link.addEventListener('click', function (event) {
+                event.preventDefault();
+                const href = this.href;
+                pageBase.classList.add('fade-out');
+                setTimeout(() => {
+                    window.location.href = href;
+                }, 500); // Duration should match the CSS transition duration
+            });
+        });
+    });
+</script>
