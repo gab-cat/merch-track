@@ -268,7 +268,7 @@
         item.classList.add('cart-item');
         item.setAttribute('data-product-id', productId);  // Set data attribute for the product ID
         item.innerHTML = `
-            <img src="${productImage}" alt="Product Image">
+            <img class='border rounded-md' src="${productImage}" alt="Product Image">
             <div class="flex flex-col ml-4">
                 <span class="font-semibold text-gray-700">${productName}</span>
                 <span class="text-gray-500">₱<span class="price">${productPrice.toFixed(2)}</span></span>

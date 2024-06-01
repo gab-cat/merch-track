@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 
 from app.form.product import ProductForm
 from app.models import Product
+from django.contrib import messages
 
 def create_product(request):
     if request.method == 'POST':
@@ -41,6 +42,7 @@ def edit_product(request, product_id):
         form = ProductForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
             form.save()
+            messages.success(request, "Successfully updated a product.")
             return redirect('product_list')
     else:
         form = ProductForm(instance=product)

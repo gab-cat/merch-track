@@ -63,6 +63,9 @@ class Customer(models.Model):
             models.Index(fields=['user'], name='customer_id_idx')
         ]
 
+    def __str__(self):
+        return f"{self.user.first_name} {self.user.last_name}"
+
 class Product(models.Model):
     productId = models.AutoField(primary_key=True)
     productImage = models.ImageField(upload_to='product_images/', blank=True, null=True)

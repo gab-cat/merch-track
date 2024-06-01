@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block title %} Order Detail {% endblock %}
+{% load slippers %}
+
+{% block nav %}
+    {% back-to-dashboard %}
+{% endblock %}
+
+{% block content %}
+<div id="pageBase" class='flex fade-box flex-col w-screen h-full bg-[#f3f3f3] overflow-auto p-2'>
+    <div class='container flex flex-col items-center content-center justify-center p-5 m-auto overflow-visible bg-white shadow-xl rounded-xl w-3/4'>
+        <div class='self-start w-full mx-5'>
+            <div class='self-start text-[#3BAFE1] text-3xl mt-2 font-bold text-left'>Order Details</div>
+            <div class='self-start w-full pb-3 mb-2 text-lg italic font-medium border-b'>Easy way to order</div>
+        </div>
+        <div class="bg-white w-full">
+            <table class="text-left">
+                <tr>
+                  <th class="px-5 py-2">Order ID</th>
+                  <td class="px-2">:</td>
+                  <td>{{ order.orderId }}</td>
+                </tr>
+                <tr>
+                  <th class="px-5 py-2">Customer</th>
+                  <td class="px-2">:</td>
+                  <td>{{ order.customerId.user.first_name }} {{ order.customerId.user.last_name }}</td>
+                </tr>
+                <tr>
+                  <th class="px-5 py-2">Total Amount</th>
+                  <td class="px-2">:</td>
+                  <td>{{ order.totalAmount }}</td>
+                </tr>
+                <tr>
+                  <th class="px-5 py-2">Status</th>
+                  <td class="px-2">:</td>
+                  <td>{{ order.status }}</td>
+                </tr>
+                <tr>
+                  <th class="px-5 py-2">Order Date</th>
+                  <td class="px-2">:</td>
+                  <td>{{ order.orderDate }}</td>
+                </tr>
+                <tr>
+                    <th class="px-5 py-2">Estimated Delivery Date</th>
+                    <td class="px-2">:</td>
+                    <td>{{ order.estimatedDeliveryDate }}</td>
+                  </tr>
+            </table>
+              
+            <div>
+                <h3 class="text-xl font-bold mt-4 w-full mb-2 px-3 mx-2">Order Items</h3>
+                <ul class="list-disc pl-5">
+                    {% for item in order.orderitem_set.all %}
+                    <li>{{ item.productId.name }} - {{ item.quantity }} x ${{ item.price }}</li>
+                        {% if item.customerNote or item.size %}
+                        <ul class="text-gray-500 pl-5">
+                            <li>Size: {{ item.size }}</li>
+                            <li>Note: {{ item.customerNote }}</li>
+                        </ul>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+    
+            <div class="flex justify-end mt-4">
+                <a href="{% url 'order_list' %}" class="btn-secondary mr-2">Back to List</a>
+                <a href="{% url 'edit_order' order.orderId %}" class="btn-primary mr-2">Edit Order</a>
+                <form action="{% url 'delete_order' order.orderId %}" method="post">
+                    {% csrf_token %}
+                    <button onclick="showModal('confirmationModal')" class="btn-destructive">Delete Order</button>
+                </form>
+            </div>
+    
+        </div>
+    </div>
+</div>
+
+{% modal modal_id='confirmationModal' modal_title='Confirm Delete Order' modal_message='Are you sure you want to delete this order?' modal_warning='This process is not reversible. Saved data will no longer be recoverable.' %}
+{% endblock %}

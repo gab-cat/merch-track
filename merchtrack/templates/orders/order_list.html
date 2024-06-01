@@ -1,0 +1,90 @@
+{% extends 'base.html' %} 
+{% block title %} Order List {% endblock %}
+{% load slippers %}
+
+{% block nav %}
+    {% back-to-dashboard %}
+{% endblock %}
+
+{% block content %}
+{% #page-base page_title='Order List' %}
+<div class="self-start w-full px-4 py-8 mb-auto align-top">  
+    <div class="flex justify-between">  
+        <form method="GET" action="{% url 'order_list' %}" class="flex flex-row w-2/4 mb-6 space-x-3">
+            <input type="text" name="q" placeholder="Search orders..." value="{{ request.GET.q }}" class="w-full px-4 py-2 border rounded-lg">
+            <select name="status" class="w-full px-4 py-2 border rounded-lg">
+                <option value="">All Statuses</option>
+                <option value="Pending" {% if request.GET.status == "Pending" %}selected{% endif %}>Pending</option>
+                <option value="Completed" {% if request.GET.status == "Completed" %}selected{% endif %}>Completed</option>
+                <option value="Completed" {% if request.GET.status == "Under Production" %}selected{% endif %}>Under Production</option>
+            </select>
+            <button type="submit" class="btn-primary">Search</button>
+        </form>
+        <a href="{% url 'create_order' %}" class="items-center mb-4 content-center justify-center flex align-middle self-end mt-auto w-max text-white bg-[#3BAFE1] border-white text-lg rounded-lg font-Inter font-semibold text-center py-2 px-4 cursor-pointer active:opacity-100 hover:opacity-[0.5] transition-all">
+            <span class="mr-2 text-3xl font-bold"> + </span> 
+            <span class="flex h-full my-auto align-middle"> Create new Order </span>
+        </a>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white outline rounded-md outline-white border">
+            <thead class="bg-gray-800 text-white text-left">
+                <tr>
+                    <th class="w-1/4 py-3 px-4 uppercase font-semibold text-sm rounded-tl-lg">Order ID</th>
+                    <th class="w-1/4 py-3 px-4 uppercase font-semibold text-sm">Customer</th>
+                    <th class="w-1/4 py-3 px-4 uppercase font-semibold text-sm">Total Amount</th>
+                    <th class="w-1/4 py-3 px-4 uppercase font-semibold text-sm ">Status</th>
+                    <th class="py-3 px-4 uppercase font-semibold text-sm rounded-tr-lg">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-700  rounded-b-lg">
+                {% for order in page_obj %}
+                <tr>
+                    <td class="w-1/4 py-3 px-4 rounded-bl-lg">{{ order.orderId }}</td>
+                    <td class="w-1/4 py-3 px-4">{{ order.customerId.user.first_name }} {{ order.customerId.user.last_name }}</td>
+                    <td class="w-1/4 py-3 px-4">₱ {{ order.totalAmount }}</td>
+
+                    {% if order.status == 'Pending' %}
+                    <td class="w-1/4 py-3 px-4 font-bold text-red-700">{{ order.status }}</td>
+                    {% elif order.status == 'Under Production' %}
+                    <td class="w-1/4 py-3 px-4 font-bold text-yellow-500">{{ order.status }}</td>
+                    {% elif order.status == 'Completed' %}
+                    <td class="w-1/4 py-3 px-4 font-bold text-green-700">{{ order.status }}</td>
+                    {% else %}
+                    <td class="w-1/4 py-3 px-4 font-bold">None</td>
+                    {% endif %}
+                    
+                    <td class="py-3 px-4 flex flex-row rounded-br-lg space-x-2">
+                        <a href="{% url 'order_detail' order.orderId %}" class="btn-secondary">View</a>
+                        <a href="{% url 'edit_order' order.orderId %}" class="btn-primary">Edit</a>
+                        <form action="{% url 'delete_order' order.orderId %}" method="post" class="inline-block">
+                            {% csrf_token %}
+                            <button onclick="showModal('confirmationModal')" type="submit" class="btn-destructive">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pagination my-2 py-3">
+        <div class="current text-lg mx-2 font-regular mb-4">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </div>
+        <div class="step-links my-2">
+            {% if page_obj.has_previous %}
+                <a href="?page=1" class="mr-2 btn-primary">&laquo;  First</a>
+                <a href="?page={{ page_obj.previous_page_number }}" class="mr-2 btn-primary">Prev</a>
+            {% endif %}
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="ml-2 btn-primary">Next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}" class="ml-2 btn-primary">Last  &raquo;</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% modal modal_id='confirmationModal' modal_title='Confirm Delete Order' modal_message='Are you sure you want to delete this order?' modal_warning='This process is not reversible. Saved data will no longer be recoverable.' %}
+{% /page-base %}
+{% endblock %}

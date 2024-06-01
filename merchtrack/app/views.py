@@ -1,16 +1,20 @@
+import logging
+from unittest import loader
+from django.contrib import messages as django_messages
+
 from django.db import connection
-from django.shortcuts import get_object_or_404, render, redirect
-from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.template import loader
+from django.shortcuts import get_object_or_404, render, redirect, HttpResponse
+from django.http import JsonResponse
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
-from django.contrib import messages
+
 from django.contrib.auth.decorators import login_required
-from django.core.cache import cache
 from django.contrib.auth.models import User
 
 from .forms import CreateUserForm, LoginForm, UserRegistrationForm
 from .models import user_info, order_info, order_details, contact_us, Customer
+
+# Set up logging
+logger = logging.getLogger(__name__)
 
 def home(request):
     return render(request, 'index.html')
@@ -154,6 +158,8 @@ def register(request):
 def login(request):
     if request.user.is_authenticated:
         return redirect('dashboard')
+    
+    error = 0
 
     if request.method == 'POST':
         form = LoginForm(data=request.POST)
@@ -161,24 +167,31 @@ def login(request):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
 
-            print("username: " + username, "password: " + password)
-            # Retrieve the user_info object with the provided student_id
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 auth_login(request, user)
+                logger.debug(f"messages type: {type(django_messages)}")  # Log the type of messages
+                django_messages.info(request, 'Logged in successfully.')
                 return redirect('dashboard')
-            else:
-                form.add_error(None, "Invalid student ID or password.")
+        else:
+            django_messages.error(request, "Invalid student ID or password.")
     else:
+        if error == 1:
+            django_messages.error(request, "Invalid student ID or password.")
         form = LoginForm()
+
+    for message in django_messages.get_messages(request):
+        logger.debug(f"Message: {message} - Tags: {message.tags}")
 
     return render(request, 'login.html', {'form': form})
 
 def logout(request):
     if request.method == 'POST':
         auth_logout(request)
+        django_messages.info(request, 'Logged out successfully.')
         return redirect('login')
-
+    
+    django_messages.error(request, 'Something went wrong.')
     return redirect('dashboard')
 
 @login_required(login_url='login')
