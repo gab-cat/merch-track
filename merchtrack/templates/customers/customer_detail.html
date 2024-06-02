@@ -12,26 +12,26 @@
 
             <div class="bg-white p-4 rounded-lg shadow-md">
                 <div class="w-full flex items-center justify-between">
-                    <h2 class="text-xl font-semibold">{{ customer.user.first_name }} {{ customer.user.last_name }}</h2>
+                    <h2 class="text-2xl font-bold">{{ customer.user.first_name }} {{ customer.user.last_name }}</h2>
                     <div class="flex flex-row items-center">
                         <a href="{% url 'customer_list' %}" class="btn-secondary m-2 justify-self-end self-end w-max flex ">Back to List</a>
                         <a href="{% url 'edit_customer' customer.user.id %}" class="btn-primary items-center flex w-max">Edit Profile</a>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 w-5/12">
-                    <p>Username: </p>
-                    <p>{{ customer.user.username }}</p>
-                    <p>Email: </p>
+                    <p class="font-semibold pb-1" >Username: </p>
+                    <p >{{ customer.user.username }}</p>
+                    <p class="font-semibold pb-1">Email: </p>
                     <p>{{ customer.user.email }}</p>
-                    <p>Phone: </p>
+                    <p class="font-semibold pb-1">Phone: </p>
                     <p>{{ customer.phone }}</p>
-                    <p>Course: </p>
+                    <p class="font-semibold pb-1">Course: </p>
                     <p>{{ customer.course }}</p>
                 </div>
             </div>
             <h2 class="text-xl font-semibold mt-8">Orders</h2>
             <table class="min-w-full bg-white border border-gray-200 mt-4">
-                <thead class="bg-gray-50 text-left">
+                <thead class="bg-gray-200 text-left">
                     <tr>
                         <th class="py-2 px-4 border-b">Order ID</th>
                         <th class="py-2 px-4 border-b">Date</th>
