@@ -99,6 +99,7 @@ class Order(models.Model):
     totalAmount = models.FloatField(max_length=10, default=0)
     discountAmount = models.FloatField(max_length=10, default=0)
     estimatedDeliveryDate = models.DateTimeField()
+    actualDeliveryDate = models.DateTimeField(null=True, blank=True)  # Add this line
 
     class Meta:
         db_table = 'order'
@@ -126,6 +127,10 @@ class OrderItem(models.Model):
         indexes = [
             models.Index(fields=['orderItemId'], name='order_item_id_idx')
         ]
+
+    @property
+    def total_price(self):
+        return self.quantity * self.price
 
 class Payment(models.Model):
     paymentId = models.AutoField(primary_key=True)

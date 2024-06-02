@@ -14,17 +14,49 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
-
+@login_required(login_url='login')
 def customer_list(request):
-    customer_list = Customer.objects.all()
-    paginator = Paginator(customer_list, 10)  # Show 10 customers per page.
+    query = request.GET.get('q')
+    is_staff = request.GET.get('is_staff')
+    is_active = request.GET.get('is_active')
 
+    customer_list = Customer.objects.all()
+
+    if is_staff:
+        customer_list = customer_list.filter(user__is_staff=is_staff == 'true')
+
+    if is_active:
+        customer_list = customer_list.filter(user__is_active=is_active == 'true')
+
+    if query:
+        customer_list = customer_list.filter(
+            Q(user__first_name__icontains=query) |
+            Q(user__last_name__icontains=query) |
+            Q(user__username__icontains=query) |
+            Q(user__email__icontains=query) |
+            Q(phone__icontains=query)
+        )
+
+    paginator = Paginator(customer_list, 10)  # Show 10 customers per page.
     page_number = request.GET.get('page')
     customers = paginator.get_page(page_number)
-    
-    return render(request, 'customers/customer_list.html', {'customers': customers})
 
+    if query == "None":
+        query = ""
+
+    context = {
+        'customers': customers,
+        'query': query,
+        'is_staff': is_staff,
+        'is_active': is_active,
+    }
+
+    return render(request, 'customers/customer_list.html', context)
+
+@login_required(login_url='login')
 def customer_detail(request, customer_id):
     customer = get_object_or_404(Customer, pk=customer_id)
     orders = Order.objects.filter(customerId=customer)
@@ -49,11 +81,11 @@ def send_html_password_reset_email(user, request):
     email.attach_alternative(html_content, "text/html")
     email.send()
 
+@login_required(login_url='login')
 def edit_customer(request, customer_id):
     customer = get_object_or_404(Customer, pk=customer_id)
     user = customer.user
     if request.method == 'POST':
-        print(request.POST)
         if 'reset_password' in request.POST:
             password_reset_form = PasswordResetForm({'email': user.email})
             if password_reset_form.is_valid():
@@ -73,6 +105,7 @@ def edit_customer(request, customer_id):
         user_form = UserForm(instance=user)
     return render(request, 'customers/edit_customer.html', {'customer_form': customer_form, 'user_form': user_form, 'customer': customer})
 
+@login_required(login_url='login')
 def send_password_reset_email(request, user_id):
     user = get_object_or_404(User, pk=user_id)
     password_reset_form = PasswordResetForm({'email': user.email})

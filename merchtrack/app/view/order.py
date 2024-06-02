@@ -6,6 +6,7 @@ from app.models import Customer, Product, Order, OrderItem
 from app.form.order import OrderForm, OrderItemForm
 from django.core.paginator import Paginator
 from django.contrib import messages as django_messages
+from django.db.models import Q
 
 @login_required
 def create_order(request):
@@ -62,14 +63,39 @@ def create_order(request):
     })
 
 def order_list(request):
+    query = request.GET.get('q')
+    status = request.GET.get('status')
+
     orders = Order.objects.all().order_by('-orderDate')
+
+    if status:
+        orders = orders.filter(status=status)
+
+    if query:
+        orders = orders.filter(
+            Q(orderId__icontains=query) |
+            Q(customerId__user__first_name__icontains=query) |
+            Q(customerId__user__last_name__icontains=query)
+        )
+
     paginator = Paginator(orders, 10)  # Show 10 orders per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'orders/order_list.html', {'page_obj': page_obj})
+
+    context = {
+        'page_obj': page_obj,
+        'query': query,
+        'status': status,
+    }
+
+    return render(request, 'orders/order_list.html', context)
 
 def order_detail(request, order_id):
-    order = get_object_or_404(Order, pk=order_id)
+    try:
+        order = Order.objects.get(pk=order_id)
+    except Order.DoesNotExist:
+        django_messages.error(request, "Order ID is not found. Please try again.")
+        return redirect('home')
     return render(request, 'orders/order_detail.html', {'order': order})
 
 def edit_order(request, order_id):

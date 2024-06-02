@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Order Report{% endblock %}
+{% block content %}
+{% load slippers %}
+
+{% #page-base page_title='Order Report'%}
+
+<form method="get" class="mb-6">
+        <div class="flex items-center space-x-4">
+            <input type="date" name="start_date" class="px-4 py-2 border rounded-md" value="{{ request.GET.start_date }}">
+            <input type="date" name="end_date" class="px-4 py-2 border rounded-md" value="{{ request.GET.end_date }}">
+            <button type="submit" class="btn-primary">Filter</button>
+        </div>
+    </form>
+    <table class="min-w-full bg-white border border-gray-200">
+        <thead class="text-left bg-gray-50">
+            <tr>
+                <th class="px-4 py-2 border-b">Order ID</th>
+                <th class="px-4 py-2 border-b">Customer</th>
+                <th class="px-4 py-2 border-b">Date</th>
+                <th class="px-4 py-2 border-b">Total Amount</th>
+                <th class="px-4 py-2 border-b">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td class="px-4 py-2 border-b">{{ order.orderId }}</td>
+                <td class="px-4 py-2 border-b">{{ order.customerId.user.username }}</td>
+                <td class="px-4 py-2 border-b">{{ order.orderDate }}</td>
+                <td class="px-4 py-2 border-b">{{ order.totalAmount }}</td>
+                <td class="px-4 py-2 border-b">{{ order.status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% /page-base %}
+{% endblock %}

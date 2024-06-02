@@ -64,7 +64,7 @@
             display: flex;
             justify-content: center;
             position: fixed;
-            bottom: 1rem; /* bottom-4 in Tailwind */
+            bottom: 2.5rem; /* bottom-4 in Tailwind */
             left: 50%;
             transform: translateX(-50%);
             width: 100%;
@@ -72,7 +72,7 @@
 
     </style>
 </head>
-<body class="bg-[#f3f3f3] ">
+<body class="bg-[#f3f3f3] h-screen">
 
 
   <div class="bg-[#212121] flex flex-row content-between justify-between p-1 px-5 ">
@@ -84,11 +84,10 @@
         {% block nav %} {% endblock %}
     </nav>
   </div>
-  <div class="fade-box w-screen h-[90vh] bg-[#f3f3f3] overflow-hidden">
+  <div class="fade-box w-screen h-[92vh] border bg-[#f3f3f3] overflow-hidden">
     {% block content %} {% endblock %}
   </div>
-  <div class='w-full h-5 bg-[#212121]'>
-  </div>
+
 
   <div id="toast-container" class="absolute max-w-[40%] mb-2 bottom-8 left-1/2 transform -translate-x-1/2 flex justify-center items-center z-50">
     {% if messages %}

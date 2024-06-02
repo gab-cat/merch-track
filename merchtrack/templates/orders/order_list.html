@@ -8,52 +8,57 @@
 
 {% block content %}
 {% #page-base page_title='Order List' %}
-<div class="self-start w-full px-4 py-8 mb-auto align-top">  
+<div class="self-start w-full px-4 py-4 mb-auto align-top">  
     <div class="flex justify-between">  
-        <form method="GET" action="{% url 'order_list' %}" class="flex flex-row w-2/4 mb-6 space-x-3">
-            <input type="text" name="q" placeholder="Search orders..." value="{{ request.GET.q }}" class="w-full px-4 py-2 border rounded-lg">
-            <select name="status" class="w-full px-4 py-2 border rounded-lg">
-                <option value="">All Statuses</option>
-                <option value="Pending" {% if request.GET.status == "Pending" %}selected{% endif %}>Pending</option>
-                <option value="Completed" {% if request.GET.status == "Completed" %}selected{% endif %}>Completed</option>
-                <option value="Completed" {% if request.GET.status == "Under Production" %}selected{% endif %}>Under Production</option>
-            </select>
-            <button type="submit" class="btn-primary">Search</button>
+        <form method="GET" action="{% url 'order_list' %}" class="flex flex-col w-full mb-2 space-y-4">
+            <div class="flex space-x-4">
+                {% input type='text' name='q' id='q' label='Search orders...' value=query %}
+                <button type="submit" class="flex p-2 px-5 text-white transition-all bg-blue-500 rounded cursor-pointer h-fit hover:bg-blue-600">Search</button>
+            </div>
+            <div class="flex flex-col mb-4">
+                <label class="mr-2 font-bold">Status:</label>
+                <div class="flex items-center mb-2">
+                    <input type="radio" id="status_all" name="status" value="" class="mr-2" {% if status == '' %}checked{% endif %}>
+                    <label for="status_all" class="mr-4">All</label>
+                    <input type="radio" id="status_pending" name="status" value="Pending" class="mr-2" {% if status == 'Pending' %}checked{% endif %}>
+                    <label for="status_pending" class="mr-4">Pending</label>
+                    <input type="radio" id="status_under_production" name="status" value="Under Production" class="mr-2" {% if status == 'Under Production' %}checked{% endif %}>
+                    <label for="status_under_production" class="mr-4">Under Production</label>
+                    <input type="radio" id="status_completed" name="status" value="Completed" class="mr-2" {% if status == 'Completed' %}checked{% endif %}>
+                    <label for="status_completed">Completed</label>
+                </div>
+            </div>
         </form>
-        <a href="{% url 'create_order' %}" class="items-center mb-4 content-center justify-center flex align-middle self-end mt-auto w-max text-white bg-[#3BAFE1] border-white text-lg rounded-lg font-Inter font-semibold text-center py-2 px-4 cursor-pointer active:opacity-100 hover:opacity-[0.5] transition-all">
-            <span class="mr-2 text-3xl font-bold"> + </span> 
-            <span class="flex h-full my-auto align-middle"> Create new Order </span>
-        </a>
     </div>
     <div class="overflow-x-auto">
-        <table class="min-w-full bg-white outline rounded-md outline-white border">
-            <thead class="bg-gray-800 text-white text-left">
+        <table class="min-w-full bg-white border rounded-md outline outline-white">
+            <thead class="text-left text-white bg-gray-800">
                 <tr>
-                    <th class="w-1/4 py-3 px-4 uppercase font-semibold text-sm rounded-tl-lg">Order ID</th>
-                    <th class="w-1/4 py-3 px-4 uppercase font-semibold text-sm">Customer</th>
-                    <th class="w-1/4 py-3 px-4 uppercase font-semibold text-sm">Total Amount</th>
-                    <th class="w-1/4 py-3 px-4 uppercase font-semibold text-sm ">Status</th>
-                    <th class="py-3 px-4 uppercase font-semibold text-sm rounded-tr-lg">Actions</th>
+                    <th class="w-1/4 px-4 py-3 text-sm font-semibold uppercase rounded-tl-lg">Order ID</th>
+                    <th class="w-1/4 px-4 py-3 text-sm font-semibold uppercase">Customer</th>
+                    <th class="w-1/4 px-4 py-3 text-sm font-semibold uppercase">Total Amount</th>
+                    <th class="w-1/4 px-4 py-3 text-sm font-semibold uppercase ">Status</th>
+                    <th class="px-4 py-3 text-sm font-semibold uppercase rounded-tr-lg">Actions</th>
                 </tr>
             </thead>
-            <tbody class="text-gray-700  rounded-b-lg">
+            <tbody class="text-gray-700 rounded-b-lg">
                 {% for order in page_obj %}
                 <tr>
-                    <td class="w-1/4 py-3 px-4 rounded-bl-lg">{{ order.orderId }}</td>
-                    <td class="w-1/4 py-3 px-4">{{ order.customerId.user.first_name }} {{ order.customerId.user.last_name }}</td>
-                    <td class="w-1/4 py-3 px-4">₱ {{ order.totalAmount }}</td>
+                    <td class="w-1/4 px-4 py-3 rounded-bl-lg">{{ order.orderId }}</td>
+                    <td class="w-1/4 px-4 py-3">{{ order.customerId.user.first_name }} {{ order.customerId.user.last_name }}</td>
+                    <td class="w-1/4 px-4 py-3">₱ {{ order.totalAmount }}</td>
 
                     {% if order.status == 'Pending' %}
-                    <td class="w-1/4 py-3 px-4 font-bold text-red-700">{{ order.status }}</td>
+                    <td class="w-1/4 px-4 py-3 font-bold text-red-700">{{ order.status }}</td>
                     {% elif order.status == 'Under Production' %}
-                    <td class="w-1/4 py-3 px-4 font-bold text-yellow-500">{{ order.status }}</td>
+                    <td class="w-1/4 px-4 py-3 font-bold text-yellow-500">{{ order.status }}</td>
                     {% elif order.status == 'Completed' %}
-                    <td class="w-1/4 py-3 px-4 font-bold text-green-700">{{ order.status }}</td>
+                    <td class="w-1/4 px-4 py-3 font-bold text-green-700">{{ order.status }}</td>
                     {% else %}
-                    <td class="w-1/4 py-3 px-4 font-bold">None</td>
+                    <td class="w-1/4 px-4 py-3 font-bold">None</td>
                     {% endif %}
                     
-                    <td class="py-3 px-4 flex flex-row rounded-br-lg space-x-2">
+                    <td class="flex flex-row px-4 py-3 space-x-2 rounded-br-lg">
                         <a href="{% url 'order_detail' order.orderId %}" class="btn-secondary">View</a>
                         <a href="{% url 'edit_order' order.orderId %}" class="btn-primary">Edit</a>
                         <form action="{% url 'delete_order' order.orderId %}" method="post" class="inline-block">
@@ -67,11 +72,11 @@
         </table>
     </div>
 
-    <div class="pagination my-2 py-3">
-        <div class="current text-lg mx-2 font-regular mb-4">
+    <div class="py-3 my-2 pagination">
+        <div class="mx-2 mb-4 text-lg current font-regular">
             Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
         </div>
-        <div class="step-links my-2">
+        <div class="my-2 step-links">
             {% if page_obj.has_previous %}
                 <a href="?page=1" class="mr-2 btn-primary">&laquo;  First</a>
                 <a href="?page={{ page_obj.previous_page_number }}" class="mr-2 btn-primary">Prev</a>

@@ -14,24 +14,59 @@
             <div class='self-start text-[#3BAFE1] text-3xl mt-2 font-bold text-left'>User Details</div>
             <div class='self-start w-full pb-3 mb-2 text-lg italic font-medium border-b'>Easy way to order</div>
         </div>
-        <table class="min-w-full bg-white border border-gray-200">
-            <thead class="bg-gray-50 text-left">
+
+        <form method="get" class="flex flex-col">
+            <div class="flex items-start content-start space-x-4">
+                {% input type='text' name='q' id='q' label='Search Query' value=query  %}
+                <input type="submit" value="Filter" class="flex p-2 px-10 text-white transition-all bg-blue-500 rounded cursor-pointer h-5/6 hover:bg-blue-600">
+            </div>
+            <div class='flex flex-row w-full my-2 space-x-8' >
+                <div class="flex flex-row ">
+                    <label class="mr-2 font-bold">Staff:</label>
+                    <div class="flex items-center mb-2">
+                        <input type="radio" id="staff_all" name="is_staff" value="" class="mr-2" {% if is_staff == '' %}checked{% endif %}>
+                        <label for="staff_all" class="mr-4">All</label>
+                        <input type="radio" id="staff_yes" name="is_staff" value="true" class="mr-2" {% if is_staff == 'true' %}checked{% endif %}>
+                        <label for="staff_yes" class="mr-4">Yes</label>
+                        <input type="radio" id="staff_no" name="is_staff" value="false" class="mr-2" {% if is_staff == 'false' %}checked{% endif %}>
+                        <label for="staff_no">No</label>
+                    </div>
+                </div>
+                <div class="flex flex-row ">
+                    <label class="mr-2 font-bold">Active:</label>
+                    <div class="flex items-center mb-2">
+                        <input type="radio" id="active_all" name="is_active" value="" class="mr-2" {% if is_active == '' %}checked{% endif %}>
+                        <label for="active_all" class="mr-4">All</label>
+                        <input type="radio" id="active_yes" name="is_active" value="true" class="mr-2" {% if is_active == 'true' %}checked{% endif %}>
+                        <label for="active_yes" class="mr-4">Yes</label>
+                        <input type="radio" id="active_no" name="is_active" value="false" class="mr-2" {% if is_active == 'false' %}checked{% endif %}>
+                        <label for="active_no">No</label>
+                    </div>
+                </div>
+                
+            </div>
+            
+        </form>
+
+
+        <table class="min-w-full bg-white border-gray-200">
+            <thead class="text-left bg-gray-200">
                 <tr>
-                    <th class="py-2 px-4 border-b rounded-tl-md">ID</th>
-                    <th class="py-2 px-4 border-b">Name</th>
-                    <th class="py-2 px-4 border-b">Email</th>
-                    <th class="py-2 px-4 border-b">Phone</th>
-                    <th class="py-2 px-4 border-b rounded-tr-md">Actions</th>
+                    <th class="px-4 py-2 border-b rounded-tl-lg">ID</th>
+                    <th class="px-4 py-2 border-b">Name</th>
+                    <th class="px-4 py-2 border-b">Email</th>
+                    <th class="px-4 py-2 border-b">Phone</th>
+                    <th class="px-4 py-2 border-b rounded-tr-lg">Actions</th>
                 </tr>
             </thead>
-            <tbody class="text-left">
+            <tbody class="text-left border">
                 {% for customer in customers %}
                 <tr>
-                    <td class="py-2 px-4 border-b">{{ customer.user.id }}</td>
-                    <td class="py-2 px-4 border-b">{{ customer.user.username }}</td>
-                    <td class="py-2 px-4 border-b">{{ customer.user.email }}</td>
-                    <td class="py-2 px-4 border-b">{{ customer.phone }}</td>
-                    <td class="py-2 px-4 border-b">
+                    <td class="px-4 py-2 border-b">{{ customer.user.id }}</td>
+                    <td class="px-4 py-2 border-b">{{ customer.user.username }}</td>
+                    <td class="px-4 py-2 border-b">{{ customer.user.email }}</td>
+                    <td class="px-4 py-2 border-b">{{ customer.phone }}</td>
+                    <td class="px-4 py-2 border-b">
                         <a href="{% url 'customer_detail' customer.user.id %}" class="btn-secondary">View</a> 
                         <a href="{% url 'edit_customer' customer.user.id %}" class="btn-primary">Edit</a>
                     </td>
@@ -46,25 +81,23 @@
             </span>
             <div class="inline-flex mt-2">
                 {% if customers.has_previous %}
-                    <a href="?page=1" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-l hover:bg-gray-400 transition-all">First</a>
-                    <a href="?page={{ customers.previous_page_number }}" class="px-4 py-2 bg-gray-300 text-gray-700">Previous</a>
+                    <a href="?page=1" class="px-4 py-2 text-gray-700 transition-all bg-gray-300 rounded-l hover:bg-gray-400">First</a>
+                    <a href="?page={{ customers.previous_page_number }}" class="px-4 py-2 text-gray-700 bg-gray-300">Previous</a>
                 {% endif %}
                 {% for num in customers.paginator.page_range %}
                     {% if customers.number == num %}
-                        <span class="px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 transition-all first:rounded-l last:rounded-r">{{ num }}</span>
+                        <span class="px-4 py-2 text-white transition-all bg-blue-600 hover:bg-blue-700 first:rounded-l last:rounded-r">{{ num }}</span>
                     {% elif num > customers.number|add:'-5' and num < customers.number|add:'5' %}
-                        <a href="?page={{ num }}" class="px-4 py-2 bg-gray-300 text-gray-700 hover:bg-gray-400 transition-all">{{ num }}</a>
+                        <a href="?page={{ num }}" class="px-4 py-2 text-gray-700 transition-all bg-gray-300 hover:bg-gray-400">{{ num }}</a>
                     {% endif %}
                 {% endfor %}
                 {% if customers.has_next %}
-                    <a href="?page={{ customers.next_page_number }}" class="px-4 py-2 bg-gray-300 text-gray-700 hover:bg-gray-400 transition-all">Next</a>
-                    <a href="?page={{ customers.paginator.num_pages }}" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-r hover:bg-gray-400 transition-all">Last</a>
+                    <a href="?page={{ customers.next_page_number }}" class="px-4 py-2 text-gray-700 transition-all bg-gray-300 hover:bg-gray-400">Next</a>
+                    <a href="?page={{ customers.paginator.num_pages }}" class="px-4 py-2 text-gray-700 transition-all bg-gray-300 rounded-r hover:bg-gray-400">Last</a>
                 {% endif %}
             </div>
         </div>
     </div>
 </div>
-
-
 
 {% endblock %}

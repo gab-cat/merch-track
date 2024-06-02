@@ -63,7 +63,7 @@
     <div class='flex flex-col w-2/4 h-full p-4 border rounded-md'>
         
         <p class='pb-2 font-semibold border-b'><span class='px-3 py-1 mr-2 text-base font-semibold text-white bg-[#3BAFE1] rounded-md'>Step 2</span> Add Order Items</p>
-        <div class="grid grid-cols-4 gap-4 mt-4">
+        <div class="grid grid-cols-5 gap-2 mt-4">
             <div class="flex items-center col-span-3 space-x-3">
                 <label class="font-semibold w-max" for="product_select">Select Product:</label>
                 <select class="w-full rounded-md" id="product_select">
@@ -78,7 +78,7 @@
                     {% endfor %}
                 </select>
             </div>
-            <div class="flex items-center space-x-3">
+            <div class="flex items-center col-span-2 space-x-3">
                 <label class="font-semibold" for="product_quantity">Quantity:</label>
                 <input class="w-full rounded-md" type="number" id="product_quantity" name="product_quantity" min="1">
             </div>
@@ -86,7 +86,7 @@
                 <label class="font-semibold" for="product_note">Add Note:</label>
                 <textarea class="w-full rounded-md" id="product_note" name="product_note" rows="1"></textarea>
             </div>
-            <div class="flex items-center space-x-3">
+            <div class="flex items-center col-span-2 space-x-3">
                 <label class="font-semibold" for="product_size">Size:</label>
                 <select class="w-full rounded-md" id="product_size">
                     <option value="">Sizes</option>

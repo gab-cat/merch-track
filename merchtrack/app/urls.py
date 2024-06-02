@@ -2,7 +2,7 @@ from django.conf import settings
 from django.views.static import serve
 from django.urls import path,re_path, include
 from . import views
-from .view import product, order, customer
+from .view import product, order, customer, report
 
 urlpatterns = [
     path("", views.home, name='home'),
@@ -32,6 +32,18 @@ urlpatterns = [
     path('edit_order/<int:order_id>/', order.edit_order, name='edit_order'),
     path('delete_order/<int:order_id>/', order.delete_order, name='delete_order'),
     path('sales_report', order.sales_report, name='sales_report'),
+
+
+    path('reports/orders/', report.order_report, name='order_report'),
+    path('reports/products/', report.product_report, name='product_report'),
+    path('reports/products/<int:product_id>/', report.product_report, name='product_report'),
+    # path('reports/customers/<int:customer_id>/', report.customer_report, name='customer_report'),
+    path('reports/customers/', report.customer_report, name='customer_report'),
+
+
+    path('reports/sales/', report.sales_report, name='sales_report'),
+    path('reports/fulfillment/', report.fulfillment_report, name='fulfillment_report'),
+    path('api/sales_data/<int:product_id>/', report.sales_data_api, name='sales_data_api'),
 
 
     path('customers/', customer.customer_list, name='customer_list'),
