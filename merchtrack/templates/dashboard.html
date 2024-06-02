@@ -18,9 +18,11 @@
         <div class='grid content-center grid-cols-4 gap-4 p-5 justify-evenly group'>
             {% card url='create_order' src='assets/create.png' title='Create new order' %}
             {% card url='order_list' src='assets/track.png' title='Admin Tracker' %}
+            {% card url='product_list' src='assets/inventory-ic.png' title='Inventory Manager' %}
+            {% card url='customer_list' src='assets/customers.png' title='Manage Users' %}
             {% card url='messages' src='assets/messages.png' title='Check Messages' %}
             {% card url='registration' src='assets/register.png' title='Register Account' %}
-            {% card url='product_list' src='assets/inventory-ic.png' title='Inventory Manager' %}
+            
         </div>
         <form method='POST' action='/logout' class='flex flex-row-reverse self-start w-full mt-auto mr-10'>
             {% csrf_token %}

@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}Customer Detail{% endblock %}
+{% block content %}
+
+<div id="pageBase" class='flex fade-box flex-col w-screen h-full bg-[#f3f3f3] overflow-auto p-2'>
+    <div class='container flex flex-col items-center content-center justify-center p-5 m-auto overflow-visible bg-white shadow-xl rounded-xl w-3/4'>
+        <div class='self-start w-full mx-5'>
+            <div class='self-start text-[#3BAFE1] text-3xl mt-2 font-bold text-left'>Customer Details</div>
+            <div class='self-start w-full pb-3 mb-2 text-lg italic font-medium border-b'>Easy way to order</div>
+        </div>
+        <div class="container mx-auto px-4 w-full py-4">
+
+            <div class="bg-white p-4 rounded-lg shadow-md">
+                <div class="w-full flex items-center justify-between">
+                    <h2 class="text-xl font-semibold">{{ customer.user.first_name }} {{ customer.user.last_name }}</h2>
+                    <div class="flex flex-row items-center">
+                        <a href="{% url 'customer_list' %}" class="btn-secondary m-2 justify-self-end self-end w-max flex ">Back to List</a>
+                        <a href="{% url 'edit_customer' customer.user.id %}" class="btn-primary items-center flex w-max">Edit Profile</a>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 w-5/12">
+                    <p>Username: </p>
+                    <p>{{ customer.user.username }}</p>
+                    <p>Email: </p>
+                    <p>{{ customer.user.email }}</p>
+                    <p>Phone: </p>
+                    <p>{{ customer.phone }}</p>
+                    <p>Course: </p>
+                    <p>{{ customer.course }}</p>
+                </div>
+            </div>
+            <h2 class="text-xl font-semibold mt-8">Orders</h2>
+            <table class="min-w-full bg-white border border-gray-200 mt-4">
+                <thead class="bg-gray-50 text-left">
+                    <tr>
+                        <th class="py-2 px-4 border-b">Order ID</th>
+                        <th class="py-2 px-4 border-b">Date</th>
+                        <th class="py-2 px-4 border-b">Total Amount</th>
+                        <th class="py-2 px-4 border-b">Status</th>
+                        <th class="py-2 px-4 border-b text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td class="py-2 px-4 border-b">{{ order.orderId }}</td>
+                        <td class="py-2 px-4 border-b">{{ order.orderDate }}</td>
+                        <td class="py-2 px-4 border-b">{{ order.totalAmount }}</td>
+                        {% if order.status == 'Pending' %}
+                        <td class="w-1/4 py-3 px-4 border-b font-bold text-red-700">{{ order.status }}</td>
+                        {% elif order.status == 'Under Production' %}
+                        <td class="w-1/4 py-3 px-4 border-b font-bold text-yellow-500">{{ order.status }}</td>
+                        {% elif order.status == 'Completed' %}
+                        <td class="w-1/4 py-3 px-4 border-b font-bold text-green-700">{{ order.status }}</td>
+                        {% else %}
+                        <td class="w-1/4 py-3 px-4 border-b font-bold">None</td>
+                        {% endif %}
+                        <td class="py-2 px-4 border-b flex justify-center">
+                            <a href="{% url 'order_detail' order.orderId %}" class="text-blue-500 hover:underline">View</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

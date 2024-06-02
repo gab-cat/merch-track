@@ -52,7 +52,7 @@ def create_order(request):
                 size=item_data.get('size', '') ,
             )
             order_item.save()
-        django_messages.success(request, "Successfully created a new order.")
+        django_messages.success(request, f"Successfully created a new order with ID: {order.orderId}.")
         return redirect('success')  # Redirect to a success page
 
     return render(request, 'create_order.html', {
@@ -79,7 +79,7 @@ def edit_order(request, order_id):
         form = OrderForm(request.POST, instance=order)
         if form.is_valid():
             form.save()
-            django_messages.success(request, f"Successfully updated order with ID: {order_id}")
+            django_messages.success(request, f"Successfully updated order with ID : {order_id}")
             return redirect('order_detail', order_id=order.orderId)
         else:
             django_messages.error(request, "Something went wrong. Unable to complete your request.")
@@ -93,7 +93,7 @@ def delete_order(request, order_id):
     order = get_object_or_404(Order, pk=order_id)
     if request.method == 'POST':
         order.delete()
-        django_messages.success(request, "Successfully deleted an order.")
+        django_messages.success(request, f"Successfully deleted order with ID : {order_id}")
         return redirect('order_list')
     return render(request, 'orders/confirm_delete.html', {'order': order})
 

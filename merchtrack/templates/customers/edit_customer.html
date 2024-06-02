@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %}Edit Customer{% endblock %}
+{% block content %}
+
+<div id="pageBase" class='flex fade-box flex-col w-screen h-full bg-[#f3f3f3] overflow-auto p-2'>
+    <div class='container flex flex-col items-center content-center justify-center p-5 m-auto overflow-visible bg-white shadow-xl rounded-xl w-4/6 max-w-[35rem]'>
+        <div class='self-start w-full mx-5'>
+            <div class='self-start text-[#3BAFE1] text-3xl mt-2 font-bold text-left'>Customer Details</div>
+            <div class='self-start w-full pb-3 mb-2 text-lg italic font-medium border-b'>Easy way to order</div>
+        </div>
+        <div class="container mx-auto px-4 py-8">
+            <h1 class="text-2xl font-bold mb-4">Edit Customer</h1>
+            <form method="post" class="bg-white">
+                {% csrf_token %}
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <div class="flex w-full flex-col">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="user">User</label>
+                        {{ customer_form.user }}
+                    </div>
+                    <div class="flex w-full flex-col">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="{{ user_form.first_name.id_for_label }}">{{ user_form.first_name.label }}</label>
+                        {{ user_form.first_name }}
+                    </div>
+                    <div class="flex w-full flex-col">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="{{ user_form.last_name.id_for_label }}">{{ user_form.last_name.label }}</label>
+                        {{ user_form.last_name }}
+                    </div>
+                    <div class="flex w-full flex-col">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="{{ user_form.email.id_for_label }}">{{ user_form.email.label }}</label>
+                        {{ user_form.email }}
+                    </div>
+                    <div class="flex w-full flex-col">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="{{ user_form.is_staff.id_for_label }}">{{ user_form.is_staff.label }}</label>
+                        {{ user_form.is_staff }}
+                    </div>
+                    <div class="flex w-full flex-col">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="{{ user_form.is_active.id_for_label }}">{{ user_form.is_active.label }}</label>
+                        {{ user_form.is_active }}
+                    </div>
+                    <div class="flex w-full flex-col">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="{{ customer_form.phone.id_for_label }}">{{ customer_form.phone.label }}</label>
+                        {{ customer_form.phone }}
+                    </div>
+                    <div class="flex w-full flex-col">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="{{ customer_form.course.id_for_label }}">{{ customer_form.course.label }}</label>
+                        {{ customer_form.course }}
+                    </div>
+                </div>
+                <div class="flex justify-end mt-4 w-full">
+                    <button type="submit" name="reset_password" value="reset_password" class="btn-destructive flex place-self-start mr-2" onclick="setResetPassword()">Reset Password</button>
+                    <button type="submit" class="btn-primary mr-2">Save Changes</button>
+                    <a href="{% url 'customer_detail' customer.user_id %}" class="btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    input[type="text"], input[type="email"]  {
+        border-radius: 0.25rem;
+    }
+</style>
+
+
+
+<script type="text/javascript">
+    function setResetPassword() {
+        var input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'reset_password';
+        input.value = 'reset_password';
+        document.forms[0].appendChild(input);
+    }
+</script>
+{% endblock %}

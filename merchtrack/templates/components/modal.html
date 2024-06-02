@@ -16,7 +16,7 @@
 <style>
     .fade-box {
     opacity: 0;
-    transition: opacity 0.5s ease-in-out;
+    transition: opacity 0.3s ease-in-out;
     }
 
     .fade-box.show {
@@ -29,7 +29,7 @@
 
     .fade-in {
         opacity: 1;
-        transition: opacity 0.5s ease-in-out;
+        transition: opacity 0.3s ease-in-out;
     }
 
 </style>
@@ -69,7 +69,7 @@
                 fadeOutAllElements();
                 setTimeout(() => {
                     document.querySelector('form').submit();
-                }, 500);
+                }, 350);
                 
             });
         }

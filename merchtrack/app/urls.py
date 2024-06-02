@@ -2,7 +2,7 @@ from django.conf import settings
 from django.views.static import serve
 from django.urls import path,re_path, include
 from . import views
-from .view import product, order
+from .view import product, order, customer
 
 urlpatterns = [
     path("", views.home, name='home'),
@@ -32,6 +32,12 @@ urlpatterns = [
     path('edit_order/<int:order_id>/', order.edit_order, name='edit_order'),
     path('delete_order/<int:order_id>/', order.delete_order, name='delete_order'),
     path('sales_report', order.sales_report, name='sales_report'),
+
+
+    path('customers/', customer.customer_list, name='customer_list'),
+    path('customers/<int:customer_id>/', customer.customer_detail, name='customer_detail'),
+    path('customers/edit/<int:customer_id>/', customer.edit_customer, name='edit_customer'),
+
 
     re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
     re_path(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}),

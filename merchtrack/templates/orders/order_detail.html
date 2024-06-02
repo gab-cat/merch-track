@@ -63,7 +63,7 @@
             </div>
     
             <div class="flex justify-end mt-4">
-                <a href="{% url 'order_list' %}" class="btn-secondary mr-2">Back to List</a>
+                <a href="javascript:history.back()" class="btn-secondary mr-2">Back to List</a>
                 <a href="{% url 'edit_order' order.orderId %}" class="btn-primary mr-2">Edit Order</a>
                 <form action="{% url 'delete_order' order.orderId %}" method="post">
                     {% csrf_token %}
