@@ -150,6 +150,7 @@ def register(request):
                 phone=form.cleaned_data['phone'],
                 course=form.cleaned_data['course']
             )
+            django_messages.success(request, "Account successfully created.")
             return redirect('login')  # Redirect to the login page after successful registration
     else:
         form = UserRegistrationForm()
@@ -185,6 +186,7 @@ def login(request):
 
     return render(request, 'login.html', {'form': form})
 
+@login_required(login_url='login')
 def logout(request):
     if request.method == 'POST':
         auth_logout(request)
@@ -233,6 +235,7 @@ def messages(request):
     all_messages = contact_us.objects.all().order_by('-created_at')
     return render(request, 'messages.html', {'messages': all_messages})
 
+@login_required(login_url='login')
 def customer_info(request):
     email = request.GET.get('email')
     try:

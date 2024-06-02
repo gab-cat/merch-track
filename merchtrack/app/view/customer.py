@@ -13,10 +13,16 @@ from django.contrib import messages
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from django.core.paginator import Paginator
 
 
 def customer_list(request):
-    customers = Customer.objects.all()
+    customer_list = Customer.objects.all()
+    paginator = Paginator(customer_list, 10)  # Show 10 customers per page.
+
+    page_number = request.GET.get('page')
+    customers = paginator.get_page(page_number)
+    
     return render(request, 'customers/customer_list.html', {'customers': customers})
 
 def customer_detail(request, customer_id):

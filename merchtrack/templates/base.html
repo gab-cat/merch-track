@@ -93,7 +93,7 @@
   <div id="toast-container" class="absolute max-w-[40%] mb-2 bottom-8 left-1/2 transform -translate-x-1/2 flex justify-center items-center z-50">
     {% if messages %}
         {% for message in messages %}
-            <div id="toast" class="toast px-4 py-3 text-white rounded-md shadow-lg opacity-0 transition-opacity duration-300 ease-in-out text-center 
+            <div id="toast" class="toast px-4 py-3 tracking-wide text-white rounded-md shadow-lg opacity-0 transition-opacity duration-300 ease-in-out text-center 
                 {% if message.tags == 'success' %}bg-green-500{% elif message.tags == 'error' %}bg-red-500{% else %}bg-blue-500{% endif %}">
                 <p class="p-0">{{ message }}</p>
             </div>

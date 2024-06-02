@@ -1,5 +1,11 @@
 {% extends 'base.html' %}
 {% block title %}Customer Detail{% endblock %}
+{% load slippers %}
+
+{% block nav %}
+    {% back-to-dashboard %}
+{% endblock %}
+
 {% block content %}
 
 <div id="pageBase" class='flex fade-box flex-col w-screen h-full bg-[#f3f3f3] overflow-auto p-2'>
@@ -30,17 +36,17 @@
                 </div>
             </div>
             <h2 class="text-xl font-semibold mt-8">Orders</h2>
-            <table class="min-w-full bg-white border border-gray-200 mt-4">
+            <table class="min-w-full bg-white  rounded-lg border-gray-200 mt-4">
                 <thead class="bg-gray-200 text-left">
                     <tr>
-                        <th class="py-2 px-4 border-b">Order ID</th>
+                        <th class="py-2 px-4 border-b rounded-tl-lg">Order ID</th>
                         <th class="py-2 px-4 border-b">Date</th>
                         <th class="py-2 px-4 border-b">Total Amount</th>
                         <th class="py-2 px-4 border-b">Status</th>
                         <th class="py-2 px-4 border-b text-center">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="border">
                     {% for order in orders %}
                     <tr>
                         <td class="py-2 px-4 border-b">{{ order.orderId }}</td>
@@ -55,8 +61,8 @@
                         {% else %}
                         <td class="w-1/4 py-3 px-4 border-b font-bold">None</td>
                         {% endif %}
-                        <td class="py-2 px-4 border-b flex justify-center">
-                            <a href="{% url 'order_detail' order.orderId %}" class="text-blue-500 hover:underline">View</a>
+                        <td class="py-2 px-4 border-b h-full">
+                            <a href="{% url 'order_detail' order.orderId %}" class="mx-auto w-fit text-center flex text-blue-500 hover:underline">View</a>
                         </td>
                     </tr>
                     {% endfor %}

@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}Edit Customer{% endblock %}
 {% block content %}
+{% load slippers %}
 
 <div id="pageBase" class='flex fade-box flex-col w-screen h-full bg-[#f3f3f3] overflow-auto p-2'>
     <div class='container flex flex-col items-center content-center justify-center p-5 m-auto overflow-visible bg-white shadow-xl rounded-xl w-4/6 max-w-[35rem]'>
@@ -47,7 +48,7 @@
                 </div>
                 <div class="flex justify-end mt-4 w-full">
                     <button type="submit" name="reset_password" value="reset_password" class="btn-destructive flex place-self-start mr-2" onclick="setResetPassword()">Reset Password</button>
-                    <button type="submit" class="btn-primary mr-2">Save Changes</button>
+                    <button type="submit" onclick="showModal('confirmUpdate')" class="btn-primary mr-2">Save Changes</button>
                     <a href="{% url 'customer_detail' customer.user_id %}" class="btn-secondary">Cancel</a>
                 </div>
             </form>
@@ -72,4 +73,5 @@
         document.forms[0].appendChild(input);
     }
 </script>
+{% modal modal_id='confirmUpdate' modal_title='Confirm Update User Details' modal_message='Are you sure you want to update this user details?' modal_warning='This process is not reversible. Saved data will no longer be recoverable. Actions will be logged for business security purposes.' %}
 {% endblock %}
