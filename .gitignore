@@ -5,4 +5,6 @@
 *.pyd
 *.djcache
 
+*.log
+
 merchtrack/app/__pycache__/
