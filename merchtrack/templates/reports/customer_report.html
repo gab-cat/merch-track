@@ -11,6 +11,7 @@
         <a href="{% url 'customer_report' %}?{% if selected_customer_id %}customer_id={{ selected_customer_id }}&{% endif %}{% if status %}status={{ status }}&{% endif %}export=excel" class="mb-6 btn-primary">Export to Excel</a>
     </div>
     <form method="get" class="mb-6">
+    {% csrf_token %}
         <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
             <div>
                 <label for="customer_id" class="block mb-2 font-bold text-gray-700">Select Customer:</label>
