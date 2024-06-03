@@ -170,10 +170,14 @@ def login(request):
 
             user = authenticate(request, username=username, password=password)
             if user is not None:
-                auth_login(request, user)
-                logger.debug(f"messages type: {type(django_messages)}")  # Log the type of messages
-                django_messages.info(request, 'Logged in successfully.')
-                return redirect('dashboard')
+                if user.is_staff:
+                    auth_login(request, user)
+                    logger.debug(f"messages type: {type(django_messages)}")  # Log the type of messages
+                    django_messages.info(request, 'Logged in successfully.')
+                    return redirect('dashboard')
+                else:
+                    django_messages.error(request, "You are not authorized to access this page.")
+                    return redirect('login')
         else:
             django_messages.error(request, "Invalid student ID or password.")
     else:

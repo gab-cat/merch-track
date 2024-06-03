@@ -33,6 +33,7 @@ urlpatterns = [
     path('delete_order/<int:order_id>/', order.delete_order, name='delete_order'),
     path('sales_report', order.sales_report, name='sales_report'),
 
+    path('reports/', report.report_index, name='reports'),
 
     path('reports/orders/', report.order_report, name='order_report'),
     path('reports/products/', report.product_report, name='product_report'),
