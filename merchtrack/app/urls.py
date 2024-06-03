@@ -6,7 +6,7 @@ from .view import product, order, customer, report
 
 urlpatterns = [
     path("", views.home, name='home'),
-    path("trackOrder", views.trackOrder, name='trackOrder'),
+    # path("trackOrder", views.trackOrder, name='trackOrder'),
     path("aboutUs", views.aboutUs, name='aboutUs'),
     path("contactUs", views.contactUs, name='contactUs'),
     path("order-entry", views.orderEntry, name='order-entry'),
