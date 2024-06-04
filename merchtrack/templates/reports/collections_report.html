@@ -1,5 +1,5 @@
 {% extends 'reports/report_base.html' %}
-{% block title %}Fulfillment Report{% endblock %}
+{% block title %}Collections Report{% endblock %}
 {% block content %}
 {% load slippers %}
 
@@ -7,7 +7,7 @@
     <form method="get">
         {% csrf_token %}
         <div class='flex items-center justify-between'>
-            <h1 class="mb-4 text-2xl font-bold">Fulfillment Report</h1>
+            <h1 class="mb-4 text-2xl font-bold">Collections Report</h1>
             <div class="flex items-end content-center">
                 <a href="?export=excel" class="w-full align-middle btn-primary">Export to Excel</a>
             </div>
@@ -30,25 +30,29 @@
     <table class="min-w-full mt-4 bg-white border border-gray-200">
         <thead class="text-left bg-gray-50">
             <tr>
-                <th class="px-4 py-2 border-b">Fulfillment ID</th>
+                <th class="px-4 py-2 border-b">Payment ID</th>
                 <th class="px-4 py-2 border-b">Order ID</th>
                 <th class="px-4 py-2 border-b">Customer</th>
                 <th class="px-4 py-2 border-b">Processed By</th>
-                <th class="px-4 py-2 border-b">Fulfillment Date</th>
-                <th class="px-4 py-2 border-b">Estimated Delivery Date</th>
-                <th class="px-4 py-2 border-b">Status</th>
+                <th class="px-4 py-2 border-b">Payment Date</th>
+                <th class="px-4 py-2 border-b">Amount</th>
+                <th class="px-4 py-2 border-b">Payment Method</th>
+                <th class="px-4 py-2 border-b">Payment Status</th>
+                <th class="px-4 py-2 border-b">Reference Number</th>
             </tr>
         </thead>
         <tbody>
-            {% for fulfillment in fulfillments %}
+            {% for payment in payments %}
             <tr class="hover:bg-gray-50">
-                <td class="px-4 py-2 border-b">{{ fulfillment.fulfillmentId }}</td>
-                <td class="px-4 py-2 border-b">{{ fulfillment.orderId.orderId }}</td>
-                <td class="px-4 py-2 border-b">{{ fulfillment.orderId.customerId.user.first_name }} {{ fulfillment.orderId.customerId.user.last_name }}</td>
-                <td class="px-4 py-2 border-b">{{ fulfillment.processedBy.first_name }} {{ fulfillment.processedBy.last_name }}</td>
-                <td class="px-4 py-2 border-b">{{ fulfillment.fulfillmentDate }}</td>
-                <td class="px-4 py-2 border-b">{{ fulfillment.orderId.estimatedDeliveryDate }}</td>
-                <td class="px-4 py-2 border-b">{{ fulfillment.status }}</td>
+                <td class="px-4 py-2 border-b">{{ payment.paymentId }}</td>
+                <td class="px-4 py-2 border-b">{{ payment.orderId.orderId }}</td>
+                <td class="px-4 py-2 border-b">{{ payment.customerId.user.first_name }} {{ payment.customerId.user.last_name }}</td>
+                <td class="px-4 py-2 border-b">{{ payment.processedBy.first_name }} {{ payment.processedBy.last_name }}</td>
+                <td class="px-4 py-2 border-b">{{ payment.paymentDate }}</td>
+                <td class="px-4 py-2 border-b">{{ payment.amount }}</td>
+                <td class="px-4 py-2 border-b">{{ payment.paymentMethod }}</td>
+                <td class="px-4 py-2 border-b">{{ payment.paymentStatus }}</td>
+                <td class="px-4 py-2 border-b">{{ payment.referenceNumber }}</td>
             </tr>
             {% endfor %}
         </tbody>

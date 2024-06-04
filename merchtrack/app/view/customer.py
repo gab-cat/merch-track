@@ -64,7 +64,7 @@ def customer_detail(request, customer_id):
 
 def send_html_password_reset_email(user, request):
     subject = "Reset Your Password"
-    from_email = f"MerchTrack <{settings.DEFAULT_FROM_EMAIL}>"
+    from_email = f"Merch Track Help Desk Team"
     context = {
         'email': user.email,
         'domain': request.get_host(),

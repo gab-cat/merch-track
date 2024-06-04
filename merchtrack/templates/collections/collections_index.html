@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}Collections{% endblock %}
+{% block content %}
+{% load slippers %}
+
+{% block nav %}
+    {% back-to-dashboard %}
+{% endblock %}
+
+<div id="pageBase" class='flex fade-box flex-col w-screen h-full bg-[#f3f3f3] overflow-auto p-2'>
+    <div class='container flex flex-col  p-5 m-auto overflow-visible bg-white shadow-xl rounded-xl min-h-[90%] max-w-[70rem]'>
+        <div class='self-start w-full mx-5'>
+            <div class='self-start text-[#3BAFE1] text-3xl mt-2 font-bold text-left'>Collections</div>
+            <div class='self-start w-full pb-3 mb-2 text-lg italic font-medium border-b'>Easy way to order</div>
+        </div>
+        <div class="container flex flex-col h-full p-4 mx-auto">
+            <h1 class="mb-4 text-2xl font-bold">Pending Orders</h1>
+            <form method="get" class="flex mb-4 space-x-4">
+                <input type="text" name="q" placeholder="Search by username, email, or phone" class="w-full p-2 border rounded">
+                <button type="submit" class="btn-primary">Search</button>
+            </form>
+            <table class="min-w-full mt-4 bg-white border border-gray-200">
+                <thead class="text-left bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-2 border-b">Order ID</th>
+                        <th class="px-4 py-2 border-b">Customer</th>
+                        <th class="px-4 py-2 border-b">Order Date</th>
+                        <th class="px-4 py-2 border-b">Total Amount</th>
+                        <th class="px-4 py-2 border-b">For Verification</th>
+                        <th class="px-4 py-2 border-b">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in page_obj  %}
+                    <tr>
+                        <td class="px-4 py-2 border-b">{{ order.orderId }}</td>
+                        <td class="px-4 py-2 border-b">{{ order.customerId.user.last_name }}, {{ order.customerId.user.last_name }}</td>
+                        <td class="px-4 py-2 border-b">{{ order.orderDate }}</td>
+                        <td class="px-4 py-2 border-b">₱ {{ order.totalAmount }}</td>
+                        <td class="px-4 py-2 border-b">
+                            {% if order.pending_payment %}
+                                ₱ {{ order.pending_payment.amount }} ({{ order.pending_payment.paymentMethod }})
+                            {% else %}
+                                None
+                            {% endif %}
+                        </td>
+                        <td class="px-4 py-2 border-b">
+                            <a href="{% url 'collection_detail' order.orderId %}" class="btn-primary">Collect Payment</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="mt-auto">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1{% if query %}&q={{ query }}{% endif %}" class="btn-primary">First</a>
+                    <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}" class="btn-secondary">Previous</a>
+                {% endif %}
+                <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}" class="btn-primary">Next</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}{% if query %}&q={{ query }}{% endif %}" class="btn-secondary">Last</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}

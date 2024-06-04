@@ -11,20 +11,25 @@
             <div class='self-start text-[#3BAFE1] text-3xl mt-2 font-bold text-left'>Welcome to MerchTrack Dashboard!</div>
             <div class='self-start w-full pb-3 mb-2 text-lg italic font-medium border-b'>Easy way to order</div>
         </div>
-        <div class='flex flex-row mx-5 my-2 space-x-4'>
-            <span class='text-sm font-regular'>Logged in as</span>
-            <span class='text-sm font-semibold'>{{ student_name }}</span>
+        <div class='flex flex-row justify-between mx-5 my-2'>
+            <div class="flex space-x-2">
+                <span class='text-sm font-regular'>Logged in as</span>
+                <span class='text-sm font-semibold'>{{ student_name }}</span>
+            </div>
+            <div class="flex">
+                <a class="btn-primary" href="{% url 'messages' %}" >Check Messages</a>
+                <a class="btn-primary" href="{% url 'customer_payment' %}" >Customer Payment</a>
+            </div>
         </div>
-        <div class='grid content-center grid-cols-4 gap-4 p-5 justify-evenly group'>
+        <div class='grid content-center grid-cols-4 gap-4 p-5 text-gray-800 justify-evenly group'>
             {% card url='create_order' src='assets/create.png' title='Create new order' %}
-            {% card url='product_list' src='assets/collections.png' title='Collections' %}
+            {% card url='collections_index' src='assets/collections.png' title='Collections' %}
             {% card url='product_list' src='assets/inventory-ic.png' title='Inventory Manager' %}
-            {% card url='order_list' src='assets/track.png' title='Admin Tracker' %}
+            {% card url='fulfillment_view' src='assets/fulfillment.png' title='Order Fulfillment' %}
             {% card url='reports' src='assets/reporting.png' title='Reportings' %}
             {% card url='customer_list' src='assets/customers.png' title='Manage Users' %}
-            {% card url='messages' src='assets/messages.png' title='Check Messages' %}
+            {% card url='order_list' src='assets/track.png' title='Admin Tracker' %}
             {% card url='registration' src='assets/register.png' title='Register Account' %}
-            
         </div>
         <form method='POST' action='/logout' class='flex flex-row-reverse self-start w-full mt-auto mr-10'>
             {% csrf_token %}

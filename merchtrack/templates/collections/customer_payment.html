@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Customer Payment{% endblock %}
+{% block content %}
+
+<div id="pageBase" class='flex fade-box flex-col w-screen h-full bg-[#f3f3f3] overflow-auto p-2'>
+    <div class='container flex flex-col  p-5 m-auto overflow-visible bg-white shadow-xl rounded-xl min-h-[90%] max-w-[70rem]'>
+        <div class='self-start w-full mx-5'>
+            <div class='self-start text-[#3BAFE1] text-3xl mt-2 font-bold text-left'>Customer Payment</div>
+            <div class='self-start w-full pb-3 mb-2 text-lg italic font-medium border-b'>Easy way to order</div>
+        </div>
+        <div class="container w-full p-4 mx-auto mt-8">
+            <form method="post" class="flex flex-col items-start w-full mb-4 space-x-4 ">
+                {% csrf_token %}
+                <label for="username" class="mb-2 text-sm font-medium text-gray-700 ">Enter your username</label>
+                <div class="flex w-full mb-4 space-x-6">
+                    <input type="text" name="username" class="w-full p-2 border rounded" required>
+                    <button type="submit" class="p-2 px-6 text-white bg-blue-500 rounded">Search</button>
+                </div>
+                
+            </form>
+
+            {% if pending_orders %}
+                <h2 class="px-2 mt-4 text-xl font-bold text-gray-700">Pending Orders for {{ customer.user.last_name }}, {{ customer.user.first_name }}</h2>
+                <table class="min-w-full px-2 mt-4 text-gray-700 bg-white border border-gray-200">
+                    <thead class="text-left bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-2 border-b">Order ID</th>
+                            <th class="px-4 py-2 border-b">Date</th>
+                            <th class="px-4 py-2 border-b">Total Amount</th>
+                            <th class="px-4 py-2 border-b">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in pending_orders %}
+                        <tr>
+                            <td class="px-4 py-2 border-b">{{ order.orderId }}</td>
+                            <td class="px-4 py-2 border-b">{{ order.orderDate }}</td>
+                            <td class="px-4 py-2 border-b">{{ order.totalAmount }}</td>
+                            <td class="px-4 py-2 border-b">
+                                <a href="{% url 'customer_make_payment' order.orderId %}" class="p-2 text-white bg-blue-500 rounded">Make Payment</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

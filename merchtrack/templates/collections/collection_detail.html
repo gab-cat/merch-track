@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+{% block title %}Collection Detail{% endblock %}
+{% block content %}
+
+<div id="pageBase" class='flex fade-box flex-col w-screen h-full bg-[#f3f3f3] overflow-auto p-2'>
+    <div class='container flex flex-col  p-5 m-auto overflow-visible bg-white shadow-xl rounded-xl min-h-[90%] max-w-[80rem]'>
+        <div class='self-start w-full mx-5'>
+            <div class='self-start text-[#3BAFE1] text-3xl mt-2 font-bold text-left'>Collections</div>
+            <div class='self-start w-full pb-3 mb-2 text-lg italic font-medium border-b'>Easy way to order</div>
+        </div>
+        <a href="{% url 'collections_index'%}" class='self-end btn-secondary w-fit'>Back to List</a>
+        <div class="container mx-auto">
+            <div class="grid grid-cols-3">
+                <div class="flex flex-col w-full p-4">
+                    <h1 class="mb-4 text-2xl font-bold">Order Details</h1>
+                    <div class="grid grid-cols-2 space-y-2">
+                        <p class="font-semibold">Order ID: </p>
+                        <p>{{ order.orderId }}</p>
+                        <p class="font-semibold">Customer: </p>
+                        <p>{{ order.customerId.user.last_name }}, {{ order.customerId.user.first_name }}</p>
+                        <p class="font-semibold">Total Amount:</p>
+                        <p>{{ order.totalAmount }}</p>
+                        <p class="font-semibold">Discount Amount:</p>
+                        <p> {{ order.discountAmount }}</p>
+                        <p class="font-semibold">Status: </p>
+                        <p>{{ order.status }}</p>
+                    </div>
+                </div>
+                <div class="flex flex-col w-full col-span-2 p-4">
+                    <h2 class="mt-4 text-xl font-bold">Order Items</h2>
+                    <table class="mt-4 bg-white border border-gray-200 ">
+                        <thead class="text-left bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-2 border-b">Product Name</th>
+                                <th class="px-4 py-2 border-b">Quantity</th>
+                                <th class="px-4 py-2 border-b">Price</th>
+                                <th class="px-4 py-2 border-b">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in order_items %}
+                            <tr>
+                                <td class="px-4 py-2 border-b">{{ item.productId.name }}</td>
+                                <td class="px-4 py-2 border-b">{{ item.quantity }}</td>
+                                <td class="px-4 py-2 border-b">{{ item.price }}</td>
+                                <td class="px-4 py-2 border-b">{{ item.total_price }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="flex flex-col p-4">
+                    <h2 class="mt-4 text-xl font-bold">Add Payment</h2>
+                    <form method="post" class="flex flex-col mt-4">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <label for="amount" class="block text-sm font-medium text-gray-700">Amount</label>
+                            <input type="number" name="amount" class="w-full p-2 border rounded">
+                        </div>
+                        <div class="mb-4">
+                            <label for="payment_method" class="block text-sm font-medium text-gray-700">Payment Method</label>
+                            <select name="payment_method" class="w-full p-2 border rounded">
+                                <option value="Cash">Cash</option>
+                                <option value="GCash">GCash</option>
+                                <option value="PayMaya">PayMaya</option>
+                                <option value="BDO">BDO</option>
+                                <option value="BPI">BPI</option>
+                                <option value="Others">Others</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label for="payment_status" class="block text-sm font-medium text-gray-700">Payment Status</label>
+                            <select name="payment_status" class="w-full p-2 border rounded">
+                                <option value="Completed">Completed</option>
+                                <option value="Downpayment">Downpayment</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label for="reference_number" class="block text-sm font-medium text-gray-700">Reference Number</label>
+                            <input type="text" name="reference_number" class="w-full p-2 border rounded">
+                        </div>
+                        <button type="submit" class="self-end btn-primary">Submit Payment</button>
+                    </form>
+                </div>
+
+                <div class="flex flex-col col-span-2 p-4">
+                    <h2 class="mt-4 text-xl font-bold">Payment History</h2>
+                    <table class="min-w-full mt-4 bg-white border border-gray-200">
+                        <thead class="text-left bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-2 border-b">Date</th>
+                                <th class="px-4 py-2 border-b">Processed By</th>
+                                <th class="px-4 py-2 border-b">Amount</th>
+                                <th class="px-4 py-2 border-b">Method</th>
+                                <th class="px-4 py-2 border-b">Status</th>
+                                <th class="px-4 py-2 border-b">Reference</th>
+                                <th class="px-4 py-2 border-b">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for payment in payments %}
+                            <tr>
+                                <td class="px-4 py-2 border-b">{{ payment.paymentDate }}</td>
+                                <td class="px-4 py-2 border-b">{{ payment.processedBy.first_name }} {{ payment.processedBy.last_name }}</td>
+                                <td class="px-4 py-2 border-b">₱ {{ payment.amount }}</td>
+                                <td class="px-4 py-2 border-b">{{ payment.paymentMethod }}</td>
+                                <td class="px-4 py-2 border-b">{{ payment.paymentStatus }}</td>
+                                <td class="px-4 py-2 border-b">{{ payment.referenceNumber }}</td>
+                                <td class="px-4 py-2 space-x-4 border-b ">
+                                    {% if payment.paymentStatus == 'For Verification' %}
+                                    <form method="post" class="flex flex-row">
+                                        {% csrf_token %} 
+                                        <button type="submit" name="verify" value="{{ payment.paymentId }}" class="px-2 py-1 text-white bg-green-500 rounded">Verify</button>
+                                        <button type="submit" name="reject" value="{{ payment.paymentId }}" class="px-2 py-1 text-white bg-red-500 rounded">Reject</button>
+                                    </form>
+                                    {% elif payment.paymentStatus == 'Completed' %}
+                                    <form method="post" class="inline">
+                                        {% csrf_token %}
+                                        <button type="submit" name="refund" value="{{ payment.paymentId }}" class="px-2 py-1 text-white bg-yellow-500 rounded">Refund</button>
+                                    </form>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const verifyButtons = document.querySelectorAll('button[name="verify"]');
+    const rejectButtons = document.querySelectorAll('button[name="reject"]');
+    const refundButtons = document.querySelectorAll('button[name="refund"]');
+
+    verifyButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'verify';
+            input.value = this.value;
+            this.form.appendChild(input);
+        });
+    });
+
+    rejectButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'reject';
+            input.value = this.value;
+            this.form.appendChild(input);
+        });
+    });
+
+    refundButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'refund';
+            input.value = this.value;
+            this.form.appendChild(input);
+        });
+    });
+});
+</script>
+{% endblock %}

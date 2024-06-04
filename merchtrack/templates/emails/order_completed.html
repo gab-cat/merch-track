@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Completed</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            padding-bottom: 20px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #007bff;
+        }
+        .content {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        .content p {
+            margin-bottom: 20px;
+        }
+        .footer {
+            text-align: center;
+            font-size: 14px;
+            color: #777;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 1rem 1.5rem;
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+            border-radius: 0.5rem;
+            margin-top: 0.75rem;
+            margin-bottom: 0.75rem;
+            text-decoration: none;
+        }
+
+        span {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Order Completed</h1>
+        </div>
+        <div class="content">
+            <p>Hello <span>{{ order.customerId.user.first_name }} {{ order.customerId.user.last_name }}</span>,</p>
+            <p>Thank you for your purchase! Your order <strong>#{{ order.orderId }}</strong> has been picked up.</p>
+            <p>Order Details:</p>
+            <ul>
+                {% for item in order.orderitem_set.all %}
+                <li>{{ item.productId.name }} - {{ item.quantity }} x {{ item.price }} (Size: {{ item.size }})</li>
+                {% endfor %}
+            </ul>
+            <p>Please take a moment to complete our <a href="{{ survey_link }}" class="button">Customer Satisfaction Survey</a>.</p>
+            <p>We hope to see you again soon!</p>
+        </div>
+        <div class="footer">
+            <p>The Merch Track team</p>
+        </div>
+    </div>
+</body>
+</html>

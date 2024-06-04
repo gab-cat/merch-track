@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Make Payment{% endblock %}
+{% block content %}
+
+<div id="pageBase" class='flex fade-box flex-col w-screen h-full bg-[#f3f3f3] overflow-auto p-2'>
+    <div class='container flex flex-col  p-5 m-auto overflow-visible bg-white shadow-xl rounded-xl min-h-[30rem] max-w-[30rem]'>
+        <div class='self-start w-full mx-5'>
+            <div class='self-start text-[#3BAFE1] text-3xl mt-2 font-bold text-left'>Customer Payment</div>
+            <div class='self-start w-full pb-3 mb-2 text-lg italic font-medium border-b'>Easy way to order</div>
+        </div>
+        <div class="container p-4 mx-auto">
+            <h1 class="mb-4 text-2xl font-bold text-gray-800">Make Payment for Order #{{ order.orderId }}</h1>
+            <form method="post" class="flex flex-col">
+                {% csrf_token %}
+                <div class="mb-4">
+                    <label for="amount" class="block text-sm font-medium text-gray-700">Amount</label>
+                    <input type="number" name="amount" class="w-full p-2 border rounded">
+                </div>
+                <div class="mb-4">
+                    <label for="payment_method" class="block text-sm font-medium text-gray-700">Payment Method</label>
+                    <select name="payment_method" class="w-full p-2 border rounded" required>
+                        <option value="Cash">Cash</option>
+                        <option value="GCash">GCash</option>
+                        <option value="PayMaya">PayMaya</option>
+                        <option value="BDO">BDO</option>
+                        <option value="BPI">BPI</option>
+                        <option value="Others">Others</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="reference_number" class="block text-sm font-medium text-gray-700">Reference Number</label>
+                    <input type="text" name="reference_number" class="w-full p-2 border rounded">
+                </div>
+                <button type="submit" class="self-end p-2 text-white bg-blue-500 rounded">Submit Payment</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

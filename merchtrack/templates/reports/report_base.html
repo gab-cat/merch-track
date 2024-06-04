@@ -91,33 +91,49 @@
     <div class="flex">
 
         <!-- Sidebar -->
-        <aside class="w-2/12 mt-4 font-medium bg-white rounded shadow-md h-fit">
-            <nav class="p-4">
-                
-                <ul class="space-y-2">
-                <li class="w-full px-2 pb-2 mb-2 font-semibold text-gray-900 border-b">Reports Menu</li>
-                    <li>
-                        <a href="{% url 'reports' %}" class="block p-2 text-gray-700 transition-all rounded hover:bg-gray-300">> Dashboard</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'order_report' %}" class="block p-2 text-gray-700 transition-all rounded hover:bg-gray-300">> Orders Report</a>
-                    </li>
-                    <li>
-                        <a href="/reports/products/" class="block p-2 text-gray-700 transition-all rounded hover:bg-gray-300">> Products Report</a>
-                    </li>
-                    <li>
-                        <a href="/reports/customers/" class="block p-2 text-gray-700 transition-all rounded hover:bg-gray-300">> Customers Report</a>
-                    </li>
-                    <li>
-                        <a href="/reports/sales/" class="block p-2 text-gray-700 transition-all rounded hover:bg-gray-300">> Sales Report</a>
-                    </li>
-                    <li>
-                        <a href="/reports/fulfillment/" class="block p-2 text-gray-700 transition-all rounded hover:bg-gray-300"> > Fulfillment Report</a>
-                    </li>
-                </ul>
-            </nav>
+        <div class="flex flex-col w-2/12">
+            <aside class="mt-4 font-medium bg-white rounded shadow-md h-fit">
+                <nav class="p-4">
+                    <ul class="space-y-2">
+                    <li class="w-full px-2 pb-2 mb-2 font-semibold text-gray-900 border-b">Reports Menu</li>
+                        <li>
+                            <a href="{% url 'reports' %}" class="block p-2 text-gray-700 transition-all rounded hover:bg-gray-300">> Dashboard</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'order_report' %}" class="block p-2 text-gray-700 transition-all rounded hover:bg-gray-300">> Orders Report</a>
+                        </li>
+                        <li>
+                            <a href="/reports/products/" class="block p-2 text-gray-700 transition-all rounded hover:bg-gray-300">> Products Report</a>
+                        </li>
+                        <li>
+                            <a href="/reports/customers/" class="block p-2 text-gray-700 transition-all rounded hover:bg-gray-300">> Customers Report</a>
+                        </li>
+                        <li>
+                            <a href="/reports/collections/" class="block p-2 text-gray-700 transition-all rounded hover:bg-gray-300">> Collections Report</a>
+                        </li>
+                        <li>
+                            <a href="/reports/fulfillment/" class="block p-2 text-gray-700 transition-all rounded hover:bg-gray-300"> > Fulfillment Report</a>
+                        </li>
+                        <li>
+                            <a href="/reports/survey/" class="block p-2 text-gray-700 transition-all rounded hover:bg-gray-300"> > Survey Report</a>
+                        </li>
+                    </ul>
+                </nav>
+            </aside>
+    
+            <aside class="mt-4 font-medium bg-white rounded shadow-md h-fit">
+                <nav class="p-4">
+                    
+                    <ul class="space-y-2">
+                    <li class="w-full px-2 pb-2 mb-2 font-semibold text-gray-900 border-b">Recent Logs</li>
+                        <li>
+                            <a href="{% url 'reports' %}" class="block p-2 text-gray-700 transition-all rounded hover:bg-gray-300">> Dashboard</a>
+                        </li>
 
-        </aside>
+                    </ul>
+                </nav>
+            </aside>
+        </div>
 
         <!-- Main Content Area -->
         <main class="w-full h-full px-2 py-4">

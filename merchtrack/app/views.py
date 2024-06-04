@@ -9,8 +9,9 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
-from .forms import CreateUserForm, LoginForm, UserRegistrationForm
-from .models import user_info, order_info, order_details, contact_us, Customer
+from .forms import CreateUserForm, CustomerSatisfactionSurveyForm, LoginForm, UserRegistrationForm
+from .models import  CustomerSatisfactionSurvey, Order, user_info, order_info, order_details, contact_us, Customer
+
 
 # Set up logging
 logger = logging.getLogger(__name__)
@@ -178,14 +179,11 @@ def login(request):
                     django_messages.error(request, "You are not authorized to access this page.")
                     return redirect('login')
         else:
-            django_messages.error(request, "Invalid student ID or password.")
+            django_messages.error(request, "Invalid username or password.")
     else:
         if error == 1:
-            django_messages.error(request, "Invalid student ID or password.")
+            django_messages.error(request, "Invalid username or password.")
         form = LoginForm()
-
-    for message in django_messages.get_messages(request):
-        logger.debug(f"Message: {message} - Tags: {message.tags}")
 
     return render(request, 'login.html', {'form': form})
 
@@ -258,3 +256,26 @@ def customer_info(request):
     except User.DoesNotExist:
         data = {'valid': False}
     return JsonResponse(data)
+
+def survey_view(request, order_id):
+    order = get_object_or_404(Order, pk=order_id)
+    existing_survey = CustomerSatisfactionSurvey.objects.filter(order=order).first()
+
+    if existing_survey:
+        return render(request, 'survey/survey_already_filled.html')
+
+    if request.method == 'POST':
+        form = CustomerSatisfactionSurveyForm(request.POST)
+        if form.is_valid():
+            survey = form.save(commit=False)
+            survey.order = order
+            survey.save()
+            django_messages.success(request, 'Thank you for completing the survey!')
+            return redirect('survey_thank_you')  # Redirect to an appropriate page
+    else:
+        form = CustomerSatisfactionSurveyForm()
+
+    return render(request, 'survey/survey_form.html', {'form': form, 'order': order})
+
+def survey_thank_you(request):
+    return render(request, 'survey/survey_thank_you.html')

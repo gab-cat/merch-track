@@ -1,16 +1,16 @@
 {% extends 'reports/report_base.html' %}
-{% block title %}Fulfillment Report{% endblock %}
+{% block title %}Customer Survey Report{% endblock %}
 {% block content %}
 {% load slippers %}
 
 <div class="container px-4 py-8 mx-auto">
     <form method="get">
-        {% csrf_token %}
+    {% csrf_token %}
         <div class='flex items-center justify-between'>
-            <h1 class="mb-4 text-2xl font-bold">Fulfillment Report</h1>
-            <div class="flex items-end content-center">
-                <a href="?export=excel" class="w-full align-middle btn-primary">Export to Excel</a>
-            </div>
+                <h1 class="mb-4 text-2xl font-bold">Customer Survey Report</h1>
+                <div class="flex items-end content-center">
+                    <a href="?export=excel" class="w-full align-middle btn-primary">Export to Excel</a>
+                </div>
         </div>
         <div class="grid grid-cols-1 gap-6 mb-6 md:grid-cols-3">
             <div>
@@ -30,25 +30,25 @@
     <table class="min-w-full mt-4 bg-white border border-gray-200">
         <thead class="text-left bg-gray-50">
             <tr>
-                <th class="px-4 py-2 border-b">Fulfillment ID</th>
                 <th class="px-4 py-2 border-b">Order ID</th>
-                <th class="px-4 py-2 border-b">Customer</th>
-                <th class="px-4 py-2 border-b">Processed By</th>
-                <th class="px-4 py-2 border-b">Fulfillment Date</th>
-                <th class="px-4 py-2 border-b">Estimated Delivery Date</th>
-                <th class="px-4 py-2 border-b">Status</th>
+                <th class="px-4 py-2 border-b">Submit Date</th>
+                <th class="px-4 py-2 border-b">Q1: Satisfaction</th>
+                <th class="px-4 py-2 border-b">Q2: Ease of Use</th>
+                <th class="px-4 py-2 border-b">Q3: Processor Satisfaction</th>
+                <th class="px-4 py-2 border-b">Q4: Likelihood to Recommend</th>
+                <th class="px-4 py-2 border-b">Comments</th>
             </tr>
         </thead>
         <tbody>
-            {% for fulfillment in fulfillments %}
+            {% for survey in surveys %}
             <tr class="hover:bg-gray-50">
-                <td class="px-4 py-2 border-b">{{ fulfillment.fulfillmentId }}</td>
-                <td class="px-4 py-2 border-b">{{ fulfillment.orderId.orderId }}</td>
-                <td class="px-4 py-2 border-b">{{ fulfillment.orderId.customerId.user.first_name }} {{ fulfillment.orderId.customerId.user.last_name }}</td>
-                <td class="px-4 py-2 border-b">{{ fulfillment.processedBy.first_name }} {{ fulfillment.processedBy.last_name }}</td>
-                <td class="px-4 py-2 border-b">{{ fulfillment.fulfillmentDate }}</td>
-                <td class="px-4 py-2 border-b">{{ fulfillment.orderId.estimatedDeliveryDate }}</td>
-                <td class="px-4 py-2 border-b">{{ fulfillment.status }}</td>
+                <td class="px-4 py-2 border-b">{{ survey.order.orderId }}</td>
+                <td class="px-4 py-2 border-b">{{ survey.submit_date }}</td>
+                <td class="px-4 py-2 border-b">{{ survey.question1 }}</td>
+                <td class="px-4 py-2 border-b">{{ survey.question2 }}</td>
+                <td class="px-4 py-2 border-b">{{ survey.question3 }}</td>
+                <td class="px-4 py-2 border-b">{{ survey.question4 }}</td>
+                <td class="px-4 py-2 border-b">{{ survey.comments }}</td>
             </tr>
             {% endfor %}
         </tbody>

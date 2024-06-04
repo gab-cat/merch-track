@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Customer Satisfaction Survey{% endblock %}
+{% block content %}
+<div class="container p-4 mx-auto mt-8 text-gray-700 rounded shadow-md max-w-[30rem]">
+    <h1 class="py-2 mb-4 text-2xl font-bold border-b">Customer Satisfaction Survey</h1>
+    <p class="font-semibold">Order ID: {{ order.orderId }}</p>
+    <p>Please take a moment to complete this survey and help us improve our services.</p>
+
+    <form method="post" class="flex flex-col py-2 mt-2">
+        {% csrf_token %}
+        
+        <!-- Question 1 -->
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700" for="{{ form.question1.id_for_label }}">{{ form.question1.label }}</label>
+            <div class="mt-2">
+                {{ form.question1 }}
+            </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700" for="{{ form.question2.id_for_label }}">{{ form.question2.label }}</label>
+            <div class="mt-2">
+                {{ form.question2 }}
+            </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700" for="{{ form.question3.id_for_label }}">{{ form.question3.label }}</label>
+            <div class="mt-2">
+                {{ form.question3 }}
+            </div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700" for="{{ form.question4.id_for_label }}">{{ form.question4.label }}</label>
+            <div class="mt-2">
+                {{ form.question4 }}
+            </div>
+        </div>
+
+        <!-- Feedback -->
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700" for="{{ form.comments.id_for_label }}">{{ form.comments.label }}</label>
+            {{ form.comments }}
+        </div>
+
+        <button type="submit" class="self-end p-2 mt-4 text-white bg-blue-500 rounded">Submit Survey</button>
+    </form>
+</div>
+
+<style>
+    select, textarea{
+        border-radius: 0.25rem;
+    }
+</style>
+{% endblock %}

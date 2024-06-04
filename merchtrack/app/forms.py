@@ -7,6 +7,7 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.forms.widgets import PasswordInput, TextInput
 from .models import Customer, user_info
+from app.models import CustomerSatisfactionSurvey
 
 class CreateUserForm(UserCreationForm):
     student_id = forms.CharField(
@@ -109,3 +110,24 @@ class CustomerForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(CustomerForm, self).__init__(*args, **kwargs)
         self.fields['user'].disabled = True
+
+
+
+class CustomerSatisfactionSurveyForm(forms.ModelForm):
+    class Meta:
+        model = CustomerSatisfactionSurvey
+        fields = ['question1', 'question2', 'question3', 'question4', 'comments']
+        widgets = {
+            'question1': forms.Select,
+            'question2': forms.Select,
+            'question3': forms.Select,
+            'question4': forms.Select,
+            'comments': forms.Textarea(attrs={'rows': 4}),
+        }
+        labels = {
+            'question1': 'How satisfied are you with this new order system?',
+            'question2': 'How easy was it check order, track, send payment (using features) of the system?',
+            'question3': 'How satisfied are you with the person that processed your order?',
+            'question4': 'How likely are you to order again or recommend others to order at us?',
+            'comments': 'Anything you would like to say?',
+        }

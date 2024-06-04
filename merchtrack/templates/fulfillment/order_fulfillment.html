@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block title %}Order Fulfillment{% endblock %}
+{% block content %}
+{% load slippers %}
+{% block nav %}
+    {% back-to-dashboard %}
+{% endblock %}
+
+<div id="pageBase" class='flex fade-box flex-col w-screen h-full bg-[#f3f3f3] overflow-auto p-2'>
+    <div class='container flex flex-col  p-5 m-auto overflow-visible bg-white shadow-xl rounded-xl max-w-[80rem]'>
+        <div class='self-start w-full mx-5'>
+            <div class='self-start text-[#3BAFE1] text-3xl mt-2 font-bold text-left'>Collections</div>
+            <div class='self-start w-full pb-3 mb-2 text-lg italic font-medium border-b'>Easy way to order</div>
+        </div>
+        <div class="container p-4 mx-auto">
+            <form method="get" class="mb-4 ">
+                <div class="flex flex-row max-w-[30rem] space-x-4 ">
+                    <input type="text" name="q" placeholder="Search by username, email, or order ID" value="{{ query }}" class="w-full p-2 border rounded">
+                    <button type="submit" class="flex self-end h-full p-2 px-8 text-white transition-all bg-blue-500 rounded hover:bg-blue-700">Search</button>
+                </div>
+                <select name="item_q" class="w-full p-2 mt-2 border rounded">
+                    <option value="">Search by product name</option>
+                    {% for product in products %}
+                        <option value="{{ product.name }}" {% if item_query == product.name %}selected{% endif %}>{{ product.name }}</option>
+                    {% endfor %}
+                </select>
+                
+            </form>
+
+            <div class="grid grid-cols-2 space-x-4">
+                <div class="flex flex-col">
+                    <h2 class="text-xl font-bold">Under Production Orders</h2>
+                    <table class="min-w-full bg-white border border-gray-200">
+                        <thead class="text-left bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-2 border-b">Order ID</th>
+                                <th class="px-4 py-2 border-b">Customer</th>
+                                <th class="px-4 py-2 border-b">Date</th>
+                                <th class="px-4 py-2 border-b">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in under_production_orders %}
+                            <tr>
+                                <td class="px-4 py-2 border-b">{{ order.orderId }}</td>
+                                <td class="px-4 py-2 border-b">{{ order.customerId}}</td>
+                                <td class="px-4 py-2 border-b">{{ order.orderDate }}</td>
+                                <td class="px-4 py-2 border-b">
+                                    <form method="post" class="inline">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="mark_ready" value="{{ order.orderId }}">
+                                        <button type="submit" class="p-2 text-white transition-all bg-gray-500 rounded hover:bg-gray-700">Mark as Ready</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            
+                <div class="flex flex-col">
+                    <h2 class="text-xl font-bold">Ready Orders</h2>
+                    <table class="min-w-full bg-white border border-gray-200">
+                        <thead class="text-left bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-2 border-b">Order ID</th>
+                                <th class="px-4 py-2 border-b">Customer</th>
+                                <th class="px-4 py-2 border-b">Order Date</th>
+                                <th class="px-4 py-2 border-b">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in ready_orders %}
+                            <tr>
+                                <td class="px-4 py-2 border-b">{{ order.orderId }}</td>
+                                <td class="px-4 py-2 border-b">{{ order.customerId }}</td>
+                                <td class="px-4 py-2 border-b">{{ order.orderDate }}</td>
+                                <td class="px-4 py-2 border-b">
+                                    <form method="post" class="inline">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="mark_completed" value="{{ order.orderId }}">
+                                        <button type="submit" class="p-2 text-white transition-all bg-blue-500 rounded hover:bg-blue-700">Mark as Completed</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

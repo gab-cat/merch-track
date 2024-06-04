@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container px-4 py-8 mx-auto text-gray-700">
     <h1 class="py-2 mb-6 text-3xl font-semibold border-b">Cumulative Overview</h1>
-    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+    <div class="grid grid-cols-5 gap-6 md:grid-cols-5 lg:grid-cols-5">
         <div class="p-4 bg-gray-100 border rounded-lg">
             <h2 class="mb-2 text-xl font-semibold">Total Sales</h2>
             <p class="text-3xl font-bold">₱ {{ total_sales }}</p>
@@ -20,10 +20,14 @@
             <h2 class="mb-2 text-xl font-semibold">Total Customers</h2>
             <p class="text-3xl font-bold">{{ total_customers }}</p>
         </div>
+        <div class="p-4 bg-gray-100 border rounded-lg">
+            <h2 class="mb-2 text-xl font-semibold">Total Surveys</h2>
+            <p class="text-3xl font-bold">{{ total_surveys }}</p>
+        </div>
     </div>
 
     <h1 class="py-2 mt-8 mb-6 text-3xl font-semibold border-b">Key Performance Indicators</h1>
-    <div class="grid grid-cols-1 gap-6 mb-10 md:grid-cols-2 lg:grid-cols-4">
+    <div class="grid grid-cols-5 gap-6 mb-10 md:grid-cols-5 lg:grid-cols-5">
         <div class="p-4 bg-gray-100 border rounded-lg">
             <h2 class="mb-2 text-xl font-semibold">Collection Rate</h2>
             <p class="mb-2 text-3xl font-bold">{{ collection_rate|floatformat:2 }}%</p>
@@ -31,28 +35,33 @@
             <p class="text-lg">{{ pending_orders_count }} orders pending</p>
         </div>
 
-        <!-- Customer Retention Rate -->
-        <div class="p-4 my-8 bg-gray-100 border rounded-lg">
+        <div class="p-4 bg-gray-100 border rounded-lg">
             <h2 class="mb-2 text-xl font-semibold">Customer Retention Rate</h2>
             <p class="mb-2 text-3xl font-bold">{{ retention_rate|floatformat:2 }}%</p>
             <p class="text-lg">Returning Customers: {{ returning_customers }} / {{ total_customers }}</p>
         </div>
 
-        <!-- Average Order Value (AOV) -->
-        <div class="p-4 my-8 bg-gray-100 border rounded-lg">
-            <h2 class="mb-4 text-xl font-semibold">Average Order Value</h2>
-            <p class="text-lg"><b>₱{{ avg_order_value|floatformat:2 }}</b> / order </p>
+        <div class="p-4 bg-gray-100 border rounded-lg">
+            <h2 class="mb-2 text-xl font-semibold">Average Order Value</h2>
+            <p class="text-3xl font-bold">₱{{ avg_order_value|floatformat:2 }}</p>
         </div>
 
-        <div class="p-4 my-8 bg-gray-100 border rounded-lg">
-            <h2 class="mb-4 text-xl font-semibold">Average Order Value</h2>
-            <p class="text-lg"><b>₱{{ avg_order_value|floatformat:2 }}</b></p>
+        <div class="p-4 bg-gray-100 border rounded-lg">
+            <h2 class="mb-2 text-xl font-semibold">Survey Rate</h2>
+            <p class="mb-2 text-3xl font-bold">{{ survey_rate|floatformat:2 }}%</p>
+        </div>
+
+        <div class="p-4 bg-gray-100 border rounded-lg">
+            <h2 class="mb-2 text-xl font-semibold">Fulfillment Efficiency</h2>
+            <p class="mb-2 text-3xl font-bold">{{ fulfillment_efficiency.efficiency|floatformat:2 }}%</p>
+            <p class="text-lg">On Time <b>{{ fulfillment_efficiency.on_time_fulfillments }}</b> out of <b>{{ fulfillment_efficiency.total_fulfillments }}</b></p>
+            <p class="text-lg">{{ fulfillment_efficiency.unfulfilled_orders }} orders pending</p>
         </div>
     </div>
 
     <div class="flex flex-col py-2 my-6 mb-4">
-        <h1 class="py-2 mb-6 text-3xl font-semibold border-b ">Peak Performers</h1>
-        <div class="grid grid-cols-4 ">
+        <h1 class="py-2 mb-6 text-3xl font-semibold border-b">Peak Performers</h1>
+        <div class="grid grid-cols-4">
             <div class="p-4 px-4 my-8 bg-gray-100 border rounded-lg">
                 <h2 class="mb-4 text-2xl font-semibold">Best Sellers</h2>
                 <ul>
@@ -66,16 +75,25 @@
                 <h2 class="mb-4 text-2xl font-semibold">Top Customers</h2>
                 <ul>
                     {% for customer in top_customers %}
-                        <li>{{ forloop.counter }}. <b>{{ customer.customerId__user__last_name }}</b> , {{ customer.customerId__user__first_name }}- <b>{{ customer.total_spent }}</b></li>
+                        <li>{{ forloop.counter }}. <b>{{ customer.customerId__user__last_name }}</b>, {{ customer.customerId__user__first_name }} - <b>{{ customer.total_spent }}</b></li>
                     {% endfor %}
                 </ul>
             </div>
     
             <div class="p-4 mx-4 my-8 bg-gray-100 border rounded-lg">
-                <h2 class="mb-4 text-2xl font-semibold ">Most Processed Orders</h2>
+                <h2 class="mb-4 text-2xl font-semibold">Most Processed Orders</h2>
                 <ul>
                     {% for user in top_users %}
                         <li>{{ forloop.counter }}. <b>{{ user.last_name }}</b>, {{ user.first_name }} - <b>{{ user.processed_count }}</b></li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="p-4 mx-4 my-8 bg-gray-100 border rounded-lg">
+                <h2 class="mb-4 text-2xl font-semibold">Most Payments Processed</h2>
+                <ul>
+                    {% for user in top_collectors %}
+                        <li>{{ forloop.counter }}. <b>{{ user.processedBy__last_name }}</b>, {{ user.processedBy__first_name }} - <b>₱{{ user.total_amount }}</b></li>
                     {% endfor %}
                 </ul>
             </div>
@@ -89,25 +107,43 @@
             <img src="data:image/png;base64,{{ sales_chart }}"  alt="Sales Chart">
         </div>
     
-            <!-- Monthly Revenue Growth Chart -->
         <div class="px-4 my-8 border rounded shadow">
             <h2 class="py-2 mb-4 text-2xl font-bold border-b">Monthly Revenue Growth</h2>
             <img src="data:image/png;base64,{{ revenue_chart }}"  alt="Revenue Chart">
         </div>
     
-                <!-- Order Status Distribution Chart -->
         <div class="px-4 my-8 border rounded shadow">
             <h2 class="py-2 mb-4 text-2xl font-bold border-b">Order Status Distribution</h2>
             <img src="data:image/png;base64,{{ status_chart }}"  alt="Status Chart">
         </div>
     
-        <!-- Sales by Category Chart -->
         <div class="px-4 my-8 border rounded shadow">
             <h2 class="py-2 mb-4 text-2xl font-bold border-b">Sales by Category</h2>
             <img src="data:image/png;base64,{{ category_chart }}"  alt="Category Chart">
         </div>
     </div>
 
+    <h1 class="py-2 mt-6 mb-6 text-3xl font-bold border-b">Customer Surveys</h1>
+    <div class='grid items-start content-start grid-cols-2 mt-8 space-x-4 space-y-4'>
+        <div class="px-4 my-8 border rounded shadow">
+            <h2 class="py-2 mb-4 text-2xl font-bold border-b">Satisfaction with the New Order System</h2>
+            <img src="data:image/png;base64,{{ q1_chart }}"  alt="Satisfaction with the New Order System Chart">
+        </div>
 
+        <div class="px-4 my-8 border rounded shadow">
+            <h2 class="py-2 mb-4 text-2xl font-bold border-b">Ease of Use of System Features</h2>
+            <img src="data:image/png;base64,{{ q2_chart }}"  alt="Ease of Use of System Features Chart">
+        </div>
+
+        <div class="px-4 my-8 border rounded shadow">
+            <h2 class="py-2 mb-4 text-2xl font-bold border-b">Satisfaction with the Order Processor</h2>
+            <img src="data:image/png;base64,{{ q3_chart }}"  alt="Satisfaction with the Order Processor Chart">
+        </div>
+
+        <div class="px-4 my-8 border rounded shadow">
+            <h2 class="py-2 mb-4 text-2xl font-bold border-b">Likelihood to Order Again or Recommend</h2>
+            <img src="data:image/png;base64,{{ q4_chart }}"  alt="Likelihood to Order Again or Recommend Chart">
+        </div>
+    </div>
 </div>
 {% endblock %}

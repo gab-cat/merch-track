@@ -2,7 +2,7 @@ from django.conf import settings
 from django.views.static import serve
 from django.urls import path,re_path, include
 from . import views
-from .view import product, order, customer, report
+from .view import product, order, customer, report, collection, fulfillment
 
 urlpatterns = [
     path("", views.home, name='home'),
@@ -45,11 +45,24 @@ urlpatterns = [
     path('reports/sales/', report.sales_report, name='sales_report'),
     path('reports/fulfillment/', report.fulfillment_report, name='fulfillment_report'),
     path('api/sales_data/<int:product_id>/', report.sales_data_api, name='sales_data_api'),
+    path('reports/survey/', report.survey_report, name='survey_report'),
+    path('reports/collections/', report.collections_report, name='collections_report'),
 
 
     path('customers/', customer.customer_list, name='customer_list'),
     path('customers/<int:customer_id>/', customer.customer_detail, name='customer_detail'),
     path('customers/edit/<int:customer_id>/', customer.edit_customer, name='edit_customer'),
+
+
+    path('collections/', collection.collections_index, name='collections_index'),
+    path('collections/<int:order_id>/', collection.collection_detail, name='collection_detail'),
+    path('customer_payment/', collection.customer_payment, name='customer_payment'),
+    path('customer_payment/<int:order_id>/', collection.customer_make_payment, name='customer_make_payment'),
+
+
+    path('fulfillment/', fulfillment.fulfillment_view, name='fulfillment_view'),
+    path('survey/<int:order_id>/', views.survey_view, name='survey_view'),
+    path('survey/thank-you/', views.survey_thank_you, name='survey_thank_you'),
 
 
     re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),

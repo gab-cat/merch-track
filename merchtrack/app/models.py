@@ -99,7 +99,6 @@ class Order(models.Model):
     totalAmount = models.FloatField(max_length=10, default=0)
     discountAmount = models.FloatField(max_length=10, default=0)
     estimatedDeliveryDate = models.DateTimeField()
-    actualDeliveryDate = models.DateTimeField(null=True, blank=True)  # Add this line
 
     class Meta:
         db_table = 'order'
@@ -203,3 +202,25 @@ class Log(models.Model):
         indexes = [
             models.Index(fields=['logId'], name='logId_id_idx')
         ]
+
+
+
+from django.utils import timezone
+
+class CustomerSatisfactionSurvey(models.Model):
+    order = models.OneToOneField(Order, on_delete=models.CASCADE)
+    submit_date = models.DateTimeField(default=timezone.now)
+    question1 = models.IntegerField(choices=[(1, 'Not at all'), (2, 'Somewhat'), (3, 'Very'), (4, 'Completely')])
+    question2 = models.IntegerField(choices=[(1, 'Difficult'), (2, 'Neutral'), (3, 'Easy'), (4, 'Very Easy')])
+    question3 = models.IntegerField(choices=[(1, 'Not at all'), (2, 'Somewhat'), (3, 'Very'), (4, 'Completely')])
+    question4 = models.IntegerField(choices=[(1, 'Unlikely'), (2, 'Neutral'), (3, 'Likely'), (4, 'Very Likely')])
+    comments = models.TextField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'customer_satisfaction_survey'
+        constraints = [
+            models.UniqueConstraint(fields=['order'], name='unique_order_survey')
+        ]
+
+    def __str__(self):
+        return f"Survey for Order {self.order.orderId}"

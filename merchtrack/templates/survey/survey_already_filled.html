@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}Survey Already Filled{% endblock %}
+{% block content %}
+<div class="container flex flex-col  self-center my-auto max-w-[30rem] p-4 rounded shadow-md mx-auto mt-8">
+    <h1 class="mb-4 text-2xl font-bold">Survey Already Filled</h1>
+    <p>Sorry, the survey for order ID {{ order.orderId }} has already been filled out. Each survey can only be submitted once per order.</p>
+    <a class="self-center px-5 m-4 btn-primary w-fit" href="{% url 'home' %}">Back to Home</a>
+</div>
+{% endblock %}

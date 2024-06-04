@@ -6,16 +6,10 @@ class OrderForm(forms.ModelForm):
     estimatedDeliveryDate = forms.DateField(
         widget=forms.DateInput(attrs={'type': 'date'})
     )
-    actualDeliveryDate = forms.DateTimeField(
-        input_formats=['%Y-%m-%dT%H:%M'],  # This format is for HTML datetime-local input
-        widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}),
-        required=False,
-    )
-
 
     class Meta:
         model = Order
-        fields = ['customerId', 'status', 'totalAmount', 'discountAmount', 'estimatedDeliveryDate', 'actualDeliveryDate']
+        fields = ['customerId', 'status', 'totalAmount', 'discountAmount', 'estimatedDeliveryDate']
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
