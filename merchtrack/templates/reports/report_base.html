@@ -117,19 +117,19 @@
                         <li>
                             <a href="/reports/survey/" class="block p-2 text-gray-700 transition-all rounded hover:bg-gray-300"> > Survey Report</a>
                         </li>
+                        <li>
+                            <a href="/reports/logs/" class="block p-2 text-gray-700 transition-all rounded hover:bg-gray-300"> > Log Report</a>
+                        </li>
                     </ul>
                 </nav>
             </aside>
     
             <aside class="mt-4 font-medium bg-white rounded shadow-md h-fit">
                 <nav class="p-4">
-                    
                     <ul class="space-y-2">
                     <li class="w-full px-2 pb-2 mb-2 font-semibold text-gray-900 border-b">Recent Logs</li>
-                        <li>
-                            <a href="{% url 'reports' %}" class="block p-2 text-gray-700 transition-all rounded hover:bg-gray-300">> Dashboard</a>
-                        </li>
-
+                        {% block list %}
+                        {% endblock %}
                     </ul>
                 </nav>
             </aside>

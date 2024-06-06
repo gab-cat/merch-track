@@ -12,6 +12,8 @@ from django.contrib.auth.models import User
 from .forms import CreateUserForm, CustomerSatisfactionSurveyForm, LoginForm, UserRegistrationForm
 from .models import  CustomerSatisfactionSurvey, Order, user_info, order_info, order_details, contact_us, Customer
 
+from .utils import log_action
+
 
 # Set up logging
 logger = logging.getLogger(__name__)
@@ -145,11 +147,12 @@ def register(request):
             user = form.save(commit=False)
             user.save()
             # Create a Customer instance
-            Customer.objects.create(
+            customer = Customer.objects.create(
                 user=user,
                 phone=form.cleaned_data['phone'],
                 course=form.cleaned_data['course']
             )
+            log_action(user, 'User Registration', f'User {user.username} registered.', customer)
             django_messages.success(request, "Account successfully created.")
             return redirect('login')  # Redirect to the login page after successful registration
     else:
@@ -270,6 +273,7 @@ def survey_view(request, order_id):
             survey = form.save(commit=False)
             survey.order = order
             survey.save()
+            log_action(request.user, 'Survey Completed', f'Customer {request.user.username} completed survey for Order {order_id}.', order.customerId)
             django_messages.success(request, 'Thank you for completing the survey!')
             return redirect('survey_thank_you')  # Redirect to an appropriate page
     else:

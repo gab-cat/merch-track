@@ -12,6 +12,22 @@
                 <a href="?export=excel" class="w-full align-middle btn-primary">Export to Excel</a>
             </div>
         </div>
+        <table class="min-w-fit mb-6 mt-2 bg-white border border-gray-200">
+            <thead class="text-left bg-gray-50">
+                <tr>
+                    <th class="px-4 py-2 border-b">Payment Method</th>
+                    <th class="px-4 py-2 border-b">Total Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for method in total_collection_by_method %}
+                <tr class="hover:bg-gray-50">
+                    <td class="px-4 py-2 border-b">{{ method.paymentMethod }}</td>
+                    <td class="px-4 py-2 border-b">₱{{ method.total_amount }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
         <div class="grid grid-cols-1 gap-6 mb-6 md:grid-cols-3">
             <div>
                 <label for="start_date" class="block mb-2 font-bold text-gray-700">Start Date</label>
@@ -49,7 +65,7 @@
                 <td class="px-4 py-2 border-b">{{ payment.customerId.user.first_name }} {{ payment.customerId.user.last_name }}</td>
                 <td class="px-4 py-2 border-b">{{ payment.processedBy.first_name }} {{ payment.processedBy.last_name }}</td>
                 <td class="px-4 py-2 border-b">{{ payment.paymentDate }}</td>
-                <td class="px-4 py-2 border-b">{{ payment.amount }}</td>
+                <td class="px-4 py-2 border-b">₱{{ payment.amount }}</td>
                 <td class="px-4 py-2 border-b">{{ payment.paymentMethod }}</td>
                 <td class="px-4 py-2 border-b">{{ payment.paymentStatus }}</td>
                 <td class="px-4 py-2 border-b">{{ payment.referenceNumber }}</td>
@@ -58,4 +74,17 @@
         </tbody>
     </table>
 </div>
+{% endblock %}
+
+{% block list %}
+{% for log in latest_logs %}
+<li class="text-gray-700">
+    <div class="flex flex-col border-b py-1">
+        <p class="font-bold">{{log.reason}}</p>
+        <p class="text-sm">{{log.created_by}}</p>
+        <p class="text-xs text-gray-500">{{log.system_text}}</p>
+        <p class="text-right text-xs text-gray-500 line-clamp-3">{{log.created_date}}</p>
+    </div>
+</li>
+{% endfor %}
 {% endblock %}

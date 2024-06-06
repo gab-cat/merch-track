@@ -8,6 +8,8 @@ from django.core.paginator import Paginator
 from django.contrib import messages as django_messages
 from django.db.models import Q
 
+from app.utils import log_action
+
 @login_required
 def create_order(request):
     products = Product.objects.filter(available=True)
@@ -22,7 +24,6 @@ def create_order(request):
         processed_by = request.user
 
         if not customer_id or not total_amount or not estimated_delivery_date:
-            # Handle missing data
             django_messages.error(request, "Please fill in all required fields.")
             return render(request, 'create_order.html', {
                 'order_form': order_form,
@@ -31,7 +32,6 @@ def create_order(request):
                 'error_message': 'Please fill in all required fields.'
             })
 
-        # Create the Order object
         order = Order(
             customerId_id=customer_id,
             totalAmount=total_amount,
@@ -41,7 +41,6 @@ def create_order(request):
         )
         order.save()
 
-        # Save order items
         for item in request.POST.getlist('items'):
             item_data = json.loads(item)
             order_item = OrderItem(
@@ -50,17 +49,20 @@ def create_order(request):
                 quantity=item_data['quantity'],
                 price=item_data['price'],
                 customerNote=item_data.get('note', ''),
-                size=item_data.get('size', '') ,
+                size=item_data.get('size', '')
             )
             order_item.save()
+
+        log_action(request.user, 'Order Created', f"Order {order.orderId} created by {request.user.username}.", order.customerId)
         django_messages.success(request, f"Successfully created a new order with ID: {order.orderId}.")
-        return redirect('success')  # Redirect to a success page
+        return redirect('success')
 
     return render(request, 'create_order.html', {
         'products': products,
         'customers': customers,
         'order_form': order_form,
     })
+
 
 def order_list(request):
     query = request.GET.get('q')
@@ -98,26 +100,37 @@ def order_detail(request, order_id):
         return redirect('home')
     return render(request, 'orders/order_detail.html', {'order': order})
 
+@login_required
 def edit_order(request, order_id):
     order = get_object_or_404(Order, pk=order_id)
     
     if request.method == 'POST':
         form = OrderForm(request.POST, instance=order)
         if form.is_valid():
-            form.save()
-            django_messages.success(request, f"Successfully updated order with ID : {order_id}")
-            return redirect('order_detail', order_id=order.orderId)
+            if form.has_changed():
+                changes = []
+                for field in form.changed_data:
+                    old_value = getattr(order, field)
+                    new_value = form.cleaned_data[field]
+                    changes.append(f"{field} changed from '{old_value}' to '{new_value}'")
+
+                form.save()
+                change_details = "\n".join(changes)
+                log_action(request.user, 'Order Edited', f"Order {order.orderId} edited by {request.user.username}.\n{change_details}", order.customerId)
+                django_messages.success(request, f"Successfully updated order with ID: {order_id}.")
+                return redirect('order_detail', order_id=order.orderId)
         else:
             django_messages.error(request, "Something went wrong. Unable to complete your request.")
     else:
-        
         form = OrderForm(instance=order)
 
     return render(request, 'orders/edit_order.html', {'form': form, 'order': order})
 
+
 def delete_order(request, order_id):
     order = get_object_or_404(Order, pk=order_id)
     if request.method == 'POST':
+        log_action(request.user, 'Order Deleted', f"Order {order.orderId} deleted by {request.user.username}.", order.customerId)
         order.delete()
         django_messages.success(request, f"Successfully deleted order with ID : {order_id}")
         return redirect('order_list')

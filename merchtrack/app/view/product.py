@@ -3,14 +3,21 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from django.contrib.auth.decorators import login_required
 
 from app.form.product import ProductForm
-from app.models import Product
+from app.models import Customer, Product
 from django.contrib import messages
+
+from app.utils import log_action
+
+
+customer = Customer.objects.get(pk=999)
+
 
 def create_product(request):
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            product = form.save()
+            log_action(request.user, 'Product Created', f"Product {product.name} (ID: {product.productId}) created by {request.user.username}.", customer)
             messages.success(request, "Successfully created a product.")
             return redirect('product_list')
     else:
@@ -42,13 +49,21 @@ def edit_product(request, product_id):
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
-            form.save()
-            messages.success(request, f"Successfully updated product with ID : {product_id}.")
-            return redirect('product_list')
+            if form.has_changed():
+                changes = []
+                for field in form.changed_data:
+                    old_value = getattr(product, field)
+                    new_value = form.cleaned_data[field]
+                    changes.append(f"{field} changed from '{old_value}' to '{new_value}'")
+
+                form.save()
+                change_details = "\n".join(changes)
+                log_action(request.user, 'Product Edited', f"Product {product.name} (ID: {product.productId}) edited by {request.user.username}.\n{change_details}", customer)
+                messages.success(request, f"Successfully updated product with ID: {product_id}.")
+                return redirect('product_list')
     else:
         form = ProductForm(instance=product)
     
-    # Query all distinct categories
     categories = Product.objects.values_list('category', flat=True).distinct()
     
     return render(request, 'edit_product.html', {
@@ -61,6 +76,7 @@ def edit_product(request, product_id):
 def delete_product(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     if request.method == 'POST':
+        log_action(request.user, 'Product Deleted', f"Product {product.name} (ID: {product.productId}) deleted by {request.user.username}.", customer)
         product.delete()
         messages.success(request, f"Successfully deleted product with ID : {product_id}")
         return redirect('product_list')

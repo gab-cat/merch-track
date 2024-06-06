@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from app.models import Customer, Order
+from app.models import Customer, Order, Payment
 from app.forms import CustomerForm, UserForm
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordResetForm
@@ -16,6 +16,8 @@ from django.utils.html import strip_tags
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+
+from app.utils import log_action
 
 @login_required(login_url='login')
 def customer_list(request):
@@ -60,7 +62,8 @@ def customer_list(request):
 def customer_detail(request, customer_id):
     customer = get_object_or_404(Customer, pk=customer_id)
     orders = Order.objects.filter(customerId=customer)
-    return render(request, 'customers/customer_detail.html', {'customer': customer, 'orders': orders})
+    payments = Payment.objects.filter(customerId=customer)
+    return render(request, 'customers/customer_detail.html', {'customer': customer, 'orders': orders, 'payments': payments})
 
 def send_html_password_reset_email(user, request):
     subject = "Reset Your Password"
@@ -90,14 +93,35 @@ def edit_customer(request, customer_id):
             password_reset_form = PasswordResetForm({'email': user.email})
             if password_reset_form.is_valid():
                 send_html_password_reset_email(user, request)
+                log_action(request.user, 'Password Reset', f'Password reset email sent to {user.email}.', customer)
                 messages.success(request, "Password reset link successfully sent.")
                 return redirect('customer_detail', customer_id=customer.user_id)
         else:
             customer_form = CustomerForm(request.POST, instance=customer)
             user_form = UserForm(request.POST, instance=user)
             if customer_form.is_valid() and user_form.is_valid():
+                # Log the changes
+                changes = []
+                if user_form.has_changed():
+                    for field in user_form.changed_data:
+                        old_value = getattr(user, field)
+                        new_value = user_form.cleaned_data[field]
+                        changes.append(f"{field} changed from '{old_value}' to '{new_value}'")
+                
+                if customer_form.has_changed():
+                    for field in customer_form.changed_data:
+                        old_value = getattr(customer, field)
+                        new_value = customer_form.cleaned_data[field]
+                        changes.append(f"{field} changed from '{old_value}' to '{new_value}'")
+
+                # Save changes
                 user_form.save()
                 customer_form.save()
+
+                # Log the action
+                change_details = "\n".join(changes)
+                log_action(request.user, 'Customer Edited', f'Customer {user.username} edited.\n{change_details}', customer)
+
                 messages.success(request, "Changes saved successfully.")
                 return redirect('customer_detail', customer_id=customer.user_id)
     else:

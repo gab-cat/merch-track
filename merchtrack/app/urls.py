@@ -47,6 +47,7 @@ urlpatterns = [
     path('api/sales_data/<int:product_id>/', report.sales_data_api, name='sales_data_api'),
     path('reports/survey/', report.survey_report, name='survey_report'),
     path('reports/collections/', report.collections_report, name='collections_report'),
+    path('reports/logs/', report.log_report, name='log_report'),
 
 
     path('customers/', customer.customer_list, name='customer_list'),

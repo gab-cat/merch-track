@@ -10,6 +10,8 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
 
+from app.utils import log_action
+
 
 @login_required
 def collections_index(request):
@@ -56,6 +58,7 @@ def collection_detail(request, order_id):
 
             order.status = 'Under Production'
             order.save()
+            log_action(request.user, 'Payment Verified', f'Payment {payment_id} for order {order_id} verified.', order.customerId)
 
             send_payment_status_email(payment, 'verified')
 
@@ -69,6 +72,8 @@ def collection_detail(request, order_id):
             payment.save()
 
             send_payment_status_email(payment, 'rejected')
+            log_action(request.user, 'Payment Rejected', f'Payment {payment_id} for order {order_id} rejected.', order.customerId)
+
 
             messages.success(request, 'Payment rejected.')
             return redirect('collection_detail', order_id=order_id)
@@ -83,18 +88,25 @@ def collection_detail(request, order_id):
             payment.save()
 
             send_payment_status_email(payment, 'refunded')
+            log_action(request.user, 'Payment Refunded', f'Payment {payment_id} for order {order_id} refunded.', order.customerId)
 
             messages.success(request, 'Payment refunded and order status set to Pending.')
             return redirect('collection_detail', order_id=order_id)
 
         else:
-            order.status = 'Under Production'
-            order.save()
 
             amount = request.POST.get('amount')
             payment_method = request.POST.get('payment_method')
             payment_status = request.POST.get('payment_status')
             reference_number = request.POST.get('reference_number')
+
+            if not amount or not reference_number:
+                messages.error(request, "Please fill in all details regarding payment. ")
+                return redirect('collection_detail', order_id=order_id)
+
+            order.status = 'Under Production'
+            order.save()
+            log_action(request.user, 'Payment Added', f'Payment added for order {order_id}. Amount: {amount}, Method: {payment_method}, Status: {payment_status}, Reference: {reference_number}.', order.customerId)
 
             Payment.objects.create(
                 orderId=order,
@@ -144,6 +156,10 @@ def customer_payment(request):
         if user:
             customer = Customer.objects.filter(user=user).first()
             pending_orders = Order.objects.filter(customerId=customer, status='Pending')
+
+            if pending_orders.__len__() == 0:
+                messages.info(request, "You have no pending order as of the moment.")
+
             return render(request, 'collections/customer_payment.html', {
                 'pending_orders': pending_orders,
                 'customer': customer
@@ -161,6 +177,10 @@ def customer_make_payment(request, order_id):
         payment_method = request.POST.get('payment_method')
         reference_number = request.POST.get('reference_number')
 
+        if not amount or not reference_number:
+            messages.error(request, 'Amount and Reference Number are required fields.')
+            return render(request, 'collections/customer_make_payment.html', {'order': order})
+
         Payment.objects.create(
             orderId=order,
             customerId=order.customerId,
@@ -171,6 +191,8 @@ def customer_make_payment(request, order_id):
             paymentStatus='For Verification',
             referenceNumber=reference_number
         )
+
+        log_action(request.user, 'Customer Payment Made', f'Payment made by customer for order {order_id}. Amount: {amount}, Method: {payment_method}, Reference: {reference_number}.', order.customerId)
         messages.success(request, 'Payment confirmation sent. Please wait for verfication.')
         return redirect('customer_payment')
 

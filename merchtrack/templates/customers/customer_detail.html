@@ -35,7 +35,8 @@
                     <p>{{ customer.course }}</p>
                 </div>
             </div>
-            <h2 class="text-xl font-semibold mt-8">Orders</h2>
+
+            <h2 class="text-xl font-semibold mt-8">Orders History</h2>
             <table class="min-w-full bg-white  rounded-lg border-gray-200 mt-4">
                 <thead class="bg-gray-200 text-left">
                     <tr>
@@ -63,6 +64,38 @@
                         {% endif %}
                         <td class="py-2 px-4 border-b h-full">
                             <a href="{% url 'order_detail' order.orderId %}" class="mx-auto w-fit text-center flex text-blue-500 hover:underline">View</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <h2 class="text-xl font-semibold mt-8">Payments History</h2>
+            <table class="min-w-full bg-white rounded-lg border-gray-200 mt-4">
+                <thead class="bg-gray-200 text-left">
+                    <tr>
+                        <th class="py-2 px-4 border-b rounded-tl-lg">Payment ID</th>
+                        <th class="py-2 px-4 border-b">Order ID</th>
+                        <th class="py-2 px-4 border-b">Date</th>
+                        <th class="py-2 px-4 border-b">Amount</th>
+                        <th class="py-2 px-4 border-b">Method</th>
+                        <th class="py-2 px-4 border-b">Status</th>
+                        <th class="py-2 px-4 border-b">Reference #</th>
+                        <th class="py-2 px-4 border-b">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="border">
+                    {% for payment in payments %}
+                    <tr>
+                        <td class="py-2 px-4 border-b">{{ payment.paymentId }}</td>
+                        <td class="py-2 px-4 border-b">{{ payment.orderId.orderId }}</td>
+                        <td class="py-2 px-4 border-b">{{ payment.paymentDate }}</td>
+                        <td class="py-2 px-4 border-b">{{ payment.amount }}</td>
+                        <td class="py-2 px-4 border-b">{{ payment.paymentMethod }}</td>
+                        <td class="py-2 px-4 border-b">{{ payment.paymentStatus }}</td>
+                        <td class="py-2 px-4 border-b">{{ payment.referenceNumber }}</td>
+                        <td class="py-2 px-4 border-b h-full">
+                            <a href="{% url 'collection_detail' payment.orderId.orderId %}" class="mx-auto w-fit text-center flex text-blue-500 hover:underline">View</a>
                         </td>
                     </tr>
                     {% endfor %}

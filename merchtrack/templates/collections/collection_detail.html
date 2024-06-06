@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 {% block title %}Collection Detail{% endblock %}
 {% block content %}
+{% load slippers %}
 
 <div id="pageBase" class='flex fade-box flex-col w-screen h-full bg-[#f3f3f3] overflow-auto p-2'>
-    <div class='container flex flex-col  p-5 m-auto overflow-visible bg-white shadow-xl rounded-xl min-h-[90%] max-w-[80rem]'>
+    <div class='container flex flex-col  p-5 m-auto overflow-visible bg-white shadow-xl rounded-xl  max-w-[80rem]'>
         <div class='self-start w-full mx-5'>
             <div class='self-start text-[#3BAFE1] text-3xl mt-2 font-bold text-left'>Collections</div>
             <div class='self-start w-full pb-3 mb-2 text-lg italic font-medium border-b'>Easy way to order</div>
@@ -11,7 +12,7 @@
         <a href="{% url 'collections_index'%}" class='self-end btn-secondary w-fit'>Back to List</a>
         <div class="container mx-auto">
             <div class="grid grid-cols-3">
-                <div class="flex flex-col w-full p-4">
+                <div class="flex flex-col w-fit p-4 border rounded mt-4">
                     <h1 class="mb-4 text-2xl font-bold">Order Details</h1>
                     <div class="grid grid-cols-2 space-y-2">
                         <p class="font-semibold">Order ID: </p>
@@ -26,7 +27,7 @@
                         <p>{{ order.status }}</p>
                     </div>
                 </div>
-                <div class="flex flex-col w-full col-span-2 p-4">
+                <div class="flex flex-col w-full col-span-2 p-4 border rounded mt-4 ml-4">
                     <h2 class="mt-4 text-xl font-bold">Order Items</h2>
                     <table class="mt-4 bg-white border border-gray-200 ">
                         <thead class="text-left bg-gray-50">
@@ -50,7 +51,7 @@
                     </table>
                 </div>
 
-                <div class="flex flex-col p-4">
+                <div class="flex flex-col p-4 border rounded mt-4 ">
                     <h2 class="mt-4 text-xl font-bold">Add Payment</h2>
                     <form method="post" class="flex flex-col mt-4">
                         {% csrf_token %}
@@ -80,11 +81,11 @@
                             <label for="reference_number" class="block text-sm font-medium text-gray-700">Reference Number</label>
                             <input type="text" name="reference_number" class="w-full p-2 border rounded">
                         </div>
-                        <button type="submit" class="self-end btn-primary">Submit Payment</button>
+                        <button type="submit" {% if order.status != "Pending" %} disabled aria-readonly="true" {% endif %}  onclick="showModal('confirmUpdate')" class="self-end btn-primary">Submit Payment</button>
                     </form>
                 </div>
 
-                <div class="flex flex-col col-span-2 p-4">
+                <div class="flex flex-col col-span-2 p-4 border rounded mt-4 ml-4">
                     <h2 class="mt-4 text-xl font-bold">Payment History</h2>
                     <table class="min-w-full mt-4 bg-white border border-gray-200">
                         <thead class="text-left bg-gray-50">
@@ -170,4 +171,6 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 </script>
+
+{% modal modal_id='confirmUpdate' modal_title='Confirm Payment' modal_message='Are you sure you want to add payment to this order?' modal_warning='By clicking <b>Submit</b>, you hereby guarantee that all the information provided is accurate and factual to the best of your knowledge. Any false information can lead to cancellation of the order and potential legal consequences. Please review all the details carefully before proceeding.<br><br> Actions will be logged for business and security reasons.' %}
 {% endblock %}

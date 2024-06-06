@@ -12,6 +12,8 @@ from django.utils.html import strip_tags
 from django.urls import reverse
 from django.core.mail import EmailMultiAlternatives
 
+from app.utils import log_action
+
 @login_required
 def fulfillment_view(request):
     query = request.GET.get('q', '')
@@ -52,6 +54,7 @@ def fulfillment_view(request):
             order.status = 'Ready'
             order.save()
             send_order_email(order, 'ready', request)
+            log_action(request.user, 'Order Marked as Ready', f'Order {order_id} marked as ready.', order.customerId)
             messages.success(request, f'Order #{order_id} marked as ready.')
         elif 'mark_completed' in request.POST:
             order_id = request.POST.get('mark_completed')
@@ -64,6 +67,7 @@ def fulfillment_view(request):
             status = 'On Time' if fulfillment_date.date() <= order.estimatedDeliveryDate.date() else 'Late'
             Fulfillment.objects.create(orderId=order, processedBy=request.user, status=status, fulfillmentDate=fulfillment_date)
 
+            log_action(request.user, 'Order Marked as Completed', f'Order {order_id} marked as {status.lower()}.', order.customerId)
             send_order_email(order, 'completed', request)
             messages.success(request, f'Order #{order_id} marked as {status.lower()}.')
 

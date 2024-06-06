@@ -182,9 +182,15 @@ class Fulfillment(models.Model):
             models.Index(fields=['fulfillmentId'], name='fulfillment_id_idx')
         ]
 
+def get_default_customer():
+    customer = Customer.objects.get(pk=999)
+    print("Customer: ", customer)
+    return customer
+
+
 class Log(models.Model):
     logId = models.AutoField(primary_key=True)
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, default=get_default_customer)
     created_date = models.DateTimeField(default=now)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, default=999)
     reason = models.CharField(max_length=255)

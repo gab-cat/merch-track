@@ -73,3 +73,16 @@
 </div>
 
 {% endblock %}
+
+{% block list %}
+{% for log in latest_logs %}
+<li class="text-gray-700">
+    <div class="flex flex-col border-b py-1">
+        <p class="font-bold">{{log.reason}}</p>
+        <p class="text-sm">{{log.created_by}}</p>
+        <p class="text-xs text-gray-500">{{log.system_text}}</p>
+        <p class="text-right text-xs text-gray-500 line-clamp-3">{{log.created_date}}</p>
+    </div>
+</li>
+{% endfor %}
+{% endblock %}

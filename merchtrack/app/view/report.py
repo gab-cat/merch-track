@@ -4,7 +4,7 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
-from app.models import Customer, CustomerSatisfactionSurvey, Fulfillment, Order, OrderItem, Payment, Product
+from app.models import Customer, CustomerSatisfactionSurvey, Fulfillment, Log, Order, OrderItem, Payment, Product
 from app.forms import CustomerForm
 from django.db.models import Sum, Count
 from django.utils import timezone
@@ -16,6 +16,7 @@ from django.utils.timezone import make_naive
 from django.contrib import messages
 from django.db.models.functions import TruncDay
 from django.utils.dateparse import parse_date
+from django.core.paginator import Paginator
 
 import matplotlib
 matplotlib.use('Agg')  # Use the 'Agg' backend for non-GUI rendering
@@ -185,7 +186,9 @@ def report_index(request):
         # Fulfillment Efficiency Data
         fulfillment_efficiency = calculate_fulfillment_efficiency()
 
-        top_collectors = Payment.objects.values('processedBy__last_name', 'processedBy__first_name', 'processedBy')\
+    # Exclude refunded payments and get the total amount processed by each user
+        top_collectors = Payment.objects.exclude(paymentStatus='Refunded')\
+                           .values('processedBy__last_name', 'processedBy__first_name', 'processedBy')\
                            .annotate(total_amount=Sum('amount'))\
                            .order_by('-total_amount')[:3]
 
@@ -218,7 +221,8 @@ def report_index(request):
             'q3_chart': q3_chart,
             'q4_chart': q4_chart,
             'fulfillment_efficiency': fulfillment_efficiency,
-            'top_collectors': top_collectors
+            'top_collectors': top_collectors, 
+            'latest_logs': get_latest_logs
         })
     except Exception as e:
         logger.error(f"An error occurred: {e}", exc_info=True)
@@ -238,7 +242,7 @@ def order_report(request):
     if request.GET.get('export') == 'excel':
         return or_export_to_excel(orders)
 
-    return render(request, 'reports/order_report.html', {'orders': orders})
+    return render(request, 'reports/order_report.html', {'orders': orders, 'latest_logs': get_latest_logs})
 
 def or_export_to_excel(orders):
     wb = openpyxl.Workbook()
@@ -297,6 +301,7 @@ def product_report(request, product_id=None):
         'selected_product_name': selected_product_name,
         'status': status,
         'order_statuses': order_statuses,
+        'latest_logs': get_latest_logs
     })
 
 def pr_export_to_excel(orders):
@@ -342,7 +347,8 @@ def sales_data_api(request, product_id):
     )
     data = {
         'sales_over_time': list(sales_over_time),
-        'quantity_by_customer': list(quantity_by_customer)
+        'quantity_by_customer': list(quantity_by_customer),
+        'latest_logs': get_latest_logs
     }
     return JsonResponse(data)
 
@@ -419,6 +425,7 @@ def sales_report(request):
         'avg_order_value': avg_order_value,
         'start_date': start_date,
         'end_date': end_date,
+        'latest_logs': get_latest_logs
     })
 
 def sr_export_to_excel(orders, total_sales, total_discount, total_orders, avg_order_value, start_date, end_date):
@@ -467,7 +474,7 @@ def fulfillment_report(request):
     if request.GET.get('export') == 'excel':
         return fulfillment_export_to_excel(fulfillments)
 
-    return render(request, 'reports/fulfillment_report.html', {'fulfillments': fulfillments, 'start_date': start_date, 'end_date': end_date})
+    return render(request, 'reports/fulfillment_report.html', {'fulfillments': fulfillments, 'start_date': start_date, 'end_date': end_date, 'latest_logs': get_latest_logs})
 
 def fulfillment_export_to_excel(fulfillments):
     wb = openpyxl.Workbook()
@@ -491,7 +498,6 @@ def fulfillment_export_to_excel(fulfillments):
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = 'attachment; filename=fulfillment_report.xlsx'
     wb.save(response)
-    
     return response
 
 def calculate_fulfillment_efficiency():
@@ -528,7 +534,7 @@ def survey_report(request):
     if request.GET.get('export') == 'excel':
         return sr_export_to_excel(surveys, start_date, end_date)
 
-    return render(request, 'reports/survey_report.html', {'surveys': surveys, 'start_date': start_date, 'end_date': end_date})
+    return render(request, 'reports/survey_report.html', {'surveys': surveys, 'start_date': start_date, 'end_date': end_date, 'latest_logs': get_latest_logs})
 
 def sr_export_to_excel(surveys, start_date, end_date):
     wb = openpyxl.Workbook()
@@ -586,14 +592,24 @@ def collections_report(request):
     if request.GET.get('export') == 'excel':
         return collections_export_to_excel(payments)
 
-    # Calculate top 3 users with highest payments processed
-    top_users = User.objects.annotate(total_amount=Sum('processed_payments__amount')).order_by('-total_amount')[:3]
+    # Exclude refunded payments and get the total amount processed by each user
+    top_users = Payment.objects.exclude(paymentStatus='Refunded')\
+                           .values('processedBy__last_name', 'processedBy__first_name', 'processedBy')\
+                           .annotate(total_amount=Sum('amount'))\
+                           .order_by('-total_amount')[:3]
+
+    # Total collection by payment method excluding refunded payments
+    total_collection_by_method = Payment.objects.exclude(paymentStatus='Refunded')\
+                                            .values('paymentMethod')\
+                                            .annotate(total_amount=Sum('amount'))
 
     return render(request, 'reports/collections_report.html', {
         'payments': payments,
         'start_date': start_date,
         'end_date': end_date,
-        'top_users': top_users
+        'top_users': top_users,
+        'total_collection_by_method': total_collection_by_method,
+        'latest_logs': get_latest_logs
     })
 
 def collections_export_to_excel(payments):
@@ -622,3 +638,63 @@ def collections_export_to_excel(payments):
     wb.save(response)
     
     return response
+
+
+def log_report(request):
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+    created_by = request.GET.get('created_by')
+    logs = Log.objects.all()
+
+    if start_date and end_date:
+        start_date = parse_date(start_date)
+        end_date = parse_date(end_date)
+        logs = logs.filter(created_date__range=[start_date, end_date])
+    
+    if created_by:
+        logs = logs.filter(created_by__username__icontains=created_by)
+
+    # Pagination
+    paginator = Paginator(logs, 10)  # Show 10 logs per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    if request.GET.get('export') == 'excel':
+        return log_export_to_excel(logs)
+
+    return render(request, 'reports/log_report.html', {
+        'logs': logs,
+        'page_obj': page_obj,
+        'start_date': start_date,
+        'end_date': end_date,
+        'created_by': created_by,
+        'latest_logs': get_latest_logs,
+    })
+
+def log_export_to_excel(logs):
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Log Report"
+
+    headers = ['Log ID', 'Created Date', 'Created By', 'Reason', 'System Text']
+    ws.append(headers)
+
+    for log in logs:
+        ws.append([
+            log.logId,
+            log.created_date.strftime('%Y-%m-%d %H:%M:%S'),
+            f"{log.created_by.first_name} {log.created_by.last_name}",
+            log.reason,
+            log.system_text
+        ])
+
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=log_report.xlsx'
+    wb.save(response)
+
+
+    return response
+
+
+def get_latest_logs(count=5):
+    return Log.objects.order_by('-created_date')[:count]

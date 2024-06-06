@@ -1,0 +1,80 @@
+{% extends 'reports/report_base.html' %}
+{% block title %}Log Report{% endblock %}
+{% block content %}
+
+<div class="container mx-auto mt-4 p-4">
+    <h1 class="mb-4 text-2xl font-bold">Log Report</h1>
+    <form method="get" class="mb-4">
+        <div class="grid grid-cols-1 gap-6 mb-6 md:grid-cols-3">
+            <div>
+                <label for="start_date" class="block mb-2 font-bold text-gray-700">Start Date</label>
+                <input type="date" name="start_date" id="start_date" value="{{ start_date }}" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+            </div>
+            <div>
+                <label for="end_date" class="block mb-2 font-bold text-gray-700">End Date</label>
+                <input type="date" name="end_date" id="end_date" value="{{ end_date }}" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+            </div>
+            <div>
+                <label for="created_by" class="block mb-2 font-bold text-gray-700">Created By</label>
+                <input type="text" name="created_by" id="created_by" value="{{ created_by }}" placeholder="Username" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+            </div>
+        </div>
+        <button type="submit" class="p-2 mt-2 text-white bg-blue-500 rounded">Filter</button>
+        <a href="?export=excel" class="p-2 mt-2 text-white bg-green-500 rounded">Export to Excel</a>
+    </form>
+
+    <table class="min-w-full bg-white border border-gray-200">
+        <thead class="bg-gray-50">
+            <tr>
+                <th class="px-4 py-2 border-b">Log ID</th>
+                <th class="px-4 py-2 border-b">Created Date</th>
+                <th class="px-4 py-2 border-b">Created By</th>
+                <th class="px-4 py-2 border-b">Reason</th>
+                <th class="px-4 py-2 border-b">System Text</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in page_obj %}
+            <tr class="hover:bg-gray-50">
+                <td class="px-4 py-2 border-b">{{ log.logId }}</td>
+                <td class="px-4 py-2 border-b">{{ log.created_date }}</td>
+                <td class="px-4 py-2 border-b">{{ log.created_by.username }}</td>
+                <td class="px-4 py-2 border-b">{{ log.reason }}</td>
+                <td class="px-4 py-2 border-b">{{ log.system_text }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="mt-4">
+        <nav>
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1{% if start_date %}&start_date={{ start_date }}{% endif %}{% if end_date %}&end_date={{ end_date }}{% endif %}{% if created_by %}&created_by={{ created_by }}{% endif %}">First</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if start_date %}&start_date={{ start_date }}{% endif %}{% if end_date %}&end_date={{ end_date }}{% endif %}{% if created_by %}&created_by={{ created_by }}{% endif %}">Previous</a>
+                </li>
+                {% endif %}
+                {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <li class="page-item"><a class="page-link" href="?page={{ num }}{% if start_date %}&start_date={{ start_date }}{% endif %}{% if end_date %}&end_date={{ end_date }}{% endif %}{% if created_by %}&created_by={{ created_by }}{% endif %}">{{ num }}</a></li>
+                {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if start_date %}&start_date={{ start_date }}{% endif %}{% if end_date %}&end_date={{ end_date }}{% endif %}{% if created_by %}&created_by={{ created_by }}{% endif %}">Next</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if start_date %}&start_date={{ start_date }}{% endif %}{% if end_date %}&end_date={{ end_date }}{% endif %}{% if created_by %}&created_by={{ created_by }}{% endif %}">Last</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+
+{% endblock %}
