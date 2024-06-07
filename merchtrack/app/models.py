@@ -190,7 +190,7 @@ def get_default_customer():
 
 class Log(models.Model):
     logId = models.AutoField(primary_key=True)
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, default=get_default_customer)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, blank=True, null=True)
     created_date = models.DateTimeField(default=now)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, default=999)
     reason = models.CharField(max_length=255)
