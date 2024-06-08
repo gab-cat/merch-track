@@ -12,11 +12,18 @@
             <div class='self-start w-full pb-3 mb-2 text-lg italic font-medium border-b'>Easy way to order</div>
         </div>
         <div class='flex flex-row justify-between mx-5 my-2'>
-            <div class="flex space-x-2">
-                <span class='text-sm font-regular'>Logged in as</span>
-                <span class='text-sm font-semibold'>{{ student_name }}</span>
+            <div class="flex flex-col">
+                <div class="">
+                    <span class='text-sm font-regular'>Logged in as</span>
+                    <span class='text-sm font-semibold'>{{ user_details.student_name }}</span>
+                </div>
+                <div class="grid items-end grid-cols-4 mt-2 space-y-2">
+                    {% for group in groups %}
+                    <span class="p-1 px-3 mr-2 text-xs font-medium text-center text-white bg-blue-500 rounded-xl h-fit">{{ group.name }}</span>
+                    {% endfor %}
+                </div>
             </div>
-            <div class="flex">
+            <div class="flex h-fit">
                 <a class="btn-primary" href="{% url 'messages' %}" >Check Messages</a>
                 <a class="btn-primary" href="{% url 'customer_payment' %}" >Customer Payment</a>
             </div>

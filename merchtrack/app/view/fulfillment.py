@@ -13,8 +13,10 @@ from django.urls import reverse
 from django.core.mail import EmailMultiAlternatives
 
 from app.utils import log_action
+from app.auth import group_required
 
-@login_required
+@login_required(login_url='login')
+@group_required('Fulfillment')
 def fulfillment_view(request):
     query = request.GET.get('q', '')
     item_query = request.GET.get('item_q', '')

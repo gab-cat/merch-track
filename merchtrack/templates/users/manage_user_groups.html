@@ -1,0 +1,16 @@
+<!-- templates/users/manage_user_groups.html -->
+{% extends 'base.html' %}
+{% block title %}Manage User Groups{% endblock %}
+{% block content %}
+<div class="container p-4 mx-auto mt-8 rounded-md shadow-md w-fit">
+    <h1 class="mb-4 text-2xl font-bold">Manage Groups for {{ user.username }}</h1>
+    <form class="flex flex-col space-y-4" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="flex justify-end space-x-4">
+            <a href="{% url 'customer_detail' user.id %}"  type="submit" class="btn-secondary ">Back to User Profile</a>
+            <button type="submit" class="btn-primary">Update Groups</hr>
+        </div>
+    </form>
+</div>
+{% endblock %}

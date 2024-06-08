@@ -9,102 +9,160 @@
 {% block content %}
 
 <div id="pageBase" class='flex fade-box flex-col w-screen h-full bg-[#f3f3f3] overflow-auto p-2'>
-    <div class='container flex flex-col items-center content-center justify-center p-5 m-auto overflow-visible bg-white shadow-xl rounded-xl w-3/4'>
+    <div class='container flex flex-col items-center content-center justify-center w-3/4 p-5 m-auto overflow-visible bg-white shadow-xl rounded-xl'>
         <div class='self-start w-full mx-5'>
             <div class='self-start text-[#3BAFE1] text-3xl mt-2 font-bold text-left'>Customer Details</div>
             <div class='self-start w-full pb-3 mb-2 text-lg italic font-medium border-b'>Easy way to order</div>
         </div>
-        <div class="container mx-auto px-4 w-full py-4">
+        <div class="container w-full px-4 py-4 mx-auto">
 
-            <div class="bg-white p-4 rounded-lg shadow-md">
-                <div class="w-full flex items-center justify-between">
+            <div class="p-4 bg-white rounded-lg shadow-md">
+                <div class="flex items-center justify-between w-full">
                     <h2 class="text-2xl font-bold">{{ customer.user.first_name }} {{ customer.user.last_name }}</h2>
                     <div class="flex flex-row items-center">
-                        <a href="{% url 'customer_list' %}" class="btn-secondary m-2 justify-self-end self-end w-max flex ">Back to List</a>
-                        <a href="{% url 'edit_customer' customer.user.id %}" class="btn-primary items-center flex w-max">Edit Profile</a>
+                        <a href="{% url 'customer_list' %}" class="flex self-end m-2 btn-secondary justify-self-end w-max ">Back to List</a>
+                        <a href="{% url 'edit_customer' customer.user.id %}" class="flex items-center btn-primary w-max">Edit Profile</a>
+                        <a href="{% url 'manage_user_groups' customer.user.id %}" class="flex items-center btn-primary w-max">Manage Permissions</a>
                     </div>
                 </div>
-                <div class="grid grid-cols-2 w-5/12">
-                    <p class="font-semibold pb-1" >Username: </p>
+                <div class="grid w-5/12 grid-cols-2">
+                    <p class="pb-1 font-semibold" >Username: </p>
                     <p >{{ customer.user.username }}</p>
-                    <p class="font-semibold pb-1">Email: </p>
+                    <p class="pb-1 font-semibold">Email: </p>
                     <p>{{ customer.user.email }}</p>
-                    <p class="font-semibold pb-1">Phone: </p>
+                    <p class="pb-1 font-semibold">Phone: </p>
                     <p>{{ customer.phone }}</p>
-                    <p class="font-semibold pb-1">Course: </p>
+                    <p class="pb-1 font-semibold">Course: </p>
                     <p>{{ customer.course }}</p>
                 </div>
             </div>
 
-            <h2 class="text-xl font-semibold mt-8">Orders History</h2>
-            <table class="min-w-full bg-white  rounded-lg border-gray-200 mt-4">
-                <thead class="bg-gray-200 text-left">
-                    <tr>
-                        <th class="py-2 px-4 border-b rounded-tl-lg">Order ID</th>
-                        <th class="py-2 px-4 border-b">Date</th>
-                        <th class="py-2 px-4 border-b">Total Amount</th>
-                        <th class="py-2 px-4 border-b">Status</th>
-                        <th class="py-2 px-4 border-b text-center">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="border">
-                    {% for order in orders %}
-                    <tr>
-                        <td class="py-2 px-4 border-b">{{ order.orderId }}</td>
-                        <td class="py-2 px-4 border-b">{{ order.orderDate }}</td>
-                        <td class="py-2 px-4 border-b">{{ order.totalAmount }}</td>
-                        {% if order.status == 'Pending' %}
-                        <td class="w-1/4 py-3 px-4 border-b font-bold text-red-700">{{ order.status }}</td>
-                        {% elif order.status == 'Under Production' %}
-                        <td class="w-1/4 py-3 px-4 border-b font-bold text-yellow-500">{{ order.status }}</td>
-                        {% elif order.status == 'Completed' %}
-                        <td class="w-1/4 py-3 px-4 border-b font-bold text-green-700">{{ order.status }}</td>
-                        {% else %}
-                        <td class="w-1/4 py-3 px-4 border-b font-bold">None</td>
-                        {% endif %}
-                        <td class="py-2 px-4 border-b h-full">
-                            <a href="{% url 'order_detail' order.orderId %}" class="mx-auto w-fit text-center flex text-blue-500 hover:underline">View</a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <!-- Tabs -->
+            <div class="mt-8">
+                <button class="p-2 text-gray-700 transition-all bg-blue-100 rounded hover:bg-blue-400 tablink" onclick="openTab(event, 'Orders')">Orders History</button>
+                <button class="p-2 text-gray-700 transition-all bg-blue-100 rounded hover:bg-blue-400 tablink" onclick="openTab(event, 'Payments')">Payments History</button>
+                <button class="p-2 text-gray-700 transition-all bg-blue-100 rounded hover:bg-blue-400 tablink" onclick="openTab(event, 'Logs')">Logs History</button>
+            </div>
 
-            <h2 class="text-xl font-semibold mt-8">Payments History</h2>
-            <table class="min-w-full bg-white rounded-lg border-gray-200 mt-4">
-                <thead class="bg-gray-200 text-left">
-                    <tr>
-                        <th class="py-2 px-4 border-b rounded-tl-lg">Payment ID</th>
-                        <th class="py-2 px-4 border-b">Order ID</th>
-                        <th class="py-2 px-4 border-b">Date</th>
-                        <th class="py-2 px-4 border-b">Amount</th>
-                        <th class="py-2 px-4 border-b">Method</th>
-                        <th class="py-2 px-4 border-b">Status</th>
-                        <th class="py-2 px-4 border-b">Reference #</th>
-                        <th class="py-2 px-4 border-b">Action</th>
-                    </tr>
-                </thead>
-                <tbody class="border">
-                    {% for payment in payments %}
-                    <tr>
-                        <td class="py-2 px-4 border-b">{{ payment.paymentId }}</td>
-                        <td class="py-2 px-4 border-b">{{ payment.orderId.orderId }}</td>
-                        <td class="py-2 px-4 border-b">{{ payment.paymentDate }}</td>
-                        <td class="py-2 px-4 border-b">{{ payment.amount }}</td>
-                        <td class="py-2 px-4 border-b">{{ payment.paymentMethod }}</td>
-                        <td class="py-2 px-4 border-b">{{ payment.paymentStatus }}</td>
-                        <td class="py-2 px-4 border-b">{{ payment.referenceNumber }}</td>
-                        <td class="py-2 px-4 border-b h-full">
-                            <a href="{% url 'collection_detail' payment.orderId.orderId %}" class="mx-auto w-fit text-center flex text-blue-500 hover:underline">View</a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            
+            <!-- Orders History -->
+            <div id="Orders" class="tabcontent">
+                <h2 class="mt-8 text-xl font-semibold">Orders History</h2>
+                <table class="min-w-full mt-4 bg-white border-gray-200 rounded-lg">
+                    <thead class="text-left bg-gray-200">
+                        <tr>
+                            <th class="px-4 py-2 border-b rounded-tl-lg">Order ID</th>
+                            <th class="px-4 py-2 border-b">Date</th>
+                            <th class="px-4 py-2 border-b">Total Amount</th>
+                            <th class="px-4 py-2 border-b">Status</th>
+                            <th class="px-4 py-2 text-center border-b">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="border">
+                        {% for order in orders %}
+                        <tr>
+                            <td class="px-4 py-2 border-b">{{ order.orderId }}</td>
+                            <td class="px-4 py-2 border-b">{{ order.orderDate }}</td>
+                            <td class="px-4 py-2 border-b">{{ order.totalAmount }}</td>
+                            {% if order.status == 'Pending' %}
+                            <td class="w-1/4 px-4 py-3 font-bold text-red-700 border-b">{{ order.status }}</td>
+                            {% elif order.status == 'Under Production' %}
+                            <td class="w-1/4 px-4 py-3 font-bold text-yellow-500 border-b">{{ order.status }}</td>
+                            {% elif order.status == 'Completed' %}
+                            <td class="w-1/4 px-4 py-3 font-bold text-green-700 border-b">{{ order.status }}</td>
+                            {% else %}
+                            <td class="w-1/4 px-4 py-3 font-bold border-b">None</td>
+                            {% endif %}
+                            <td class="h-full px-4 py-2 border-b">
+                                <a href="{% url 'order_detail' order.orderId %}" class="flex mx-auto text-center text-blue-500 w-fit hover:underline">View</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Payments History -->
+            <div id="Payments" class="tabcontent" style="display:none">
+                <h2 class="mt-8 text-xl font-semibold">Payments History</h2>
+                <table class="min-w-full mt-4 bg-white border-gray-200 rounded-lg">
+                    <thead class="text-left bg-gray-200">
+                        <tr>
+                            <th class="px-4 py-2 border-b rounded-tl-lg">Payment ID</th>
+                            <th class="px-4 py-2 border-b">Order ID</th>
+                            <th class="px-4 py-2 border-b">Date</th>
+                            <th class="px-4 py-2 border-b">Amount</th>
+                            <th class="px-4 py-2 border-b">Method</th>
+                            <th class="px-4 py-2 border-b">Status</th>
+                            <th class="px-4 py-2 border-b">Reference #</th>
+                            <th class="px-4 py-2 border-b">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="border">
+                        {% for payment in payments %}
+                        <tr>
+                            <td class="px-4 py-2 border-b">{{ payment.paymentId }}</td>
+                            <td class="px-4 py-2 border-b">{{ payment.orderId.orderId }}</td>
+                            <td class="px-4 py-2 border-b">{{ payment.paymentDate }}</td>
+                            <td class="px-4 py-2 border-b">{{ payment.amount }}</td>
+                            <td class="px-4 py-2 border-b">{{ payment.paymentMethod }}</td>
+                            <td class="px-4 py-2 border-b">{{ payment.paymentStatus }}</td>
+                            <td class="px-4 py-2 border-b">{{ payment.referenceNumber }}</td>
+                            <td class="h-full px-4 py-2 border-b">
+                                <a href="{% url 'collection_detail' payment.orderId.orderId %}" class="flex mx-auto text-center text-blue-500 w-fit hover:underline">View</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Logs History -->
+            <div id="Logs" class="tabcontent" style="display:none">
+                <h2 class="mt-8 text-xl font-semibold">Logs History</h2>
+                <table class="min-w-full mt-4 bg-white border-gray-200 rounded-lg">
+                    <thead class="text-left bg-gray-200">
+                        <tr>
+                            <th class="px-4 py-2 border-b rounded-tl-lg">Log ID</th>
+                            <th class="px-4 py-2 border-b">Date</th>
+                            <th class="px-4 py-2 border-b">Created By</th>
+                            <th class="px-4 py-2 border-b">Reason</th>
+                            <th class="px-4 py-2 border-b">System Text</th>
+                        </tr>
+                    </thead>
+                    <tbody class="border">
+                        {% for log in logs %}
+                        <tr>
+                            <td class="px-4 py-2 border-b">{{ log.logId }}</td>
+                            <td class="px-4 py-2 border-b">{{ log.created_date }}</td>
+                            <td class="px-4 py-2 border-b">{{ log.created_by.username }}</td>
+                            <td class="px-4 py-2 border-b">{{ log.reason }}</td>
+                            <td class="px-4 py-2 border-b">{{ log.system_text }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
 
+<script>
+function openTab(evt, tabName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablink");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" bg-blue-500", "");
+        tablinks[i].className = tablinks[i].className.replace(" text-white", " text-gray-700");
+    }
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.className += " bg-blue-500 text-white ";
+}
+document.getElementsByClassName("tablink")[0].click();
+</script>
 
 {% endblock %}
+

@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.core.validators import RegexValidator
@@ -131,3 +131,10 @@ class CustomerSatisfactionSurveyForm(forms.ModelForm):
             'question4': 'How likely are you to order again or recommend others to order at us?',
             'comments': 'Anything you would like to say?',
         }
+
+class UserGroupForm(forms.ModelForm):
+    groups = forms.ModelMultipleChoiceField(queryset=Group.objects.all(), required=False, widget=forms.CheckboxSelectMultiple)
+
+    class Meta:
+        model = User
+        fields = ['groups']

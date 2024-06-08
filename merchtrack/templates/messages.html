@@ -8,7 +8,6 @@
 {% block content %}
 {% load static %}
 
-
 <div class=' flex flex-col w-screen h-full  bg-[#f3f3f3] '>
     <div class='fade-box flex overflow-visible flex-col  bg-white rounded-xl shadow-xl max-w-[70%] max-h-[80%] min-h-[70%] min-w-[70%] m-auto p-5'>
         <div class='self-start w-full mx-5'>
@@ -16,7 +15,7 @@
         </div>
         <div class='flex flex-row justify-between h-full overflow-hidden'>
             <div class='flex flex-col p-3 my-5 overflow-y-scroll max-w-[30%] border rounded-lg' style='flex-grow: 3;'>
-                {% for message in messages %}
+                {% for message in cust_messages %}
                 <button class='flex flex-col w-full p-2 mt-2 text-left transition-all border-b rounded-lg cursor-pointer hover:bg-blue-100 active:opacity-50'
                     onclick='showMessage("{{ message.name }}", "{{ message.email }}", "{{ message.message }}")' >
                     <div class='text-lg font-semibold text-left break-all line-clamp-1'>{{ message.name|default:"No name" }}</div>
@@ -36,19 +35,33 @@
                         <div class='font-medium'>Email:</div>
                         <div id='email' class='font-semibold'>{{ messages.first.email|default:"No email available" }}</div>
                     </div>
-                    <div id='message' class='h-full px-3 py-1 leading-loose text-justify break-all indent-5' >{{ messages.first.message }}</div>
+                </div>
+                <div id='message' class='h-full px-3 py-1 leading-loose text-justify break-all indent-5' >
+                    {{ messages.first.message }}
+                </div>
+                <div class="flex flex-col">
+                    <form method="post" action="{% url 'send_reply_email' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="recipient_email" id="recipient_email" value="{{ messages.first.email|default:'' }}">
+                        <div class="flex p-4 mt-auto space-x-4 border-t">
+                            <textarea id="reply_message" placeholder="Send a message . . . " name="reply_message" rows="4" class="w-full p-2 border border-gray-300 rounded"></textarea>
+                            <button type="submit" class="p-2 transition-all rounded-md hover:bg-slate-200">
+                                <img src="{% static 'assets/send-message.png' %}"  alt="Send Message" width="50px" height="50px" />
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
 <script>
     const showMessage = (name, email, message) => {
-        document.getElementById('name').textContent = name ? name: 'No name available' ;
+        document.getElementById('name').textContent = name ? name : 'No name available';
         document.getElementById('email').textContent = email ? email : 'No email available';
         document.getElementById('message').textContent = message;
+        document.getElementById('recipient_email').value = email ? email : '';
     }
 </script>
 

@@ -27,6 +27,9 @@ This repo will contain the source code for the Merch Track Django App
     - Start Django Server 
     ```bash
     python manage.py runserver
+
+    # Set Up groups using
+    python manage.py setup_groups
     ```
 
     - Open another terminal and start Tailwind Dev to see real-time changes

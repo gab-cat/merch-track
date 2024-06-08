@@ -17,8 +17,11 @@ from django.contrib import messages
 from django.db.models.functions import TruncDay
 from django.utils.dateparse import parse_date
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
 
 import matplotlib
+
+from app.auth import group_required
 matplotlib.use('Agg')  # Use the 'Agg' backend for non-GUI rendering
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
@@ -29,6 +32,8 @@ import logging
 # Set up logging
 logger = logging.getLogger(__name__)
 
+@login_required(login_url='login')
+@group_required('Report')
 def report_index(request):
     try:
         font_path = os.path.join(settings.STATICFILES_DIRS[0], 'assets', 'montserrat.ttf')
@@ -191,7 +196,8 @@ def report_index(request):
                            .values('processedBy__last_name', 'processedBy__first_name', 'processedBy')\
                            .annotate(total_amount=Sum('amount'))\
                            .order_by('-total_amount')[:3]
-
+        
+        matplotlib.pyplot.close()
 
         messages.info(request, "Welcome to Insightify v1.0.1")
         return render(request, 'reports/report_index.html', {
@@ -230,7 +236,8 @@ def report_index(request):
 
 
 
-
+@login_required(login_url='login')
+@group_required('Report')
 def order_report(request):
     start_date = request.GET.get('start_date')
     end_date = request.GET.get('end_date')
@@ -244,6 +251,8 @@ def order_report(request):
 
     return render(request, 'reports/order_report.html', {'orders': orders, 'latest_logs': get_latest_logs})
 
+@login_required(login_url='login')
+@group_required('Report')
 def or_export_to_excel(orders):
     wb = openpyxl.Workbook()
     ws = wb.active
@@ -267,6 +276,8 @@ def or_export_to_excel(orders):
     
     return response
 
+@login_required(login_url='login')
+@group_required('Report')
 def product_report(request, product_id=None):
     status = request.GET.get('status')
     products = Product.objects.all()
@@ -304,6 +315,8 @@ def product_report(request, product_id=None):
         'latest_logs': get_latest_logs
     })
 
+@login_required(login_url='login')
+@group_required('Report')
 def pr_export_to_excel(orders):
     wb = openpyxl.Workbook()
     ws = wb.active
@@ -332,6 +345,8 @@ def pr_export_to_excel(orders):
     
     return response
 
+@login_required(login_url='login')
+@group_required('Report')
 def sales_data_api(request, product_id):
     sales_over_time = (
         OrderItem.objects.filter(productId=product_id)
@@ -352,6 +367,8 @@ def sales_data_api(request, product_id):
     }
     return JsonResponse(data)
 
+@login_required(login_url='login')
+@group_required('Report')
 def customer_report(request):
     customer_id = request.GET.get('customer_id')
     status = request.GET.get('status')
@@ -378,8 +395,11 @@ def customer_report(request):
         'selected_customer_id': customer_id,
         'status': status,
         'order_statuses': order_statuses,
+        'latest_logs': get_latest_logs
     })
 
+@login_required(login_url='login')
+@group_required('Report')
 def export_to_excel(orders):
     
     wb = openpyxl.Workbook()
@@ -404,6 +424,8 @@ def export_to_excel(orders):
     
     return response
 
+@login_required(login_url='login')
+@group_required('Report')
 def sales_report(request):
     start_date = request.GET.get('start_date', timezone.now().replace(day=1).strftime('%Y-%m-%d'))
     end_date = request.GET.get('end_date', timezone.now().strftime('%Y-%m-%d'))
@@ -428,6 +450,8 @@ def sales_report(request):
         'latest_logs': get_latest_logs
     })
 
+@login_required(login_url='login')
+@group_required('Report')
 def sr_export_to_excel(orders, total_sales, total_discount, total_orders, avg_order_value, start_date, end_date):
     wb = openpyxl.Workbook()
     ws = wb.active
@@ -461,6 +485,8 @@ def sr_export_to_excel(orders, total_sales, total_discount, total_orders, avg_or
     
     return response
 
+@login_required(login_url='login')
+@group_required('Report')
 def fulfillment_report(request):
     start_date = request.GET.get('start_date')
     end_date = request.GET.get('end_date')
@@ -476,6 +502,8 @@ def fulfillment_report(request):
 
     return render(request, 'reports/fulfillment_report.html', {'fulfillments': fulfillments, 'start_date': start_date, 'end_date': end_date, 'latest_logs': get_latest_logs})
 
+@login_required(login_url='login')
+@group_required('Report')
 def fulfillment_export_to_excel(fulfillments):
     wb = openpyxl.Workbook()
     ws = wb.active
@@ -500,6 +528,7 @@ def fulfillment_export_to_excel(fulfillments):
     wb.save(response)
     return response
 
+
 def calculate_fulfillment_efficiency():
     # Calculate on-time and late fulfillments based on status
     on_time_fulfillments = Fulfillment.objects.filter(status='On Time').count()
@@ -521,6 +550,8 @@ def calculate_fulfillment_efficiency():
         'total_fulfillments': total_fulfillments,
     }
 
+@login_required(login_url='login')
+@group_required('Report')
 def survey_report(request):
     start_date = request.GET.get('start_date')
     end_date = request.GET.get('end_date')
@@ -536,6 +567,8 @@ def survey_report(request):
 
     return render(request, 'reports/survey_report.html', {'surveys': surveys, 'start_date': start_date, 'end_date': end_date, 'latest_logs': get_latest_logs})
 
+@login_required(login_url='login')
+@group_required('Report')
 def sr_export_to_excel(surveys, start_date, end_date):
     wb = openpyxl.Workbook()
     ws = wb.active
@@ -579,6 +612,8 @@ def sr_export_to_excel(surveys, start_date, end_date):
     return response
 
 
+@login_required(login_url='login')
+@group_required('Report')
 def collections_report(request):
     start_date = request.GET.get('start_date')
     end_date = request.GET.get('end_date')
@@ -612,6 +647,8 @@ def collections_report(request):
         'latest_logs': get_latest_logs
     })
 
+@login_required(login_url='login')
+@group_required('Report')
 def collections_export_to_excel(payments):
     wb = openpyxl.Workbook()
     ws = wb.active
@@ -640,11 +677,13 @@ def collections_export_to_excel(payments):
     return response
 
 
+@login_required(login_url='login')
+@group_required('Report')
 def log_report(request):
     start_date = request.GET.get('start_date')
     end_date = request.GET.get('end_date')
     created_by = request.GET.get('created_by')
-    logs = Log.objects.all()
+    logs = Log.objects.all().order_by('-created_date')
 
     if start_date and end_date:
         start_date = parse_date(start_date)
@@ -671,6 +710,8 @@ def log_report(request):
         'latest_logs': get_latest_logs,
     })
 
+@login_required(login_url='login')
+@group_required('Report')
 def log_export_to_excel(logs):
     wb = openpyxl.Workbook()
     ws = wb.active

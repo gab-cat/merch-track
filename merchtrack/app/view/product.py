@@ -7,11 +7,14 @@ from app.models import Customer, Product
 from django.contrib import messages
 
 from app.utils import log_action
+from app.auth import group_required
 
 
 customer = Customer.objects.get(pk=999)
 
 
+@login_required(login_url='login')
+@group_required('Product')
 def create_product(request):
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES)
@@ -25,6 +28,7 @@ def create_product(request):
     
     return render(request, 'create_product.html', {'form': form})
 
+@login_required(login_url='login')
 def product_list(request):
     query = request.GET.get('q')
     category = request.GET.get('category')
@@ -44,6 +48,8 @@ def product_list(request):
         'categories': categories,
     })
 
+@login_required(login_url='login')
+@group_required('Product')
 def edit_product(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     if request.method == 'POST':
@@ -72,7 +78,8 @@ def edit_product(request, product_id):
         'categories': categories
     })
 
-
+@login_required(login_url='login')
+@group_required('Product')
 def delete_product(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     if request.method == 'POST':

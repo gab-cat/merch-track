@@ -1,5 +1,7 @@
 {% extends 'reports/report_base.html' %}
 {% block title %}Dashboard{% endblock %}
+
+
 {% block content %}
 <div class="container px-4 py-8 mx-auto text-gray-700">
     <h1 class="py-2 mb-6 text-3xl font-semibold border-b">Cumulative Overview</h1>
@@ -146,18 +148,4 @@
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block list %}
-{% for log in latest_logs %}
-<li class="text-gray-700">
-    <div class="flex flex-col border-b py-2">
-        <p class="font-bold">{{log.reason}}</p>
-        <p class="text-sm mb-2">{{log.created_by.first_name}} {{log.created_by.last_name}}</p>
-        <p class="text-xs text-gray-500 mb-2">{{log.system_text |truncatechars:50 }}</p>
-        <p class="text-right text-xs text-gray-500 line-clamp-2">{{ log.created_date|date:"d M Y H:i"|truncatechars:30 }}
-        </p>
-    </div>              
-</li>
-{% endfor %}
 {% endblock %}

@@ -9,8 +9,10 @@ from django.contrib import messages as django_messages
 from django.db.models import Q
 
 from app.utils import log_action
+from app.auth import group_required
 
-@login_required
+@login_required(login_url='login')
+@group_required('Order-Entry')
 def create_order(request):
     products = Product.objects.filter(available=True)
     customers = Customer.objects.all()
@@ -64,6 +66,7 @@ def create_order(request):
     })
 
 
+@login_required(login_url='login')
 def order_list(request):
     query = request.GET.get('q')
     status = request.GET.get('status')
@@ -92,6 +95,7 @@ def order_list(request):
 
     return render(request, 'orders/order_list.html', context)
 
+@login_required(login_url='login')
 def order_detail(request, order_id):
     try:
         order = Order.objects.get(pk=order_id)
@@ -100,7 +104,8 @@ def order_detail(request, order_id):
         return redirect('home')
     return render(request, 'orders/order_detail.html', {'order': order})
 
-@login_required
+@login_required(login_url='login')
+@group_required('Order-Entry')
 def edit_order(request, order_id):
     order = get_object_or_404(Order, pk=order_id)
     
@@ -127,6 +132,8 @@ def edit_order(request, order_id):
     return render(request, 'orders/edit_order.html', {'form': form, 'order': order})
 
 
+@login_required(login_url='login')
+@group_required('Order-Entry')
 def delete_order(request, order_id):
     order = get_object_or_404(Order, pk=order_id)
     if request.method == 'POST':

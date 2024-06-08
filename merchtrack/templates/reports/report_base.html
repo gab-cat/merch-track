@@ -1,4 +1,5 @@
 {% load static tailwind_tags %}
+{% load slippers %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -128,8 +129,9 @@
                 <nav class="p-4">
                     <ul class="space-y-2">
                     <li class="w-full px-2 pb-2 mb-2 font-semibold text-gray-900 border-b">Recent Logs</li>
-                        {% block list %}
-                        {% endblock %}
+                        {% for log in latest_logs %}
+                            {% log-list log=log %}
+                        {% endfor %}
                     </ul>
                 </nav>
             </aside>

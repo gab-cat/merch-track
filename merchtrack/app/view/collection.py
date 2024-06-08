@@ -11,9 +11,11 @@ from django.core.mail import send_mail
 from django.conf import settings
 
 from app.utils import log_action
+from app.auth import group_required
 
 
-@login_required
+@login_required(login_url='login')
+@group_required('Collection')
 def collections_index(request):
     query = request.GET.get('q', '')
     pending_orders = Order.objects.filter(status='Pending')
@@ -42,7 +44,8 @@ def collections_index(request):
         'query': query
         })
 
-@login_required
+@login_required(login_url='login')
+@group_required('Collection')
 def collection_detail(request, order_id):
     order = get_object_or_404(Order, pk=order_id)
     payments = Payment.objects.filter(orderId=order)
@@ -123,7 +126,8 @@ def collection_detail(request, order_id):
 
     return render(request, 'collections/collection_detail.html', {'order': order, 'payments': payments, 'order_items': order_items})
 
-
+@login_required(login_url='login')
+@group_required('Collection')
 def send_payment_status_email(payment, status):
     subject = f'Payment {status.capitalize()}'
     message = f'Dear {payment.customerId.user.first_name},\n\n'

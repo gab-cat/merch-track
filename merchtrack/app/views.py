@@ -1,4 +1,6 @@
+from django.contrib.auth.models import Group
 import logging
+from django.conf import settings
 from django.contrib import messages as django_messages
 
 from django.db import connection
@@ -9,10 +11,13 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
+from app.auth import group_required
+
 from .forms import CreateUserForm, CustomerSatisfactionSurveyForm, LoginForm, UserRegistrationForm
 from .models import  CustomerSatisfactionSurvey, Order, user_info, order_info, order_details, contact_us, Customer
 
 from .utils import log_action
+from django.core.mail import send_mail
 
 
 # Set up logging
@@ -147,6 +152,9 @@ def register(request):
             user = form.save(commit=False)
             user.save()
             # Create a Customer instance
+            customer_group = Group.objects.get(name='Customers')
+            user.groups.add(customer_group)
+
             customer = Customer.objects.create(
                 user=user,
                 phone=form.cleaned_data['phone'],
@@ -174,8 +182,7 @@ def login(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 if user.is_staff:
-                    auth_login(request, user)
-                    logger.debug(f"messages type: {type(django_messages)}")  # Log the type of messages
+                    auth_login(request, user)# Log the type of messages
                     django_messages.info(request, 'Logged in successfully.')
                     return redirect('dashboard')
                 else:
@@ -202,10 +209,12 @@ def logout(request):
 
 @login_required(login_url='login')
 def dashboard(request):
+    groups = request.user.groups.all()
     if 'user_details' not in request.session:
         user = request.user
         student_name = f"{user.first_name} {user.last_name}"
         email = user.email
+
         try:
             customer = Customer.objects.get(user=user)
             course = customer.course
@@ -220,7 +229,7 @@ def dashboard(request):
             'student_name': student_name,
             'course': course,
             'email': email,
-            'phone': phone
+            'phone': phone,
         }
         
         # Store user details in the session
@@ -230,16 +239,39 @@ def dashboard(request):
         # You might need to re-fetch the user instance if you need it
         user_details['user'] = User.objects.get(id=user_details['user'])
 
-    return render(request, 'dashboard.html', user_details)
+    return render(request, 'dashboard.html', {
+        'user_details': user_details,
+        'groups': groups,
+    })
 
 
 
 @login_required(login_url='login')
-def messages(request):
+@group_required('Staffs')
+def cust_messages(request):
     all_messages = contact_us.objects.all().order_by('-created_at')
-    return render(request, 'messages.html', {'messages': all_messages})
+    return render(request, 'messages.html', {'cust_messages': all_messages})
 
 @login_required(login_url='login')
+@group_required('Staffs')
+def send_reply_email(request):
+    if request.method == 'POST':
+        recipient_email = request.POST.get('recipient_email')
+        reply_message = request.POST.get('reply_message')
+        if recipient_email and reply_message:
+            subject = "Reply to Your Message"
+            message = reply_message
+            from_email = settings.DEFAULT_FROM_EMAIL
+            recipient_list = [recipient_email]
+
+            send_mail(subject, message, from_email, recipient_list)
+            django_messages.success(request, 'Reply sent successfully.')
+        else:
+            django_messages.error(request, 'Failed to send reply. Please make sure all fields are filled.')
+    return redirect('messages')
+
+@login_required(login_url='login')
+@group_required('Staffs')
 def customer_info(request):
     email = request.GET.get('email')
     try:
@@ -261,7 +293,7 @@ def customer_info(request):
     return JsonResponse(data)
 
 def survey_view(request, order_id):
-    order = get_object_or_404(Order, pk=order_id)
+    order = get_object_or_404(Order, pk=order_id, status="Completed")
     existing_survey = CustomerSatisfactionSurvey.objects.filter(order=order).first()
 
     if existing_survey:

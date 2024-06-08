@@ -5,3 +5,4 @@ components:
     back-to-dashboard: 'components/back-to-dashboard.html'
     input: 'components/input.html'
     modal: 'components/modal.html'
+    log-list: 'components/log-list.html'
