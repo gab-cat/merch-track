@@ -184,6 +184,14 @@ def login(request):
                 if user.is_staff:
                     auth_login(request, user)# Log the type of messages
                     django_messages.info(request, 'Logged in successfully.')
+
+                    # Get the 'next' parameter from the request or session
+                    next_url = request.POST.get('next') or request.session.get('next')
+                    if next_url:
+                        # Clear the session variable after use
+                        request.session['next'] = None
+                        return redirect(next_url)
+
                     return redirect('dashboard')
                 else:
                     django_messages.error(request, "You are not authorized to access this page.")
@@ -195,7 +203,7 @@ def login(request):
             django_messages.error(request, "Invalid username or password.")
         form = LoginForm()
 
-    return render(request, 'login.html', {'form': form})
+    return render(request, 'login.html', {'next': request.GET.get('next')})
 
 @login_required(login_url='login')
 def logout(request):
@@ -238,6 +246,7 @@ def dashboard(request):
         user_details = request.session['user_details']
         # You might need to re-fetch the user instance if you need it
         user_details['user'] = User.objects.get(id=user_details['user'])
+
 
     return render(request, 'dashboard.html', {
         'user_details': user_details,
@@ -305,7 +314,7 @@ def survey_view(request, order_id):
             survey = form.save(commit=False)
             survey.order = order
             survey.save()
-            log_action(request.user, 'Survey Completed', f'Customer {request.user.username} completed survey for Order {order_id}.', order.customerId)
+            log_action(order.customerId.user, 'Survey Completed', f'Customer {request.user.username} completed survey for Order {order_id}.', order.customerId)
             django_messages.success(request, 'Thank you for completing the survey!')
             return redirect('survey_thank_you')  # Redirect to an appropriate page
     else:

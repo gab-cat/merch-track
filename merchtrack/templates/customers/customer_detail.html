@@ -36,7 +36,16 @@
                     <p>{{ customer.course }}</p>
                 </div>
             </div>
-
+            {% if groups %}
+            <div class="flex w-full mt-4">
+                <span class="mr-4 font-semibold">Role Groups :</span>
+                {% for group in groups %}
+                <span class="px-3 py-1 text-xs mr-2 text-white bg-[#3BAFE1] rounded-xl">
+                    {{group.name}}
+                </span>
+                {% endfor %}
+            </div>
+            {% endif %}
             <!-- Tabs -->
             <div class="mt-8">
                 <button class="p-2 text-gray-700 transition-all bg-blue-100 rounded hover:bg-blue-400 tablink" onclick="openTab(event, 'Orders')">Orders History</button>

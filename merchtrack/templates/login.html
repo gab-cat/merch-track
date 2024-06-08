@@ -14,6 +14,7 @@
 
         <form class='flex w-full border-b flex-col self-center justify-start my-5 min-w-[80%]' method="POST" autocomplete='off' >
             {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}">
             {% comment %} {{ form.as_p }} {% endcomment %}
             {% input type='text' name='username' id='id_username' label='Username' required %}
             {% input type='password' name='password' id='id_password' label='Password'  required %}
