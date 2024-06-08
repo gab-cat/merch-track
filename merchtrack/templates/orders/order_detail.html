@@ -61,7 +61,7 @@
                 <div class="overflow-y-auto border rounded max-h-[400px]">
                     {% for item in order.orderitem_set.all %}
                     <div class='cart-item'>
-                        <img class='border rounded-md' src="{{item.productId.productImage.url}}" alt="Product Image">
+                        <img class='border rounded-md' src="{{item.productId.get_image}}" alt="Product Image">
                         <div class="flex flex-col ml-4">
                             <span class="font-semibold text-gray-700">{{item.productId.name }}</span>
                             <span class="text-gray-500">₱<span class="price">{{ item.price }}</span></span>

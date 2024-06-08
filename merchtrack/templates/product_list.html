@@ -36,7 +36,7 @@
                 </div>
                 {% endif %}
                 {% if product.productImage %}
-                    <img class="object-cover object-center w-full h-48 p-0 border-b rounded-t-lg" src="{{ product.productImage.url }}" alt="{{ product.name }}">
+                    <img class="object-cover object-center w-full h-48 p-0 border-b rounded-t-lg" src="{{ product.get_image }}" alt="{{ product.name }}">
                 {% else %}
                     <img class="object-cover object-center w-full h-48 p-0 rounded-t-md" src="{% static 'assets/placeholder.png' %}" alt="No image available">
                 {% endif %}

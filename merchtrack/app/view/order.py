@@ -15,6 +15,8 @@ from app.auth import group_required
 @group_required('Order-Entry')
 def create_order(request):
     products = Product.objects.filter(available=True)
+    for product in products:
+        product.direct_image_link = product.get_image()
     customers = Customer.objects.all()
     order_form = OrderForm(request.POST)
 

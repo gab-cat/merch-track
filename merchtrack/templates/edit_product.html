@@ -84,12 +84,13 @@
                 <label class='mr-2 font-bold' for="id_productImage">Product Image:</label>
                 <div class='flex self-center w-56 h-56 my-5 border rounded-lg bg-slate-200'>
                     {% if product.productImage %}
-                    <img src="{{ product.productImage.url }}" class='z-10 block object-cover w-full h-full p-0 rounded-lg' alt='image preview' id='image-prev' />
+                    <img src="{{ product.get_image }}" class='z-10 block object-cover w-full h-full p-0 rounded-lg' alt='image preview' id='image-prev' />
                     {% else %}
                     <img class='z-10 block object-cover w-full h-full' alt='image preview' id='image-prev' />
                     {% endif %}
                 </div>
-                <input class='flex w-full px-1 py-2 file:px-3 file:py-1 file:rounded-full cursor-pointer file:border-0 hover:file:opacity-60 active:file:opacity-85 file:bg-blue-100 file:text-blue-700  my-1 text-sm rounded-lg' type="file" name="productImage" accept="image/*" id="id_productImage" onchange="previewImage(event)">
+                {{ form.productImage }}
+                <!-- <input class='flex w-full px-1 py-2 my-1 text-sm rounded-lg cursor-pointer file:px-3 file:py-1 file:rounded-full file:border-0 hover:file:opacity-60 active:file:opacity-85 file:bg-blue-100 file:text-blue-700' type="file" name="productImage" accept="image/*" id="id_productImage" onchange="previewImage(event)"> -->
                 <input class='self-end mt-auto w-full text-white bg-[#3BAFE1] font-semibold border-white rounded font-Inter  text-center py-2 px-4 my-2  cursor-pointer active:opacity-100 hover:opacity-[0.5] transition-all' 
                 value="Update Product"
                 onclick="showModal('confirmationModal')"

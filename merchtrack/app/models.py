@@ -68,7 +68,7 @@ class Customer(models.Model):
 
 class Product(models.Model):
     productId = models.AutoField(primary_key=True)
-    productImage = models.ImageField(upload_to='product_images/', blank=True, null=True)
+    productImage = models.CharField(max_length=500, blank=True, null=True)
     name = models.CharField(max_length=200)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -84,10 +84,13 @@ class Product(models.Model):
             models.Index(fields=['productId'], name='product_id_idx')
         ]
 
+    def get_image(self):
+        if 'drive.google.com' in self.productImage:
+            file_id = self.productImage.split('/d/')[1].split('/')[0]
+            return f"https://drive.google.com/thumbnail?id={file_id}&sz=w500"
+        return f"https://drive.google.com/thumbnail?id={self.productImage}&sz=w500" 
+
     def delete(self, *args, **kwargs):
-        if self.productImage:
-            if os.path.isfile(self.productImage.path):
-                os.remove(self.productImage.path)
         super(Product, self).delete(*args, **kwargs)
 
 class Order(models.Model):

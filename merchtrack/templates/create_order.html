@@ -72,7 +72,7 @@
                             value="{{ product.productId }}" 
                             data-product-name="{{ product.name }}" 
                             data-product-price="{{ product.price }}" 
-                            data-product-image="{% if product.productImage %}{{ product.productImage.url }}{% else %}{% static 'assets/placeholder.png' %}{% endif %}"> 
+                            data-product-image="{% if product.productImage %}{{ product.direct_image_link }}{% else %}{% static 'assets/placeholder.png' %}{% endif %}"> 
                             {{ product.name }} 
                         </option>
                     {% endfor %}
