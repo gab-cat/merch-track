@@ -66,11 +66,9 @@ def customer_detail(request, customer_id):
     customer = get_object_or_404(Customer, pk=customer_id)
     user = get_object_or_404(User, pk=customer_id)
     groups = user.groups.all()
-    print("groups: ",user)
     orders = Order.objects.filter(customerId=customer)
     payments = Payment.objects.filter(customerId=customer)
     logs = Log.objects.filter(customer=customer_id).order_by('-created_date')
-    print("logs :", logs)
     return render(request, 'customers/customer_detail.html', {
         'customer': customer, 
         'orders': orders, 

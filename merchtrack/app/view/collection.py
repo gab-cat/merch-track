@@ -126,8 +126,7 @@ def collection_detail(request, order_id):
 
     return render(request, 'collections/collection_detail.html', {'order': order, 'payments': payments, 'order_items': order_items})
 
-@login_required(login_url='login')
-@group_required('Collection')
+
 def send_payment_status_email(payment, status):
     subject = f'Payment {status.capitalize()}'
     message = f'Dear {payment.customerId.user.first_name},\n\n'

@@ -187,11 +187,14 @@ def login(request):
 
                     # Get the 'next' parameter from the request or session
                     next_url = request.POST.get('next') or request.session.get('next')
+                    print("Next url: ", next_url)
+                    if next_url == "None":
+                        return redirect('dashboard')
+
                     if next_url:
-                        # Clear the session variable after use
                         request.session['next'] = None
                         return redirect(next_url)
-
+                    
                     return redirect('dashboard')
                 else:
                     django_messages.error(request, "You are not authorized to access this page.")
