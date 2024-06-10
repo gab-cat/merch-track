@@ -77,9 +77,9 @@ def customer_detail(request, customer_id):
         'groups': groups
         })
 
-@login_required(login_url='login')
-@group_required('Admin')
+
 def send_html_password_reset_email(user, request):
+    print(f"User pf: {user.pk}, email: {user.email}")
     subject = "Reset Your Password"
     from_email = f"Merch Track Help Desk Team"
     context = {
@@ -102,7 +102,8 @@ def send_html_password_reset_email(user, request):
 @group_required('Admin')
 def edit_customer(request, customer_id):
     customer = get_object_or_404(Customer, pk=customer_id)
-    user = customer.user
+    user = get_object_or_404(User, pk=customer_id)
+    print(f"User:{user}, Email: {user.email}")
     if request.method == 'POST':
         if 'reset_password' in request.POST:
             password_reset_form = PasswordResetForm({'email': user.email})
@@ -144,21 +145,7 @@ def edit_customer(request, customer_id):
         user_form = UserForm(instance=user)
     return render(request, 'customers/edit_customer.html', {'customer_form': customer_form, 'user_form': user_form, 'customer': customer})
 
-@login_required(login_url='login')
-@group_required('Admin')
-def send_password_reset_email(request, user_id):
-    user = get_object_or_404(User, pk=user_id)
-    password_reset_form = PasswordResetForm({'email': user.email})
-    if password_reset_form.is_valid():
-        request = request._request
-        opts = {
-            'use_https': request.is_secure(),
-            'token_generator': default_token_generator,
-            'from_email': None,
-            'request': request,
-        }
-        password_reset_form.save(**opts)
-        return redirect('customer_detail', customer_id=user.customer.user_id)
+
 
 @login_required(login_url='login')
 @group_required('Admin')

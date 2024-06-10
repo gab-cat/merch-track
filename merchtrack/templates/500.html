@@ -1,0 +1,25 @@
+{% extends 'base.html' %} {% block title %} Server Error {% endblock %}
+{% block content %}
+{% load static %}
+
+<div class=' flex flex-col w-screen h-full bg-[#f3f3f3] '>
+    <div class='flex overflow-visible flex-col justify-center items-center content-center bg-white rounded-xl shadow-xl w-[75%] min-h-[50%] m-auto p-5'>
+        <div class='py-5 text-5xl font-semibold text-center text-gray-700'>Oops! Something Went Wrong</div>
+        <p class="font-medium text-gray-700">It looks like our server is taking a break. We apologize for the inconvenience!</p>
+        
+        <ol class='w-fit mt-4 border p-4 rounded space-y-4 mx-auto my-5 text-sm text-gray-700 font-regular'>
+            <p class="text-left font-regular text-gray-700">While we get things back on track, here are a few things you can try:</p>
+            <li><b>1. Refresh the Page</b>: Sometimes all it takes is a quick refresh.</li>
+            <li><b>2. Come Back Later</b>: Our team is already on it and we'll have things running smoothly soon.</li>
+            <li><b>3. Contact Support</b>: If the problem persists, please let us know at merchtrack@gmail.com. We're here to help!</li>
+        </ol>
+        <div class="flex justify-center space-x-4">
+            <a href="{% url 'home' %}" class='px-5 py-3 my-5 font-medium tracking-wide hover:opacity-[0.5] transition-all bg-blue-500 text-white rounded-lg'>Back to Homepage</a>
+            {% if user.is_authenticated %}
+            <a href="{% url 'dashboard' %}" class='px-5 py-3 my-5 font-medium tracking-wide hover:opacity-[0.5] transition-all bg-gray-500 text-white rounded-lg'>Dashboard</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

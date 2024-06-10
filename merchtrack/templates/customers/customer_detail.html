@@ -131,9 +131,9 @@
                 <table class="min-w-full mt-4 bg-white border-gray-200 rounded-lg">
                     <thead class="text-left bg-gray-200">
                         <tr>
-                            <th class="px-4 py-2 border-b rounded-tl-lg">Log ID</th>
                             <th class="px-4 py-2 border-b">Date</th>
                             <th class="px-4 py-2 border-b">Created By</th>
+                            <th class="px-4 py-2 border-b rounded-tl-lg">Name</th>
                             <th class="px-4 py-2 border-b">Reason</th>
                             <th class="px-4 py-2 border-b">System Text</th>
                         </tr>
@@ -141,9 +141,9 @@
                     <tbody class="border">
                         {% for log in logs %}
                         <tr>
-                            <td class="px-4 py-2 border-b">{{ log.logId }}</td>
                             <td class="px-4 py-2 border-b">{{ log.created_date }}</td>
                             <td class="px-4 py-2 border-b">{{ log.created_by.username }}</td>
+                            <td class="px-4 py-2 border-b">{{ log.created_by.last_name }}, {{ log.created_by.first_name }}</td>
                             <td class="px-4 py-2 border-b">{{ log.reason }}</td>
                             <td class="px-4 py-2 border-b">{{ log.system_text }}</td>
                         </tr>
