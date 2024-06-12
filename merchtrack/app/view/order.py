@@ -97,7 +97,6 @@ def order_list(request):
 
     return render(request, 'orders/order_list.html', context)
 
-@login_required(login_url='login')
 def order_detail(request, order_id):
     try:
         order = Order.objects.get(pk=order_id)
