@@ -17,19 +17,23 @@
           opacity: 1;
       }
 
-      .fade-out {
+      .fade-out-page {
           opacity: 0;
-          transition: opacity 0.3s ease-in-out;
+          filter: blur(50px);
+          transition: opacity 0.3s ease-in-out, filter 0.3s ease-in-out;
       }
 
       .fade-box {
             opacity: 0;
-            transition: opacity 0.3s ease-in-out;
+            filter: blur(5px);
+            transition: opacity 0.3s ease-in-out, filter 0.3s ease-in-out;
         }
 
       .fade-box.show {
           opacity: 1;
+          filter: blur(0);
       }
+
 
       @keyframes fadeInUp {
             from {
@@ -71,6 +75,87 @@
         }
 
     </style>
+      <script>
+        function fadeIn(element) {
+        element.classList.add('show');
+        element.classList.remove('fade-out');
+        }
+  
+        // Function to fade out the element
+        function fadeOut(element) {
+            element.classList.add('fade-out-page');
+            element.classList.remove('show');
+            // element.addEventListener('transitionend', function() {
+            // }, { once: true });
+        }
+  
+        function fadeOutAllElements() {
+          const fadeElements = document.querySelectorAll('.fade-box');
+          fadeElements.forEach(element => {
+              fadeOut(element);
+          });
+        }
+  
+      document.addEventListener('DOMContentLoaded', function () {
+          // Fade-in effect for the header
+          const header = document.getElementById('header');
+          header.classList.add('show');
+  
+          const fadeElements = document.querySelectorAll('.fade-box');
+          fadeElements.forEach(element => {
+              fadeIn(element); // Fade in on page load
+          });
+  
+          // Example of fading out an element after 3 seconds
+  
+          // Fade-out effect on link click
+          const backToDashboard = document.querySelector('#backtod');
+          console.log(backToDashboard)
+          if (backToDashboard){
+              backToDashboard.addEventListener('click', function(event) {
+                  event.preventDefault();
+                  const href = this.href;
+                  fadeOutAllElements();
+                  setTimeout(() => {
+                      window.location.href = href;
+                  }, 350); // Duration should match the CSS transition duration
+              });
+          } 
+  
+          const links = document.querySelectorAll('a');
+          links.forEach(link => {
+              link.addEventListener('click', function(event) {
+                  event.preventDefault();
+                  const href = this.href;
+                  fadeOutAllElements();
+                  setTimeout(() => {
+                      window.location.href = href;
+                  }, 350); // Duration should match the CSS transition duration
+              });
+          });
+  
+          // // Handle form submissions
+          const forms = document.querySelectorAll('form');
+          forms.forEach(form => {
+              form.addEventListener('submit', function(event) {
+                  event.preventDefault();
+                  fadeOutAllElements();
+                  setTimeout(() => {
+                      form.submit();
+                  }, 350); // Duration should match the CSS transition duration
+              });
+          });
+  
+          const toastElement = document.getElementById('toast-container');
+          const messageElements = toastElement.querySelectorAll('.toast');
+  
+          if (messageElements.length > 0) {
+              messageElements.forEach(element => {
+                  element.classList.add('show');
+              });
+          }
+      });
+    </script>
 </head>
 <body class="bg-[#f3f3f3] h-screen">
 
@@ -100,74 +185,6 @@
     {% endif %}
 </div>
 
-  <script>
-      function fadeIn(element) {
-      element.classList.add('show');
-      element.classList.remove('fade-out');
-      }
 
-      // Function to fade out the element
-      function fadeOut(element) {
-          element.classList.add('fade-out');
-          element.classList.remove('show');
-          element.addEventListener('transitionend', function() {
-              // element.style.display = 'none';
-          }, { once: true });
-      }
-
-      function fadeOutAllElements() {
-        const fadeElements = document.querySelectorAll('.fade-box');
-        fadeElements.forEach(element => {
-            fadeOut(element);
-        });
-      }
-
-    document.addEventListener('DOMContentLoaded', function () {
-        // Fade-in effect for the header
-        const header = document.getElementById('header');
-        header.classList.add('show');
-
-        const fadeElements = document.querySelectorAll('.fade-box');
-        fadeElements.forEach(element => {
-            fadeIn(element); // Fade in on page load
-        });
-
-        // Example of fading out an element after 3 seconds
-
-        // Fade-out effect on link click
-        // const links = document.querySelectorAll('a');
-        // links.forEach(link => {
-        //     link.addEventListener('click', function(event) {
-        //         event.preventDefault();
-        //         const href = this.href;
-        //         fadeOutAllElements();
-        //         setTimeout(() => {
-        //             window.location.href = href;
-        //         }, 350); // Duration should match the CSS transition duration
-        //     });
-        // });
-
-        // // Handle form submissions
-        // const forms = document.querySelectorAll('form');
-        // forms.forEach(form => {
-        //     form.addEventListener('submit', function(event) {
-        //         event.preventDefault();
-        //         fadeOutAllElements();
-        //         setTimeout(() => {
-        //             form.submit();
-        //         }, 350); // Duration should match the CSS transition duration
-        //     });
-        // });
-
-        const toastElement = document.getElementById('toast-container');
-        const messageElements = toastElement.querySelectorAll('.toast');
-
-        if (messageElements.length > 0) {
-            messageElements.forEach(element => {
-                element.classList.add('show');
-            });
-        }
-    });
-  </script>
 </body>
 </html>

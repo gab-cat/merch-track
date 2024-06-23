@@ -7,7 +7,7 @@
     {% back-to-dashboard %}
 {% endblock %}
 
-<div id="pageBase" class='flex fade-box flex-col w-screen h-full bg-[#f3f3f3] overflow-auto p-2'>
+<div id="pageBase" class='flex flex-col w-screen h-full bg-[#f3f3f3] overflow-auto p-2'>
     <div class='container flex flex-col  p-5 m-auto overflow-visible bg-white shadow-xl rounded-xl min-h-[90%] max-w-[70rem]'>
         <div class='self-start w-full mx-5'>
             <div class='self-start text-[#3BAFE1] text-3xl mt-2 font-bold text-left'>Collections</div>
@@ -44,7 +44,7 @@
                                 None
                             {% endif %}
                         </td>
-                        <td class="px-4 py-2  border-b">
+                        <td class="px-4 py-2 border-b">
                             <a href="{% url 'collection_detail' order.orderId %}" class="btn-primary">Make Payment</a>
                         </td>
                     </tr>

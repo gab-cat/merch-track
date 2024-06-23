@@ -5,7 +5,7 @@
         </div>
         <div class="p-4">
             <p>{{ modal_message }}</p>
-            <p class="mt-2 text-sm text-justify indent-4 text-gray-600">{{ modal_warning }}</p>
+            <p class="mt-2 text-sm text-justify text-gray-600 indent-4">{{ modal_warning }}</p>
         </div>
         <div class="flex justify-end p-4 border-t">
             <button id="{{ modal_id }}_cancelButton" class="px-4 py-2 mr-2 text-gray-700 transition-all bg-gray-200 rounded hover:bg-gray-300">Cancel</button>
@@ -15,8 +15,9 @@
 </div>
 <style>
     .fade-box {
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
+        opacity: 0;
+        filter: blur(10px);
+        transition: opacity 0.35s ease-in-out;
     }
 
     .fade-box.show {
@@ -25,6 +26,9 @@
 
     .fade-out {
         opacity: 0;
+        filter: blur(50px);
+        transition: opacity 0.35s ease-in-out;
+        transition: filter 0.3.5s ease-in-out;
     }
 
     .fade-in {

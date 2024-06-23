@@ -3,7 +3,7 @@
 {% block content %}
 {% load slippers %}
 
-<div id="pageBase" class='flex fade-box flex-col w-screen h-full bg-[#f3f3f3] overflow-auto p-2'>
+<div id="pageBase" class='flex flex-col w-screen h-full bg-[#f3f3f3] overflow-auto p-2'>
     <div class='container flex flex-col  p-5 m-auto overflow-visible bg-white shadow-xl rounded-xl  max-w-[80rem]'>
         <div class='self-start w-full mx-5'>
             <div class='self-start text-[#3BAFE1] text-3xl mt-2 font-bold text-left'>Collections</div>
@@ -12,7 +12,7 @@
         <a href="{% url 'collections_index'%}" class='self-end btn-secondary w-fit'>Back to List</a>
         <div class="container mx-auto">
             <div class="grid grid-cols-3">
-                <div class="flex flex-col w-fit p-4 border rounded mt-4">
+                <div class="flex flex-col p-4 mt-4 border rounded w-fit">
                     <h1 class="mb-4 text-2xl font-bold">Order Details</h1>
                     <div class="grid grid-cols-2 space-y-2">
                         <p class="font-semibold">Order ID: </p>
@@ -27,7 +27,7 @@
                         <p>{{ order.status }}</p>
                     </div>
                 </div>
-                <div class="flex flex-col w-full col-span-2 p-4 border rounded mt-4 ml-4">
+                <div class="flex flex-col w-full col-span-2 p-4 mt-4 ml-4 border rounded">
                     <h2 class="mt-4 text-xl font-bold">Order Items</h2>
                     <table class="mt-4 bg-white border border-gray-200 ">
                         <thead class="text-left bg-gray-50">
@@ -51,7 +51,7 @@
                     </table>
                 </div>
 
-                <div class="flex flex-col p-4 border rounded mt-4 ">
+                <div class="flex flex-col p-4 mt-4 border rounded ">
                     <h2 class="mt-4 text-xl font-bold">Add Payment</h2>
                     <form method="post" class="flex flex-col mt-4">
                         {% csrf_token %}
@@ -85,7 +85,7 @@
                     </form>
                 </div>
 
-                <div class="flex flex-col col-span-2 p-4 border rounded mt-4 ml-4">
+                <div class="flex flex-col col-span-2 p-4 mt-4 ml-4 border rounded">
                     <h2 class="mt-4 text-xl font-bold">Payment History</h2>
                     <table class="min-w-full mt-4 bg-white border border-gray-200">
                         <thead class="text-left bg-gray-50">
