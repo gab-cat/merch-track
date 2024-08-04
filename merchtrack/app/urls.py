@@ -7,26 +7,26 @@ from .view import product, order, customer, report, collection, fulfillment
 urlpatterns = [
     # Customers
     path("", views.home, name='home'),
-    path("aboutUs", views.aboutUs, name='aboutUs'),
-    path("contactUs", views.contactUs, name='contactUs'),
-    path("order-entry", views.orderEntry, name='order-entry'),
-    path('registration', views.register, name='registration'),
-    path('login', views.login, name='login'),
-    path('logout', views.logout, name='logout'),
-    path('customer_payment/', collection.customer_payment, name='customer_payment'),
-    path('customer_payment/<int:order_id>/', collection.customer_make_payment, name='customer_make_payment'),
+    path("about-us/", views.aboutUs, name='aboutUs'),
+    path("contact-us/", views.contactUs, name='contactUs'),
+    path("order-entry/", views.orderEntry, name='order-entry'),
+    path('registration/', views.register, name='registration'),
+    path('login/', views.login, name='login'),
+    path('logout/', views.logout, name='logout'),
+    path('customer-payment/', collection.customer_payment, name='customer_payment'),
+    path('customer-payment/<int:order_id>/', collection.customer_make_payment, name='customer_make_payment'),
     path('survey/<int:order_id>/', views.survey_view, name='survey_view'),
     path('survey/thank-you/', views.survey_thank_you, name='survey_thank_you'),
 
     # Staffs
-    path('dashboard', views.dashboard, name='dashboard'),
-    path('messages', views.cust_messages, name='messages'),
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('messages/', views.cust_messages, name='messages'),
     path('send_reply_email/', views.send_reply_email, name='send_reply_email'),
-    path('success', views.success, name='success'),
+    path('success/', views.success, name='success'),
 
     # Product
-    path('create-product', product.create_product, name='create_product'),
-    path('products', product.product_list, name='product_list'),
+    path('create-product/', product.create_product, name='create_product'),
+    path('products/', product.product_list, name='product_list'),
     path('edit-product/<int:product_id>/', product.edit_product, name='edit_product'),
     path('delete-product/<int:product_id>/', product.delete_product, name='delete_product'),
 

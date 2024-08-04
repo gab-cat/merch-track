@@ -24,10 +24,10 @@ from django.core.mail import send_mail
 logger = logging.getLogger(__name__)
 
 def home(request):
-    return render(request, 'index.html')
+    return render(request, 'public/index.html')
 
 def success(request):
-    return render(request, "success.html")
+    return render(request, "public/success.html")
 
 # def trackOrder(request):
 #     try:
@@ -64,7 +64,7 @@ def success(request):
 #         return redirect(request, 'index.html', {'error_message': 'An unexpected error occurred'})
 
 def aboutUs(request):
-    return render(request, "aboutUs.html")
+    return render(request, "public/aboutUs.html")
 
 def contactUs(request):
     if request.method == 'POST':
@@ -73,9 +73,9 @@ def contactUs(request):
         message = request.POST.get('message')
         new_contact = contact_us.objects.create(name=name,email=email,message=message)
         new_contact.save()
-        return render(request, "contactUs.html", {'success_message': 'Message was sent successfully to our team. Kindly give us 2-3 business days, and we\'ll be right with you. Thank you for contacting us!'}) 
+        return render(request, "public/contactUs.html", {'success_message': 'Message was sent successfully to our team. Kindly give us 2-3 business days, and we\'ll be right with you. Thank you for contacting us!'}) 
     else:  
-        return render(request, "contactUs.html")
+        return render(request, "public/contactUs.html")
 
 def not_found(request):
     return render(request, '404.html', status=404)
@@ -86,7 +86,7 @@ def adminTracker(request):
     cursor.execute('select app_order_info.order_details_id, app_user_info.student_id, app_user_info.student_name, app_user_info.email, app_user_info.course, app_order_info.payment_method, app_order_info.payment_status, app_order_info.order_status from app_order_info join app_user_info on app_order_info.user_info_ID = app_user_info.student_id')
     results = cursor.fetchall()
     print(results)
-    return render(request, 'adminTracker.html', {'orders' : results})
+    return render(request, 'public/adminTracker.html', {'orders' : results})
 
 @login_required(login_url='login')
 def orderEntry(request):
@@ -131,7 +131,9 @@ def studentInfo(request):
     student_id = request.GET.get('student_id')
     
     if not student_id:
-        return HttpResponse("Student ID not provided", status=400)
+        return JsonResponse({
+            "message": "No Student ID"
+        }, status=400)
 
     try:
         student = get_object_or_404(user_info, student_id=student_id)
@@ -143,7 +145,9 @@ def studentInfo(request):
         }
         return JsonResponse(student_data)
     except user_info.DoesNotExist:
-        return HttpResponse("Student not found", status=404)
+        return JsonResponse({
+            "message": "No Student found"
+        }, status=400)
 
 def register(request):
     if request.method == 'POST':
@@ -165,7 +169,7 @@ def register(request):
             return redirect('login')  # Redirect to the login page after successful registration
     else:
         form = UserRegistrationForm()
-    return render(request, 'registration.html', {'form': form})
+    return render(request, 'registration/registration.html', {'form': form})
 
 def login(request):
     if request.user.is_authenticated:

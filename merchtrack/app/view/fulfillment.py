@@ -92,6 +92,9 @@ def send_order_email(order, email_type, request):
     elif email_type == "completed":
         subject = "Thank You for Your Purchase"
         template_name = "emails/order_completed.html"
+    elif email_type == "confirmation":
+        subject = "Your Order has been placed"
+        template_name = "emails/order_confirmation.html"
     
     from_email = "Merch Track Team <no-reply@merchtrack.com>"
     context = {

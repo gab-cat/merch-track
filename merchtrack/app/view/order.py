@@ -7,6 +7,7 @@ from app.form.order import OrderForm, OrderItemForm
 from django.core.paginator import Paginator
 from django.contrib import messages as django_messages
 from django.db.models import Q
+from .fulfillment import send_order_email
 
 from app.utils import log_action
 from app.auth import group_required
@@ -58,6 +59,8 @@ def create_order(request):
             order_item.save()
 
         log_action(request.user, 'Order Created', f"Order {order.orderId} created by {request.user.username}.", order.customerId)
+        send_order_email(order, 'confirmation', request)
+
         django_messages.success(request, f"Successfully created a new order with ID: {order.orderId}.")
         return redirect('success')
 

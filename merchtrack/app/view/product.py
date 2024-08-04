@@ -26,7 +26,7 @@ def create_product(request):
     else:
         form = ProductForm()
     
-    return render(request, 'create_product.html', {'form': form})
+    return render(request, 'products/create_product.html', {'form': form})
 
 @login_required(login_url='login')
 def product_list(request):
@@ -43,7 +43,7 @@ def product_list(request):
     
     categories = Product.objects.values_list('category', flat=True).distinct()
     
-    return render(request, 'product_list.html', {
+    return render(request, 'products/product_list.html', {
         'products': products,
         'categories': categories,
     })
@@ -72,7 +72,7 @@ def edit_product(request, product_id):
     
     categories = Product.objects.values_list('category', flat=True).distinct()
     
-    return render(request, 'edit_product.html', {
+    return render(request, 'products/edit_product.html', {
         'form': form,
         'product': product,
         'categories': categories
@@ -87,4 +87,4 @@ def delete_product(request, product_id):
         product.delete()
         messages.success(request, f"Successfully deleted product with ID : {product_id}")
         return redirect('product_list')
-    return render(request, 'confirm_delete.html', {'product': product})
+    return render(request, 'products/confirm_delete.html', {'product': product})

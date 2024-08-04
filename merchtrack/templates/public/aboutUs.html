@@ -1,0 +1,96 @@
+{% extends 'base.html' %} 
+{% block title %} About Us {% endblock %}
+
+{% block nav %}
+    <a class='font-regular nav-item' href="{% url 'home' %}">Home</a>
+    <a class='text-gray-500 font-bold nav-item' href="{% url 'aboutUs' %}">About Us</a>
+    <a class='font-regular nav-item' href="{% url 'contactUs' %}">Contact Us</a> 
+{% endblock %}
+
+
+{% block body_class %}bg-white{% endblock %}
+
+{% load static %}
+{% block content %}
+
+<div class="flex flex-col w-full h-full overflow-auto bg-[#f3f3f3]">
+    <div class="flex flex-row">
+        <div class='py-10 px-10 w-1/2 flex flex-col shadow-sm p-5'>
+            <div class="mb-4">
+                <span class='text-5xl mb-[-5vh] font-semibold'>MerchTrack</span>
+                <span class='mx-5 text-3xl text-center font-normal'>is designed</span>
+            </div>
+            <span class='mx-5 text-3xl text-justify font-normal'>
+                to prioritize key functions such as Order Processing, 
+                Inventory Management, Payment Processing, and Order Fulfillment. 
+                Its overarching objective is to pave the way for other organizations 
+                and colleges within the university to adopt the system in the future.
+            </span>
+        </div>
+        <span class= 'w-[50%] h-fit'>
+            <img class='bottom-0 p-0' src="{% static 'assets\halfTshirt.png' %}" alt="Dev Image" />
+        </span>
+    </div>
+    <div class="bg-[#E1E1E1] flex flex-col py-3">
+        <div class="py-2 text-center">
+            <span class = "text-3xl font-montserrat font-normal">WHO WE ARE</span>
+        </div>
+        <div class="flex flex-row gap-3">
+            <div class="flex flex-col mx-20 w-15 h-15 items-center justify-center hover:bg-slate-50 rounded-lg">
+                <div class="py-2">
+                    <img src="{% static 'assets\Gab_pic.png' %}" alt="Dev Image" /> 
+                </div>
+                <div class='mt-3 flex flex-col items-center justify-center'>
+                    <span class='font-bold'>GABRIEL CATIMBANG</span>
+                    <span>BS COMPUTER SCIENCE</span>
+                </div>
+            </div>
+            <div class="flex flex-col mx-20 w-15 h-15 items-center justify-center hover:bg-slate-50 rounded-lg">
+                <div class="py-2">
+                    <img src="{% static 'assets\JM_pic.png' %}" alt="Dev Image" /> 
+                </div>
+                <div class='mt-3 flex flex-col items-center justify-center'>
+                    <span class='font-bold'>JOHN MICHAEL CORONEL</span>
+                    <span>BS COMPUTER SCIENCE</span>
+                </div>
+            </div>
+            <div class="flex flex-col mx-20 w-15 h-15 items-center justify-center hover:bg-slate-50 rounded-lg">
+                <div class="py-2">
+                    <img src="{% static 'assets\Reiv_pic.png' %}" alt="Dev Image" /> 
+                </div>
+                <div class='mt-3 flex flex-col items-center justify-center'>
+                    <span class='font-bold'>REIVEN LEE</span>
+                    <span>BS COMPUTER SCIENCE</span>
+                </div>
+            </div>
+            <div class="flex flex-col mx-20 w-15 h-15 items-center justify-center hover:bg-slate-50 rounded-lg">
+                <div class="py-2">
+                    <img src="{% static 'assets\Kyla_pic.png' %}" alt="Merch Image" /> 
+                </div>
+                <div class='mt-3 flex flex-col items-center justify-center'>
+                    <span class='font-bold'>KYLA RONQUILLO</span>
+                    <span>BS COMPUTER SCIENCE</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bg-[#FFFFFF] flex flex-row">
+        <span class= 'w-[50%] h-fit'>
+            <img class='bottom-0 p-0' src="{% static 'assets\about_design_1.png' %}" alt="Design" />
+        </span>
+        <div class='py-10 px-10 w-1/2 flex flex-col shadow-sm p-5'>
+            <div class="mb-4">
+                <span class='text-5xl mb-[-5vh] font-semibold'>What is our Mission?</span>
+            </div>
+            <span class='mr-4 text-3xl text-justify font-normal'>
+                to prioritize key functions such as Order Tracking and seamless 
+                communication between seller and buyerIts overarching objective 
+                is to pave the way for other organizations and colleges within 
+                the university to adopt the system in the future.
+            </span>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
